@@ -46,8 +46,14 @@ Mọi cổng chỉ mở cho chính máy này (127.0.0.1).
 | Hotline, Zalo, Facebook, email, địa chỉ, đội tư vấn, email nhận báo giá | **Âu Việt › Liên hệ & công ty** | Quản trị viên |
 | Sản phẩm / Mẫu đã làm hiện trên trang chủ | **Sản phẩm**, **Mẫu đã làm** (8 sản phẩm, 3 mẫu mới nhất) | Biên tập viên, Quản trị viên |
 | Yêu cầu báo giá khách gửi | **Yêu cầu báo giá** (đổi trạng thái, người phụ trách, ghi chú; có lịch sử) | Quản trị viên |
+| Sản phẩm: mô tả, ảnh, quy cách, chất liệu, nhóm chính, sản phẩm liên quan, hỏi đáp | **Sản phẩm** (ô "Thứ tự" nhỏ hơn thì lên trước; 1–8 hiện ở trang chủ) | Biên tập viên, Quản trị viên |
+| Bảng giá tham khảo, số lượng tối thiểu, thời gian sản xuất (có lịch sử sửa giá) | **Sản phẩm** › hộp "Bảng giá tham khảo" | Quản trị viên |
+| Nhóm sản phẩm: ảnh, đoạn giới thiệu, hỏi đáp | **Sản phẩm › Nhóm sản phẩm** | Biên tập viên, Quản trị viên |
+| Thư viện chất liệu, gia công | **Chất liệu** | Biên tập viên, Quản trị viên |
 
 Ở local, email thông báo không gửi ra ngoài mà vào Mailpit: http://localhost:8025
+
+**Nhập từ web cũ** (Công cụ › Nhập từ web cũ, chỉ có ở local/staging): website tự tải sản phẩm, ảnh, nội dung từ inquangcaoauviet.com, tạo thư viện chất liệu, ảnh trang chủ và chuyển hướng 301 từ đường dẫn cũ. Chạy lại được; sản phẩm đã sửa tay được giữ nguyên trừ khi chọn ghi đè. Quy cách và giới thiệu nhóm nhập vào là bản nháp, cần kiểm tra (cột "Quy cách" trong danh sách sản phẩm).
 
 ## Lệnh hay dùng
 

@@ -36,7 +36,7 @@ function av_register_content_types(): void {
 	// SP-02, QT-03: Sản phẩm — /san-pham/<ten-san-pham>/
 	register_post_type(
 		'av_product',
-		$common + array(
+		array( 'supports' => array( 'title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'page-attributes' ) ) + $common + array(
 			'labels'          => av_cpt_labels( 'Sản phẩm', 'Sản phẩm' ),
 			'public'          => true,
 			'has_archive'     => 'san-pham',
@@ -133,7 +133,7 @@ function av_register_content_types(): void {
 	// LP-05: Ngành của dự án (dùng để lọc mẫu đã làm)
 	register_taxonomy(
 		'av_industry',
-		array( 'av_project' ),
+		array( 'av_project', 'av_product' ),
 		array(
 			'labels'            => array( 'name' => 'Ngành', 'singular_name' => 'Ngành' ),
 			'hierarchical'      => true,

@@ -16,13 +16,13 @@
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
-<!-- wp:query {"queryId":21,"query":{"perPage":8,"pages":0,"offset":0,"postType":"av_product","order":"desc","orderBy":"date","inherit":false},"className":"av-cards"} -->
+<!-- wp:query {"queryId":21,"query":{"perPage":8,"pages":0,"offset":0,"postType":"av_product","order":"asc","orderBy":"menu_order","inherit":false},"className":"av-cards"} -->
 <div class="wp-block-query av-cards"><!-- wp:post-template {"layout":{"type":"grid","columnCount":4}} -->
 <!-- wp:post-featured-image {"isLink":true,"aspectRatio":"1"} /-->
 
 <!-- wp:post-title {"level":3,"isLink":true} /-->
 
-<!-- wp:post-excerpt /-->
+<!-- wp:auviet/price-badge /-->
 <!-- /wp:post-template -->
 
 <!-- wp:query-no-results -->

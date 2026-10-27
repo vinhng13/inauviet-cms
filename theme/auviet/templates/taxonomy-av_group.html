@@ -1,0 +1,51 @@
+<!-- wp:template-part {"slug":"header","area":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"av-catalog-page","style":{"spacing":{"padding":{"top":"32px","bottom":"96px"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
+<main class="wp-block-group av-catalog-page" style="padding-top:32px;padding-bottom:96px"><!-- wp:auviet/breadcrumb /-->
+
+<!-- wp:auviet/catalog-header /-->
+
+<!-- wp:auviet/catalog-filters /-->
+
+<!-- wp:query {"queryId":5,"query":{"inherit":true,"perPage":12},"className":"av-catalog"} -->
+<div class="wp-block-query av-catalog"><!-- wp:post-template {"layout":{"type":"grid","columnCount":4}} -->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"1"} /-->
+
+<!-- wp:post-title {"level":2,"isLink":true} /-->
+
+<!-- wp:auviet/price-badge /-->
+<!-- /wp:post-template -->
+
+<!-- wp:query-pagination {"layout":{"type":"flex","justifyContent":"center"}} -->
+<!-- wp:query-pagination-previous {"label":"Trang trước"} /-->
+
+<!-- wp:query-pagination-numbers /-->
+
+<!-- wp:query-pagination-next {"label":"Trang sau"} /-->
+<!-- /wp:query-pagination -->
+
+<!-- wp:query-no-results -->
+<!-- wp:group {"className":"av-empty","layout":{"type":"default"}} -->
+<div class="wp-block-group av-empty"><!-- wp:paragraph -->
+<p><strong>Chưa có sản phẩm phù hợp.</strong> Thử bỏ bộ lọc, hoặc gửi yêu cầu để Âu Việt tư vấn sản phẩm phù hợp với bạn.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/#lien-he">Gửi yêu cầu báo giá</a></div>
+<!-- /wp:button -->
+
+<!-- wp:button {"className":"is-style-outline"} -->
+<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/san-pham/">Xem tất cả sản phẩm</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons --></div>
+<!-- /wp:group -->
+<!-- /wp:query-no-results --></div>
+<!-- /wp:query -->
+
+<!-- wp:auviet/catalog-faq /-->
+
+<!-- wp:pattern {"slug":"auviet/catalog-band"} /--></main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer"} /-->

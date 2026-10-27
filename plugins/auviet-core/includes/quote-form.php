@@ -42,7 +42,9 @@ function av_render_quote_form( array $attrs = array() ): string {
 	foreach ( av_quote_needs() as $n ) {
 		$options .= sprintf( '<option%2$s>%1$s</option>', esc_html( $n ), selected( $n, $need_default, false ) );
 	}
-	$uid = wp_unique_id( 'avq-' );
+	$uid     = wp_unique_id( 'avq-' );
+	$product = absint( $attrs['product'] ?? 0 );
+	$product = ( $product && 'av_product' === get_post_type( $product ) ) ? $product : 0;
 
 	ob_start();
 	?>
@@ -50,6 +52,10 @@ function av_render_quote_form( array $attrs = array() ): string {
 		<input type="hidden" name="action" value="av_quote">
 		<input type="hidden" name="av_source" value="<?php echo esc_attr( remove_query_arg( array( 'bao-gia', 'loi' ) ) ); ?>">
 		<input type="hidden" name="av_t" value="<?php echo esc_attr( (string) time() ); ?>">
+		<?php if ( $product ) : ?>
+			<input type="hidden" name="av_product" value="<?php echo (int) $product; ?>">
+			<p class="av-form__product av-field--full">Sản phẩm: <strong><?php echo esc_html( get_the_title( $product ) ); ?></strong></p>
+		<?php endif; ?>
 		<div class="av-hp" aria-hidden="true"><label for="<?php echo esc_attr( $uid ); ?>-web">Website</label><input id="<?php echo esc_attr( $uid ); ?>-web" type="text" name="av_website" tabindex="-1" autocomplete="off"></div>
 		<?php if ( $err && isset( $msgs[ $err ] ) ) : ?>
 			<p class="av-form__error" role="alert"><?php echo esc_html( $msgs[ $err ] ); ?></p>
@@ -95,7 +101,11 @@ function av_handle_quote(): void {
 	$email = sanitize_email( wp_unslash( $_POST['av_email'] ?? '' ) );
 	$need  = sanitize_text_field( wp_unslash( $_POST['av_need'] ?? '' ) );
 	$note  = sanitize_textarea_field( wp_unslash( $_POST['av_note'] ?? '' ) );
+	$prod  = absint( $_POST['av_product'] ?? 0 );
 	// phpcs:enable
+	if ( $prod && ( 'av_product' !== get_post_type( $prod ) || 'publish' !== get_post_status( $prod ) ) ) {
+		$prod = 0;
+	}
 
 	if ( '' === $name || mb_strlen( $name ) > 100 ) {
 		av_quote_redirect( $source, array( 'loi' => 'name' ) );
@@ -137,6 +147,9 @@ function av_handle_quote(): void {
 		'_av_source' => $source,
 		'_av_status' => 'moi',
 	);
+	if ( $prod ) {
+		$meta['_av_product'] = $prod;
+	}
 	if ( $file ) {
 		$meta['_av_file']      = $file['path'];
 		$meta['_av_file_name'] = $file['name'];
@@ -209,7 +222,7 @@ function av_quote_notify( int $post_id ): void {
 			'Họ tên: ' . $m( '_av_name' ),
 			'Số điện thoại: ' . $m( '_av_phone' ),
 			'Email: ' . ( $m( '_av_email' ) ?: '(không có)' ),
-			'Sản phẩm quan tâm: ' . $m( '_av_need' ),
+			'Sản phẩm quan tâm: ' . $m( '_av_need' ) . ( $m( '_av_product' ) ? ' – ' . get_the_title( (int) $m( '_av_product' ) ) : '' ),
 			'Nội dung: ' . ( $m( '_av_note' ) ?: '(không có)' ),
 			'File đính kèm: ' . ( $m( '_av_file_name' ) ?: '(không có)' ),
 			'Trang gửi: ' . $m( '_av_source' ),
@@ -217,7 +230,8 @@ function av_quote_notify( int $post_id ): void {
 			'Xử lý tại: ' . admin_url( 'post.php?post=' . $post_id . '&action=edit' ),
 		)
 	);
-	wp_mail( $to, '[Báo giá] ' . $m( '_av_name' ) . ' – ' . $m( '_av_need' ), $body );
+	$subject = $m( '_av_product' ) ? get_the_title( (int) $m( '_av_product' ) ) : $m( '_av_need' );
+	wp_mail( $to, '[Báo giá] ' . $m( '_av_name' ) . ' – ' . $subject, $body );
 }
 
 // Ghi lại lỗi gửi email để Quản trị viên thấy (yêu cầu vẫn được lưu trong hộp thư).

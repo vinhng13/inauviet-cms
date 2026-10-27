@@ -31,6 +31,10 @@ add_action(
 				break;
 			case 'av_need':
 				echo esc_html( (string) get_post_meta( $post_id, '_av_need', true ) );
+				$prod = (int) get_post_meta( $post_id, '_av_product', true );
+				if ( $prod ) {
+					printf( '<br><a href="%s" target="_blank">%s</a>', esc_url( get_permalink( $prod ) ), esc_html( get_the_title( $prod ) ) );
+				}
 				break;
 			case 'av_status':
 				$s = (string) get_post_meta( $post_id, '_av_status', true );
@@ -108,6 +112,9 @@ function av_quote_box_customer( WP_Post $post ): void {
 		printf( '<option%s>%s</option>', selected( $m( '_av_need' ), $n, false ), esc_html( $n ) );
 	}
 	echo '</select></td></tr>';
+	if ( $m( '_av_product' ) ) {
+		printf( '<tr><th>Sản phẩm khách xem</th><td><a href="%s" target="_blank">%s</a></td></tr>', esc_url( get_permalink( (int) $m( '_av_product' ) ) ), esc_html( get_the_title( (int) $m( '_av_product' ) ) ) );
+	}
 	printf( '<tr><th><label for="_av_note">Nội dung</label></th><td><textarea class="large-text" rows="4" id="_av_note" name="_av_note">%s</textarea></td></tr>', esc_textarea( $m( '_av_note' ) ) );
 	if ( $m( '_av_file' ) ) {
 		$url = wp_nonce_url( admin_url( 'admin-post.php?action=av_quote_file&id=' . $post->ID ), 'av_quote_file_' . $post->ID );

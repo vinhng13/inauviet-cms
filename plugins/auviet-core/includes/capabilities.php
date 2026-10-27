@@ -72,3 +72,7 @@ add_action(
 	},
 	20
 );
+
+// QT-12: nhật ký hoạt động (Simple History) chỉ Quản trị viên xem.
+add_filter( 'simple_history/view_history_capability', static fn() => 'manage_options' );
+add_filter( 'simple_history/view_settings_capability', static fn() => 'manage_options' );

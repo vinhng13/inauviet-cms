@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) || exit;
 
 function av_block_definitions(): array {
-	return array(
+	return apply_filters( 'av_block_definitions', array(
 		'auviet/topbar'          => array( 'title' => 'Thanh liên hệ trên cùng', 'icon' => 'phone', 'render' => 'av_render_topbar', 'description' => 'Hotline, email, địa chỉ văn phòng (lấy từ Âu Việt › Liên hệ & công ty).' ),
 		'auviet/campaign-banner' => array( 'title' => 'Banner chiến dịch', 'icon' => 'megaphone', 'render' => 'av_render_campaign_banner', 'description' => 'Dải banner mùa (lấy từ Âu Việt › Banner chiến dịch).' ),
 		'auviet/contact-tiles'   => array( 'title' => 'Bốn nút liên hệ', 'icon' => 'share', 'render' => 'av_render_contact_tiles', 'description' => 'Zalo, Gọi, Facebook, Email.' ),
@@ -14,7 +14,7 @@ function av_block_definitions(): array {
 		'auviet/product-groups'  => array( 'title' => 'Nhóm sản phẩm', 'icon' => 'screenoptions', 'render' => 'av_render_product_groups', 'description' => 'Các nhóm sản phẩm cấp 1 kèm mô tả.' ),
 		'auviet/quote-form'      => array( 'title' => 'Form liên hệ báo giá', 'icon' => 'feedback', 'render' => 'av_render_quote_form', 'description' => 'Form một bước, lưu vào hộp thư Yêu cầu báo giá.', 'attributes' => array( 'need' => array( 'type' => 'string', 'default' => '' ) ) ),
 		'auviet/company-info'    => array( 'title' => 'Chân trang công ty', 'icon' => 'building', 'render' => 'av_render_company_info', 'description' => 'Thông tin công ty, liên kết, chính sách.' ),
-	);
+	) );
 }
 
 add_filter(
@@ -45,6 +45,7 @@ add_action(
 					'category'              => 'auviet',
 					'attributes'            => $def['attributes'] ?? array(),
 					'render_callback'       => $def['render'],
+					'uses_context'          => $def['context'] ?? array(),
 					'editor_script_handles' => array( 'auviet-blocks-editor' ),
 					'supports'              => array( 'html' => false ),
 				)
@@ -122,25 +123,21 @@ function av_render_departments(): string {
 }
 
 function av_render_product_groups(): string {
-	$terms = get_terms(
-		array(
-			'taxonomy'   => 'av_group',
-			'parent'     => 0,
-			'hide_empty' => false,
-			'orderby'    => 'term_id',
-		)
-	);
-	if ( is_wp_error( $terms ) || ! $terms ) {
-		return '<p>Chưa có nhóm sản phẩm. Thêm trong Sản phẩm › Nhóm sản phẩm.</p>';
+	$terms = av_visible_groups();
+	if ( ! $terms ) {
+		return '<p>Sản phẩm đang được cập nhật.</p>';
 	}
 	$out = '<div class="av-groups">';
 	foreach ( $terms as $i => $t ) {
-		$out .= sprintf(
-			'<a class="av-group av-group--%1$d" href="%2$s"><strong>%3$s</strong><span>%4$s</span></a>',
+		$thumb = av_group_thumb( $t );
+		$out  .= sprintf(
+			'<a class="av-group av-group--%1$d%5$s" href="%2$s">%6$s<strong>%3$s</strong><span>%4$s</span></a>',
 			$i % 5,
 			esc_url( get_term_link( $t ) ),
 			esc_html( $t->name ),
-			esc_html( $t->description )
+			esc_html( $t->description ),
+			$thumb ? ' has-img' : '',
+			$thumb ? wp_get_attachment_image( $thumb, 'medium', false, array( 'class' => 'av-group__img', 'alt' => '', 'loading' => 'lazy' ) ) : ''
 		);
 	}
 	return $out . '</div>';
@@ -162,6 +159,7 @@ function av_render_company_info(): string {
 			<strong>Thông tin</strong>
 			<a href="<?php echo esc_url( home_url( '/gioi-thieu/' ) ); ?>">Giới thiệu</a>
 			<a href="<?php echo esc_url( home_url( '/mau-da-lam/' ) ); ?>">Mẫu đã làm</a>
+			<a href="<?php echo esc_url( home_url( '/chat-lieu/' ) ); ?>">Thư viện chất liệu</a>
 			<a href="<?php echo esc_url( home_url( '/kien-thuc/' ) ); ?>">Kiến thức in ấn</a>
 			<a href="<?php echo esc_url( home_url( '/hoi-dap/' ) ); ?>">Hỏi đáp</a>
 			<a href="<?php echo esc_url( home_url( '/#lien-he' ) ); ?>">Liên hệ</a>

@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const AV_DB_VERSION = '1';
+const AV_DB_VERSION = '2';
 
 function av_install_tables(): void {
 	global $wpdb;
@@ -21,6 +21,19 @@ function av_install_tables(): void {
 			changed_at datetime NOT NULL,
 			PRIMARY KEY  (id),
 			KEY quote_id (quote_id)
+		) {$charset};"
+	);
+	// QT-04: lịch sử sửa giá (người sửa, thời điểm, giá cũ, giá mới).
+	dbDelta(
+		"CREATE TABLE {$wpdb->prefix}av_price_log (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			product_id bigint(20) unsigned NOT NULL,
+			user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			changed_at datetime NOT NULL,
+			old_value longtext NOT NULL,
+			new_value longtext NOT NULL,
+			PRIMARY KEY  (id),
+			KEY product_id (product_id)
 		) {$charset};"
 	);
 }
