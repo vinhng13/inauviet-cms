@@ -1,0 +1,8 @@
+# Bí mật môi trường local - KHÔNG đưa lên Git
+.env
+# Dữ liệu sinh ra khi chạy
+/data/
+/logs/
+*.log
+.DS_Store
+Thumbs.db

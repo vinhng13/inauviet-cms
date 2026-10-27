@@ -1,0 +1,67 @@
+# Môi trường LOCAL của website In Âu Việt
+# Chạy:  docker compose up -d --build
+# Cài WordPress lần đầu:  docker compose exec web bash /opt/auviet/setup-wp.sh
+name: ${COMPOSE_PROJECT_NAME:-auviet}
+
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      TZ: ${TZ}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  web:
+    build:
+      context: ./docker/web
+      args:
+        OLS_VERSION: ${OLS_VERSION}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      TZ: ${TZ}
+    ports:
+      - "127.0.0.1:8080:80"     # Website: http://localhost:8080
+      - "127.0.0.1:7080:7080"   # OpenLiteSpeed WebAdmin (chỉ máy này)
+    volumes:
+      - wp_html:/var/www/vhosts/localhost/html
+      - ./theme/auviet:/var/www/vhosts/localhost/html/wp-content/themes/auviet
+      - ./plugins/auviet-core:/var/www/vhosts/localhost/html/wp-content/plugins/auviet-core
+      - ./mu-plugins:/var/www/vhosts/localhost/html/wp-content/mu-plugins
+      - ./docker/web/setup-wp.sh:/opt/auviet/setup-wp.sh:ro
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    ports:
+      - "127.0.0.1:8025:8025"   # Hộp thư thử: http://localhost:8025
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+    ports:
+      - "127.0.0.1:8081:80"     # phpMyAdmin: http://localhost:8081
+
+volumes:
+  db_data:
+  wp_html:
