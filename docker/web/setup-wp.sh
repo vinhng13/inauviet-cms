@@ -81,6 +81,9 @@ for p in secure-custom-fields seo-by-rank-math redirection simple-history litesp
   ${WP} plugin activate "$p" || echo "Không kích hoạt được $p"
 done
 
+# Môi trường local: tắt cache trang để thấy ngay thay đổi khi phát triển.
+${WP} plugin deactivate litespeed-cache >/dev/null 2>&1 || true
+
 say "Theme và plugin Âu Việt"
 ${WP} plugin activate auviet-core
 ${WP} theme activate auviet
@@ -116,6 +119,9 @@ if [ ! -s "${FONT_CSS}" ]; then
 fi
 
 chown -R "${OWNER}" "${DOCROOT}" 2>/dev/null || true
+
+say "Khởi động lại OpenLiteSpeed (nạp .htaccess cho đường dẫn đẹp)"
+/usr/local/lsws/bin/lswsctrl restart >/dev/null 2>&1 && echo "Đã khởi động lại." || echo "Không khởi động lại được, chạy: docker compose restart web"
 
 say "Xong"
 echo "Website:       ${WP_URL}"

@@ -8,59 +8,184 @@
       "defaultGradients": false,
       "custom": false,
       "palette": [
-        { "slug": "paper",     "name": "Nền giấy",   "color": "#F5F7F9" },
-        { "slug": "sheet",     "name": "Trắng",      "color": "#FFFFFF" },
-        { "slug": "ink",       "name": "Mực đen",    "color": "#16181D" },
-        { "slug": "ink-2",     "name": "Chữ phụ",    "color": "#4A505C" },
-        { "slug": "line",      "name": "Đường kẻ",   "color": "#D9DEE5" },
-        { "slug": "cyan",      "name": "Cyan",       "color": "#009FE3" },
-        { "slug": "cyan-ink",  "name": "Cyan đậm (chữ, liên kết)", "color": "#0077AA" },
-        { "slug": "magenta",   "name": "Magenta",    "color": "#E4007C" },
-        { "slug": "yellow",    "name": "Vàng",       "color": "#FFE500" }
+        {
+          "slug": "paper",
+          "name": "Nền giấy",
+          "color": "#F5F7F9"
+        },
+        {
+          "slug": "sheet",
+          "name": "Trắng",
+          "color": "#FFFFFF"
+        },
+        {
+          "slug": "ink",
+          "name": "Mực đen",
+          "color": "#16181D"
+        },
+        {
+          "slug": "ink-2",
+          "name": "Chữ phụ",
+          "color": "#4A505C"
+        },
+        {
+          "slug": "line",
+          "name": "Đường kẻ",
+          "color": "#D9DEE5"
+        },
+        {
+          "slug": "cyan",
+          "name": "Cyan",
+          "color": "#009FE3"
+        },
+        {
+          "slug": "cyan-ink",
+          "name": "Cyan đậm (chữ, liên kết)",
+          "color": "#0077AA"
+        },
+        {
+          "slug": "magenta",
+          "name": "Magenta",
+          "color": "#E4007C"
+        },
+        {
+          "slug": "yellow",
+          "name": "Vàng",
+          "color": "#FFE500"
+        }
       ]
     },
     "typography": {
       "defaultFontSizes": false,
       "fluid": true,
       "fontFamilies": [
-        { "slug": "body",    "name": "Be Vietnam Pro",      "fontFamily": "\"Be Vietnam Pro\", system-ui, sans-serif" },
-        { "slug": "display", "name": "Bricolage Grotesque", "fontFamily": "\"Bricolage Grotesque\", \"Be Vietnam Pro\", system-ui, sans-serif" }
+        {
+          "slug": "body",
+          "name": "Be Vietnam Pro",
+          "fontFamily": "\"Be Vietnam Pro\", system-ui, sans-serif"
+        },
+        {
+          "slug": "display",
+          "name": "Bricolage Grotesque",
+          "fontFamily": "\"Bricolage Grotesque\", \"Be Vietnam Pro\", system-ui, sans-serif"
+        }
       ],
       "fontSizes": [
-        { "slug": "small",   "name": "Nhỏ",     "size": "0.875rem" },
-        { "slug": "medium",  "name": "Thường",  "size": "1rem" },
-        { "slug": "large",   "name": "Lớn",     "size": "1.125rem" },
-        { "slug": "x-large", "name": "Rất lớn", "size": "clamp(2rem, 4vw, 3rem)" },
-        { "slug": "hero",    "name": "Hero",    "size": "clamp(2.75rem, 6.4vw, 5.5rem)" }
+        {
+          "slug": "small",
+          "name": "Nhỏ",
+          "size": "0.875rem"
+        },
+        {
+          "slug": "medium",
+          "name": "Thường",
+          "size": "1rem"
+        },
+        {
+          "slug": "large",
+          "name": "Lớn",
+          "size": "1.125rem"
+        },
+        {
+          "slug": "x-large",
+          "name": "Rất lớn",
+          "size": "clamp(2rem, 4vw, 3rem)"
+        },
+        {
+          "slug": "hero",
+          "name": "Hero",
+          "size": "clamp(2.75rem, 6.4vw, 5.5rem)"
+        }
       ]
     },
-    "layout": { "contentSize": "760px", "wideSize": "1200px" },
-    "spacing": { "units": [ "px", "rem", "%" ] }
+    "layout": {
+      "contentSize": "760px",
+      "wideSize": "1200px"
+    },
+    "spacing": {
+      "units": [
+        "px",
+        "rem",
+        "%"
+      ]
+    },
+    "useRootPaddingAwareAlignments": true
   },
   "styles": {
-    "color": { "background": "var(--wp--preset--color--paper)", "text": "var(--wp--preset--color--ink)" },
-    "typography": { "fontFamily": "var(--wp--preset--font-family--body)", "fontSize": "var(--wp--preset--font-size--medium)", "lineHeight": "1.6" },
-    "spacing": { "padding": { "left": "24px", "right": "24px" } },
+    "color": {
+      "background": "var(--wp--preset--color--paper)",
+      "text": "var(--wp--preset--color--ink)"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--body)",
+      "fontSize": "var(--wp--preset--font-size--medium)",
+      "lineHeight": "1.6"
+    },
+    "spacing": {
+      "padding": {
+        "left": "24px",
+        "right": "24px"
+      }
+    },
     "elements": {
       "link": {
-        "color": { "text": "var(--wp--preset--color--cyan-ink)" },
-        ":hover": { "color": { "text": "#C2006A" } }
+        "color": {
+          "text": "var(--wp--preset--color--cyan-ink)"
+        },
+        ":hover": {
+          "color": {
+            "text": "#C2006A"
+          }
+        }
       },
       "heading": {
-        "typography": { "fontFamily": "var(--wp--preset--font-family--display)", "fontWeight": "800", "lineHeight": "1.05", "letterSpacing": "-0.02em" }
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--display)",
+          "fontWeight": "800",
+          "lineHeight": "1.05",
+          "letterSpacing": "-0.02em"
+        }
       },
-      "h1": { "typography": { "fontSize": "var(--wp--preset--font-size--hero)", "lineHeight": "0.96" } },
-      "h2": { "typography": { "fontSize": "var(--wp--preset--font-size--x-large)" } },
+      "h1": {
+        "typography": {
+          "fontSize": "var(--wp--preset--font-size--hero)",
+          "lineHeight": "0.96"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontSize": "var(--wp--preset--font-size--x-large)"
+        }
+      },
       "button": {
-        "color": { "background": "var(--wp--preset--color--ink)", "text": "#FFFFFF" },
-        "border": { "radius": "999px" },
-        "typography": { "fontWeight": "600" },
-        ":hover": { "color": { "background": "var(--wp--preset--color--magenta)" } }
+        "color": {
+          "background": "var(--wp--preset--color--ink)",
+          "text": "#FFFFFF"
+        },
+        "border": {
+          "radius": "999px"
+        },
+        "typography": {
+          "fontWeight": "600"
+        },
+        ":hover": {
+          "color": {
+            "background": "var(--wp--preset--color--magenta)"
+          }
+        }
       }
     }
   },
   "templateParts": [
-    { "name": "header", "title": "Đầu trang", "area": "header" },
-    { "name": "footer", "title": "Chân trang", "area": "footer" }
+    {
+      "name": "header",
+      "title": "Đầu trang",
+      "area": "header"
+    },
+    {
+      "name": "footer",
+      "title": "Chân trang",
+      "area": "footer"
+    }
   ]
 }

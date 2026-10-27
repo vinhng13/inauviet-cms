@@ -17,4 +17,8 @@ if ( in_array( wp_get_environment_type(), array( 'local', 'development' ), true 
 			$phpmailer->SMTPAutoTLS = false;
 		}
 	);
+
+	// Địa chỉ gửi mặc định "wordpress@localhost" không hợp lệ nên PHPMailer từ chối.
+	add_filter( 'wp_mail_from', static fn() => 'no-reply@auviet.test' );
+	add_filter( 'wp_mail_from_name', static fn() => 'In Âu Việt (local)' );
 }

@@ -1,0 +1,82 @@
+/* Khối động Âu Việt. Màu khớp theme: mực #16181D, cyan #009FE3, magenta #E4007C, vàng #FFE500. */
+.av-wrap{max-width:1200px;margin:0 auto;padding:0 24px;box-sizing:border-box}
+
+/* Thanh liên hệ trên cùng */
+.av-topbar{background:#16181D;color:#C9CED6;font-size:14px}
+.av-topbar .av-wrap{display:flex;flex-wrap:wrap;gap:6px 24px;align-items:center;padding-top:8px;padding-bottom:8px}
+.av-topbar a{color:#fff;text-decoration:none}
+.av-topbar a:hover{text-decoration:underline;color:#fff}
+.av-topbar__addr{margin-left:auto}
+@media (max-width:720px){.av-topbar__addr{display:none}}
+
+/* Banner chiến dịch */
+.av-campaign{display:block;background:#FFE500;color:#16181D;text-decoration:none}
+.av-campaign:hover{color:#16181D}
+.av-campaign .av-wrap{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding-top:12px;padding-bottom:12px;font-size:15px}
+.av-campaign__link{margin-left:auto;font-weight:600;text-decoration:underline}
+
+/* Nhóm sản phẩm */
+.av-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.av-group{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid #D9DEE5;border-top:6px solid #009FE3;border-radius:12px;padding:20px;text-decoration:none;color:#16181D}
+.av-group:hover{border-color:#16181D;color:#16181D}
+.av-group strong{font-size:18px}
+.av-group span{font-size:14px;color:#4A505C}
+.av-group--1{border-top-color:#E4007C}.av-group--2{border-top-color:#FFE500}.av-group--3{border-top-color:#16181D}.av-group--4{border-top-color:#8A93A3}
+
+/* Bốn nút liên hệ dạng ô */
+.av-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.av-tile{display:flex;align-items:center;gap:12px;padding:16px;min-height:44px;border-radius:12px;background:#fff;border:1px solid #D9DEE5;color:#16181D;text-decoration:none}
+.av-tile:hover{border-color:#16181D;color:#16181D}
+.av-tile__icon{flex:0 0 40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;background:#16181D}
+.av-tile--zalo .av-tile__icon{background:#0068FF}.av-tile--goi .av-tile__icon{background:#E4007C}.av-tile--facebook .av-tile__icon{background:#1877F2}
+.av-tile strong{display:block}
+.av-tile span span{font-size:14px;color:#4A505C}
+@media (max-width:480px){.av-tiles{grid-template-columns:1fr}}
+
+/* Đội tư vấn */
+.av-people{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.av-person{background:#fff;border:1px solid #D9DEE5;border-radius:14px;padding:20px;display:flex;flex-direction:column}
+.av-person__role{font-size:14px;color:#4A505C}
+.av-person__name{font-size:18px;margin-bottom:10px}
+.av-person__tel{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:24px;text-decoration:none;color:#0077AA}
+
+/* Form liên hệ báo giá */
+.av-form{background:#fff;border:1px solid #D9DEE5;border-radius:18px;padding:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.av-field{display:flex;flex-direction:column;gap:6px}
+.av-field--full,.av-form__error{grid-column:1/-1}
+.av-field label{font-weight:600;font-size:15px}
+.av-field input:not([type=file]),.av-field select,.av-field textarea{font:inherit;padding:12px 14px;border:1px solid #A9B2BF;border-radius:10px;min-height:44px;box-sizing:border-box;background:#fff;color:#16181D}
+.av-field input:focus,.av-field select:focus,.av-field textarea:focus{outline:2px solid #009FE3;outline-offset:0;border-color:#009FE3}
+.av-field textarea{resize:vertical}
+.av-form__actions{flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px 16px;font-size:14px;color:#4A505C}
+.av-form__error{margin:0;color:#B00050;font-weight:600}
+.av-hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.av-btn{display:inline-block;font:inherit;font-weight:600;background:#16181D;color:#fff;border:2px solid #16181D;border-radius:999px;padding:13px 24px;min-height:48px;cursor:pointer;text-decoration:none;box-sizing:border-box}
+.av-btn:hover{background:#E4007C;border-color:#E4007C;color:#fff}
+.av-btn--outline{background:#fff;color:#16181D}
+.av-btn--outline:hover{background:#16181D;border-color:#16181D;color:#fff}
+.av-form--done{display:flex;flex-direction:column;align-items:flex-start;gap:12px;border-top:6px solid #009FE3}
+.av-form__done-title{font-family:"Bricolage Grotesque",sans-serif;font-size:28px}
+
+/* Chân trang */
+.av-footer-cols{display:flex;flex-wrap:wrap;gap:40px;font-size:15px}
+.av-footer-col{flex:1 1 200px;display:flex;flex-direction:column;gap:8px}
+.av-footer-col--main{flex:2 1 360px;gap:0}
+.av-footer-col p{margin:0 0 6px}
+.av-footer-col strong{color:#fff}
+.av-footer-col a{color:#A9B0BC;text-decoration:none}
+.av-footer-col a:hover{color:#fff}
+.av-footer-col--main a{color:#fff}
+.av-footer__name{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;margin-bottom:12px}
+.av-footer__copy{border-top:1px solid #343944;margin:48px 0 0;padding-top:20px;font-size:14px}
+
+/* Nút liên hệ nổi (máy tính) và thanh dưới (điện thoại) */
+.av-fab{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:90}
+.av-fab__btn{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff;background:#16181D;box-shadow:0 0 0 2px #fff,0 4px 14px rgba(22,24,29,.25)}
+.av-fab__btn:hover{color:#fff;transform:translateY(-1px)}
+.av-fab__btn--zalo{background:#0068FF}.av-fab__btn--goi{background:#E4007C}.av-fab__btn--facebook{background:#1877F2}
+.av-mbar{display:none;position:fixed;left:0;right:0;bottom:0;grid-template-columns:repeat(4,minmax(0,1fr));background:#fff;border-top:1px solid #D9DEE5;z-index:90}
+.av-mbar__btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;min-height:56px;color:#16181D;text-decoration:none;font-size:12px;font-weight:600}
+.av-mbar__btn--zalo svg{color:#0068FF}.av-mbar__btn--goi svg{color:#E4007C}.av-mbar__btn--facebook svg{color:#1877F2}
+@media (max-width:720px){.av-fab{display:none}.av-mbar{display:grid}body{padding-bottom:64px}}
+@media (prefers-reduced-motion:reduce){.av-fab__btn:hover{transform:none}}

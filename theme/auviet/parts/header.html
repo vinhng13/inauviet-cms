@@ -1,10 +1,24 @@
-<!-- wp:group {"tagName":"header","style":{"border":{"bottom":{"color":"var:preset|color|line","width":"1px"}},"spacing":{"padding":{"top":"14px","bottom":"14px"}}},"backgroundColor":"sheet","layout":{"type":"constrained","contentSize":"1200px"}} -->
-<header class="wp-block-group has-sheet-background-color has-background" style="border-bottom-color:var(--wp--preset--color--line);border-bottom-width:1px;padding-top:14px;padding-bottom:14px">
-<!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group">
-<!-- wp:site-title {"level":0,"style":{"typography":{"fontWeight":"800"}},"fontFamily":"display","fontSize":"large"} /-->
-<!-- wp:navigation {"overlayMenu":"mobile","layout":{"type":"flex","flexWrap":"wrap"}} /-->
-</div>
+<!-- wp:auviet/topbar /-->
+
+<!-- wp:group {"tagName":"header","align":"full","className":"av-header","layout":{"type":"constrained","contentSize":"1200px"}} -->
+<header class="wp-block-group alignfull av-header"><!-- wp:group {"className":"av-header__row","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group av-header__row"><!-- wp:site-title {"level":0,"className":"av-brand"} /-->
+
+<!-- wp:navigation {"overlayMenu":"mobile","className":"av-nav","layout":{"type":"flex","flexWrap":"wrap"}} -->
+<!-- wp:navigation-link {"label":"Sản phẩm","url":"/san-pham/","kind":"custom"} /-->
+<!-- wp:navigation-link {"label":"Thiết kế","url":"/thiet-ke/","kind":"custom"} /-->
+<!-- wp:navigation-link {"label":"Mẫu đã làm","url":"/mau-da-lam/","kind":"custom"} /-->
+<!-- wp:navigation-link {"label":"Kiến thức in ấn","url":"/kien-thuc/","kind":"custom"} /-->
+<!-- wp:navigation-link {"label":"Giới thiệu","url":"/gioi-thieu/","kind":"custom"} /-->
+<!-- wp:navigation-link {"label":"Liên hệ","url":"/#lien-he","kind":"custom"} /-->
+<!-- /wp:navigation -->
+
+<!-- wp:buttons {"className":"av-header__cta"} -->
+<div class="wp-block-buttons av-header__cta"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/#lien-he">Nhận báo giá</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons --></div>
+<!-- /wp:group --></header>
 <!-- /wp:group -->
-</header>
-<!-- /wp:group -->
+
+<!-- wp:auviet/campaign-banner /-->
