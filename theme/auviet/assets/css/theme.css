@@ -9,8 +9,9 @@
 .av-header{background:#fff;border-bottom:1px solid var(--av-line);padding-top:14px;padding-bottom:14px}
 .av-header__row{gap:16px 32px}
 .av-brand{margin:0;font-family:var(--wp--preset--font-family--display);font-weight:800;font-size:24px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
-.av-brand a{color:var(--av-ink);text-decoration:none}
-.av-brand::before{content:"";width:76px;height:40px;flex:0 0 76px;background:url(../images/logo-au-viet.png) center/contain no-repeat}
+
+.av-brand a{display:block;width:92px;height:48px;background:url(../images/logo-au-viet.png) left center/contain no-repeat;overflow:hidden;color:transparent;font-size:0;line-height:0}
+.av-brand a:hover{color:transparent}
 .av-nav{font-size:15px;font-weight:500;gap:24px}
 .av-nav a{color:var(--av-ink);text-decoration:none}
 .av-nav a:hover{color:var(--av-red-ink)}
