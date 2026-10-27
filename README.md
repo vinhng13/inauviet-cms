@@ -6,7 +6,8 @@ Tài liệu yêu cầu và kỹ thuật: xem `docs/tai-lieu.md`.
 
 ## Chạy trên máy local (Windows, Docker Desktop)
 
-Mở PowerShell tại thư mục này (`D:\Source.Code\Inauviet`) và Docker Desktop đang chạy.
+Yêu cầu: Docker Desktop đang chạy (“Engine running”), WSL 2 đã cài (`wsl --status` hiện “Default Version: 2”).
+Mở PowerShell tại thư mục này (`D:\Source.Code\Inauviet`).
 
 ```powershell
 # 1. Dựng và khởi động các container (lần đầu mất vài phút)
@@ -14,6 +15,13 @@ docker compose up -d --build
 
 # 2. Cài WordPress, plugin, theme, tài khoản (chạy lại nhiều lần vẫn an toàn)
 docker compose exec web bash /opt/auviet/setup-wp.sh
+```
+
+Nếu dùng **Git Bash** thay cho PowerShell, lệnh thứ hai phải chạy như sau
+(Git Bash tự đổi đường dẫn `/opt/...` và không có TTY chuẩn):
+
+```bash
+MSYS_NO_PATHCONV=1 docker compose exec -T web bash /opt/auviet/setup-wp.sh
 ```
 
 | Địa chỉ | Dùng để |
