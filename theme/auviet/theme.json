@@ -11,7 +11,7 @@
         {
           "slug": "paper",
           "name": "Nền giấy",
-          "color": "#F5F7F9"
+          "color": "#F6F6F6"
         },
         {
           "slug": "sheet",
@@ -20,38 +20,33 @@
         },
         {
           "slug": "ink",
-          "name": "Mực đen",
-          "color": "#16181D"
+          "name": "Than chì (logo)",
+          "color": "#363435"
         },
         {
           "slug": "ink-2",
           "name": "Chữ phụ",
-          "color": "#4A505C"
+          "color": "#5C5A5B"
         },
         {
           "slug": "line",
           "name": "Đường kẻ",
-          "color": "#D9DEE5"
+          "color": "#DEDCDC"
         },
         {
-          "slug": "cyan",
-          "name": "Cyan",
-          "color": "#009FE3"
+          "slug": "red",
+          "name": "Đỏ Âu Việt (logo)",
+          "color": "#EC3237"
         },
         {
-          "slug": "cyan-ink",
-          "name": "Cyan đậm (chữ, liên kết)",
-          "color": "#0077AA"
+          "slug": "red-strong",
+          "name": "Đỏ nút bấm",
+          "color": "#D2232A"
         },
         {
-          "slug": "magenta",
-          "name": "Magenta",
-          "color": "#E4007C"
-        },
-        {
-          "slug": "yellow",
-          "name": "Vàng",
-          "color": "#FFE500"
+          "slug": "red-ink",
+          "name": "Đỏ chữ, liên kết",
+          "color": "#B81C23"
         }
       ]
     },
@@ -130,11 +125,11 @@
     "elements": {
       "link": {
         "color": {
-          "text": "var(--wp--preset--color--cyan-ink)"
+          "text": "var(--wp--preset--color--red-ink)"
         },
         ":hover": {
           "color": {
-            "text": "#C2006A"
+            "text": "#8E1218"
           }
         }
       },
@@ -159,7 +154,7 @@
       },
       "button": {
         "color": {
-          "background": "var(--wp--preset--color--ink)",
+          "background": "var(--wp--preset--color--red-strong)",
           "text": "#FFFFFF"
         },
         "border": {
@@ -170,7 +165,7 @@
         },
         ":hover": {
           "color": {
-            "background": "var(--wp--preset--color--magenta)"
+            "background": "var(--wp--preset--color--ink)"
           }
         }
       }
