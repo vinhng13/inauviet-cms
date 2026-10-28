@@ -169,6 +169,25 @@ function av_render_breadcrumb(): string {
 		$current = get_the_title( get_queried_object_id() );
 	} elseif ( is_post_type_archive( 'av_material' ) ) {
 		$current = 'Thư viện chất liệu';
+	} elseif ( is_singular( 'av_project' ) ) {
+		$items[] = array( 'Mẫu đã làm', get_post_type_archive_link( 'av_project' ) );
+		$current = get_the_title( get_queried_object_id() );
+	} elseif ( is_post_type_archive( 'av_project' ) ) {
+		$current = 'Mẫu đã làm';
+	} elseif ( is_home() && function_exists( 'av_blog_url' ) ) {
+		$current = av_blog_page_id() ? get_the_title( av_blog_page_id() ) : 'Kiến thức in ấn';
+	} elseif ( ( is_category() || is_tag() || is_singular( 'post' ) ) && function_exists( 'av_blog_url' ) ) {
+		$items[] = array( av_blog_page_id() ? get_the_title( av_blog_page_id() ) : 'Kiến thức in ấn', av_blog_url() );
+		if ( is_singular( 'post' ) ) {
+			$cats = get_the_category( get_queried_object_id() );
+			// Chuyên mục trùng tên trang danh sách ("Kiến thức in ấn") thì không lặp lại.
+			if ( $cats && $cats[0]->name !== $items[ count( $items ) - 1 ][0] ) {
+				$items[] = array( $cats[0]->name, get_category_link( $cats[0] ) );
+			}
+			$current = get_the_title( get_queried_object_id() );
+		} else {
+			$current = is_tag() ? 'Chủ đề: ' . single_tag_title( '', false ) : single_cat_title( '', false );
+		}
 	} elseif ( is_page() && ! is_front_page() ) {
 		foreach ( array_reverse( get_post_ancestors( get_queried_object_id() ) ) as $aid ) {
 			$items[] = array( get_the_title( $aid ), get_permalink( $aid ) );

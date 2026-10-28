@@ -244,18 +244,17 @@ function av_product_related( int $post_id, int $limit = 4 ): array {
  * @return WP_Post[]
  */
 function av_product_related_posts( int $post_id, int $limit = 3 ): array {
-	$ids = array_filter( array_map( 'intval', (array) get_post_meta( $post_id, '_av_related_posts', true ) ) );
-	if ( ! $ids ) {
-		return array();
-	}
-	return get_posts(
+	$ids   = array_filter( array_map( 'intval', (array) get_post_meta( $post_id, '_av_related_posts', true ) ) );
+	$posts = $ids ? get_posts(
 		array(
 			'post_type'   => 'post',
 			'post__in'    => $ids,
 			'orderby'     => 'post__in',
 			'numberposts' => $limit,
 		)
-	);
+	) : array();
+	// Bổ sung bài có gắn sản phẩm này (Kiến thức in ấn).
+	return (array) apply_filters( 'av_product_related_posts', $posts, $post_id, $limit );
 }
 
 /**

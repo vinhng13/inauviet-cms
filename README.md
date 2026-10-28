@@ -57,6 +57,9 @@ Mọi cổng chỉ mở cho chính máy này (127.0.0.1).
 | Bảng giá tham khảo, số lượng tối thiểu, thời gian sản xuất (có lịch sử sửa giá) | **Sản phẩm** › hộp "Bảng giá tham khảo" | Quản trị viên |
 | Nhóm sản phẩm: ảnh, đoạn giới thiệu, hỏi đáp | **Sản phẩm › Nhóm sản phẩm** | Biên tập viên, Quản trị viên |
 | Thư viện chất liệu, gia công | **Chất liệu** | Biên tập viên, Quản trị viên |
+| Mẫu đã làm (/mau-da-lam/): ảnh, khách hàng và có được nêu tên không, ngành, sản phẩm (bắt buộc ít nhất 1), quy cách. Không xuất bản được khi khách chưa đồng ý mà tên khách nằm trong tiêu đề, mô tả hoặc ảnh | **Mẫu đã làm** (ngành ở **Mẫu đã làm › Ngành**, đoạn đầu trang ở **Mẫu đã làm › Giới thiệu trang**) | Biên tập viên, Quản trị viên |
+| Bài viết Kiến thức in ấn (/kien-thuc/): nội dung, chuyên mục, chủ đề, ảnh đại diện, sản phẩm liên quan (hộp bên phải); ghim "Nổi bật" để lên khu bài nổi bật; tiêu đề trùng sản phẩm/bài khác được cảnh báo trước khi Đăng | **Bài viết** (chuyên mục ở **Bài viết › Danh mục**, chủ đề ở **Bài viết › Chủ đề**: chủ đề dưới 2 bài không hiện ra ngoài) | Biên tập viên, Quản trị viên |
+| Đoạn giới thiệu đầu trang Kiến thức in ấn | Trang › **Kiến thức in ấn** › Tóm tắt | Biên tập viên, Quản trị viên |
 | Thêm, khoá tài khoản; vai trò; nhóm quyền bổ sung | **Người dùng**, **Người dùng › Nhóm quyền** | Quản trị viên |
 | Xác thực 2 lớp, khoá tạm khi nhập sai, file nhật ký hằng tháng | **Âu Việt › Bảo mật, nhật ký**; mỗi người bật 2 lớp ở **Hồ sơ** | Quản trị viên |
 | Nhật ký hoạt động (lọc, xuất CSV/JSON) | **Nhật ký hoạt động** (Simple History) | Quản trị viên |

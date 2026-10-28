@@ -1,10 +1,35 @@
 <!-- wp:template-part {"slug":"header","area":"header"} /-->
-<!-- wp:group {"tagName":"main","style":{"spacing":{"padding":{"top":"64px","bottom":"64px"}}},"layout":{"type":"constrained"}} -->
-<main class="wp-block-group" style="padding-top:64px;padding-bottom:64px">
-<!-- wp:post-title {"level":1} /-->
-<!-- wp:post-date {"format":"d/m/Y","fontSize":"small"} /-->
-<!-- wp:post-featured-image /-->
-<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
-</main>
+
+<!-- wp:group {"tagName":"main","className":"av-article-page","style":{"spacing":{"padding":{"top":"32px","bottom":"96px"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
+<main class="wp-block-group av-article-page" style="padding-top:32px;padding-bottom:96px"><!-- wp:auviet/breadcrumb /-->
+
+<!-- wp:group {"tagName":"header","className":"av-article__head","layout":{"type":"constrained","contentSize":"820px","justifyContent":"left"}} -->
+<header class="wp-block-group av-article__head"><!-- wp:post-title {"level":1,"className":"av-article__title"} /-->
+
+<!-- wp:auviet/post-byline /--></header>
 <!-- /wp:group -->
+
+<!-- wp:group {"className":"av-article","layout":{"type":"default"}} -->
+<div class="wp-block-group av-article"><!-- wp:group {"tagName":"aside","className":"av-article__aside","layout":{"type":"default"}} -->
+<aside class="wp-block-group av-article__aside"><!-- wp:auviet/post-toc /-->
+
+<!-- wp:auviet/post-aside-cta /--></aside>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"article","className":"av-article__main","layout":{"type":"default"}} -->
+<article class="wp-block-group av-article__main"><!-- wp:post-content {"className":"av-article__content","layout":{"type":"default"}} /-->
+
+<!-- wp:auviet/post-share /-->
+
+<!-- wp:auviet/post-topics /--></article>
+<!-- /wp:group --></div>
+<!-- /wp:group -->
+
+<!-- wp:auviet/post-products /-->
+
+<!-- wp:auviet/post-quote /-->
+
+<!-- wp:auviet/post-related /--></main>
+<!-- /wp:group -->
+
 <!-- wp:template-part {"slug":"footer","area":"footer"} /-->

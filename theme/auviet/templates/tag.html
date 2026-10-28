@@ -1,0 +1,40 @@
+<!-- wp:template-part {"slug":"header","area":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"av-catalog-page av-blog-page av-blog-page--tag","style":{"spacing":{"padding":{"top":"32px","bottom":"96px"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
+<main class="wp-block-group av-catalog-page av-blog-page av-blog-page--tag" style="padding-top:32px;padding-bottom:96px"><!-- wp:auviet/breadcrumb /-->
+
+<!-- wp:auviet/blog-header /-->
+
+
+<!-- wp:query {"queryId":43,"query":{"inherit":true,"perPage":9},"className":"av-catalog av-posts"} -->
+<div class="wp-block-query av-catalog av-posts"><!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"7/5","sizeSlug":"medium_large"} /-->
+
+<!-- wp:auviet/post-card-meta /-->
+
+<!-- wp:post-title {"level":2,"isLink":true} /-->
+
+<!-- wp:post-excerpt {"excerptLength":24} /-->
+<!-- /wp:post-template -->
+
+<!-- wp:query-pagination {"layout":{"type":"flex","justifyContent":"center"}} -->
+<!-- wp:query-pagination-previous {"label":"Trang trước"} /-->
+
+<!-- wp:query-pagination-numbers /-->
+
+<!-- wp:query-pagination-next {"label":"Trang sau"} /-->
+<!-- /wp:query-pagination -->
+
+<!-- wp:query-no-results -->
+<!-- wp:group {"className":"av-empty","layout":{"type":"default"}} -->
+<div class="wp-block-group av-empty"><!-- wp:paragraph -->
+<p><strong>Chưa có bài viết.</strong> Cần tư vấn ngay, gọi hoặc nhắn Zalo cho Âu Việt.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- /wp:query-no-results --></div>
+<!-- /wp:query -->
+
+<!-- wp:pattern {"slug":"auviet/catalog-band"} /--></main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer"} /-->

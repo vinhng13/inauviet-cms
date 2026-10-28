@@ -60,7 +60,7 @@ ${WP} option update time_format "H:i"
 ${WP} option update start_of_week 1
 ${WP} option update users_can_register 0
 ${WP} option update default_comment_status closed
-${WP} rewrite structure '/%postname%/'
+${WP} rewrite structure '/kien-thuc/%postname%/'
 
 cat > "${DOCROOT}/.htaccess" <<'HT'
 # BEGIN WordPress

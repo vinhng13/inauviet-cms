@@ -36,6 +36,13 @@ add_action(
 			$to = home_url( av_legacy_category_map()[ $m[1] ] ?? '/san-pham/' );
 		} elseif ( preg_match( '#^/contact-us\.html$#', $path ) ) {
 			$to = home_url( '/lien-he/' );
+		} elseif ( preg_match( '#/newsdetail/.*-115-(\d+)\.html$#u', $path, $m ) && function_exists( 'av_blog_url' ) ) {
+			// Bài viết cũ → bài mới cùng nội dung; chưa nhập thì về danh sách Kiến thức in ấn.
+			$map = (array) get_option( 'av_legacy_news_map', array() );
+			$pid = (int) ( $map[ $m[1] ] ?? 0 );
+			$to  = ( $pid && 'publish' === get_post_status( $pid ) ) ? get_permalink( $pid ) : av_blog_url();
+		} elseif ( preg_match( '#^/news/[^/]*-115\.html(/p-\d+)?/?$#u', $path ) && function_exists( 'av_blog_url' ) ) {
+			$to = av_blog_url();
 		}
 		if ( $to ) {
 			wp_safe_redirect( $to, 301, 'Au Viet legacy' );
@@ -80,7 +87,15 @@ function av_legacy_page(): void {
 		<?php if ( $last ) : ?>
 			<p><strong>Lần chạy gần nhất:</strong> <?php echo esc_html( (string) $last ); ?></p>
 		<?php endif; ?>
-		<p><label><input type="checkbox" id="av-legacy-only-design"> Chỉ nhập các trang dịch vụ thiết kế</label></p>
+		<p>
+			<label for="av-legacy-scope"><strong>Nhập</strong></label>
+			<select id="av-legacy-scope">
+				<option value="all">Tất cả: sản phẩm, trang thiết kế, bài viết</option>
+				<option value="source">Chỉ sản phẩm</option>
+				<option value="design">Chỉ các trang dịch vụ thiết kế</option>
+				<option value="news">Chỉ bài viết (Tin tức, Tư vấn → Kiến thức in ấn)</option>
+			</select>
+		</p>
 		<p><label><input type="checkbox" id="av-legacy-force"> Ghi đè cả sản phẩm đã sửa tay sau lần nhập trước (mất phần nội dung, quy cách đã sửa; không đụng tới bảng giá)</label></p>
 		<p><button type="button" class="button button-primary button-hero" id="av-legacy-start">Bắt đầu nhập</button></p>
 		<div id="av-legacy-progress" hidden>
@@ -117,12 +132,13 @@ function av_legacy_page(): void {
 			btn.disabled = true;
 			document.getElementById( 'av-legacy-progress' ).hidden = false;
 			status.textContent = 'Đang chuẩn bị…';
-			var prep = await call( 'prepare' );
+			var scope = document.getElementById( 'av-legacy-scope' ).value;
+			var prep = await call( 'prepare', { scope: scope } );
 			if ( ! prep.success ) { line( 'Lỗi: ' + prep.data, true ); btn.disabled = false; return; }
 			line( prep.data.message );
 			var jobs = prep.data.jobs;
-			if ( document.getElementById( 'av-legacy-only-design' ).checked ) {
-				jobs = jobs.filter( function ( j ) { return 'design' === j.kind; } );
+			if ( 'all' !== scope ) {
+				jobs = jobs.filter( function ( j ) { return scope === j.kind; } );
 			}
 			bar.max = jobs.length + 1;
 			for ( var i = 0; i < jobs.length; i++ ) {
@@ -226,9 +242,14 @@ add_action(
 				}
 			}
 		}
+		// Bài viết (Kiến thức in ấn): đọc danh sách bài trên web cũ.
+		$scope = sanitize_key( wp_unslash( $_POST['scope'] ?? 'all' ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( function_exists( 'av_legacy_news_jobs' ) && in_array( $scope, array( 'all', 'news' ), true ) ) {
+			$jobs = array_merge( $jobs, av_legacy_news_jobs() );
+		}
 		wp_send_json_success(
 			array(
-				'message' => sprintf( 'Đã tạo %d chất liệu, điền giới thiệu nhóm, bỏ %d sản phẩm mẫu vào thùng rác. Bắt đầu tải %d trang cũ.', $made, $trashed, count( $jobs ) ),
+				'message' => sprintf( 'Đã tạo %d chất liệu, điền giới thiệu nhóm, bỏ %d sản phẩm mẫu vào thùng rác. Có %d trang cũ cần tải.', $made, $trashed, count( $jobs ) ),
 				'jobs'    => $jobs,
 			)
 		);
@@ -421,6 +442,32 @@ function av_legacy_url( string $src ): string {
  * @return array|WP_Error
  */
 function av_legacy_fetch( string $path ) {
+	$xp = av_legacy_xpath( $path );
+	if ( is_wp_error( $xp ) ) {
+		return $xp;
+	}
+	$intro_node = $xp->query( "//div[contains(concat(' ', normalize-space(@class), ' '), ' infocongty_sp ')]" )->item( 0 );
+	$intro      = $intro_node ? trim( preg_replace( '/\s+/u', ' ', $intro_node->textContent ) ) : '';
+	$slides     = array();
+	foreach ( $xp->query( "//div[contains(@class,'webwidget_slideshow_dot')]//img" ) as $img ) {
+		$u = av_legacy_url( (string) $img->getAttribute( 'src' ) );
+		if ( $u && ! in_array( $u, $slides, true ) ) {
+			$slides[] = $u;
+		}
+	}
+	return array(
+		'intro'   => $intro,
+		'slides'  => $slides,
+		'content' => $xp->query( "//div[@id='noi_dung']" )->item( 0 ),
+	);
+}
+
+/**
+ * Tải một trang cũ, trả về DOMXPath để đọc.
+ *
+ * @return DOMXPath|WP_Error
+ */
+function av_legacy_xpath( string $path ) {
 	$res = wp_remote_get(
 		av_legacy_url( $path ),
 		array(
@@ -439,22 +486,7 @@ function av_legacy_fetch( string $path ) {
 	libxml_use_internal_errors( true );
 	$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $html, LIBXML_NOERROR | LIBXML_NOWARNING );
 	libxml_clear_errors();
-	$xp = new DOMXPath( $dom );
-
-	$intro_node = $xp->query( "//div[contains(concat(' ', normalize-space(@class), ' '), ' infocongty_sp ')]" )->item( 0 );
-	$intro      = $intro_node ? trim( preg_replace( '/\s+/u', ' ', $intro_node->textContent ) ) : '';
-	$slides     = array();
-	foreach ( $xp->query( "//div[contains(@class,'webwidget_slideshow_dot')]//img" ) as $img ) {
-		$u = av_legacy_url( (string) $img->getAttribute( 'src' ) );
-		if ( $u && ! in_array( $u, $slides, true ) ) {
-			$slides[] = $u;
-		}
-	}
-	return array(
-		'intro'   => $intro,
-		'slides'  => $slides,
-		'content' => $xp->query( "//div[@id='noi_dung']" )->item( 0 ),
-	);
+	return new DOMXPath( $dom );
 }
 
 /**
@@ -654,7 +686,7 @@ function av_legacy_walk( DOMNode $node, array &$blocks, int $post_id, string $ti
 			continue;
 		}
 		if ( preg_match( '/^h[1-6]$/', $tag ) ) {
-			$text = av_legacy_inline( $c );
+			$text = trim( preg_replace( '#</?strong>#', '', av_legacy_inline( $c ) ) );
 			if ( '' !== trim( wp_strip_all_tags( $text ) ) ) {
 				$level    = max( 2, min( 4, (int) $tag[1] ) );
 				$blocks[] = sprintf( '<!-- wp:heading%1$s -->' . "\n" . '<h%2$d class="wp-block-heading">%3$s</h%2$d>' . "\n" . '<!-- /wp:heading -->', 2 === $level ? '' : ' {"level":' . $level . '}', $level, $text );
@@ -780,6 +812,15 @@ function av_legacy_inline( DOMNode $node ): string {
 		}
 		$tag   = strtolower( $c->tagName );
 		$inner = av_legacy_inline( $c );
+		$style = strtolower( str_replace( ' ', '', (string) $c->getAttribute( 'style' ) ) );
+		// Nội dung dán từ Google Docs: <b style="font-weight:normal"> bao ngoài, chữ đậm nằm ở <span style="font-weight:700">.
+		if ( in_array( $tag, array( 'b', 'strong' ), true ) && preg_match( '/font-weight:(normal|400)/', $style ) ) {
+			$tag = 'span';
+		} elseif ( 'span' === $tag && preg_match( '/font-weight:(bold|[6-9]00)/', $style ) ) {
+			$tag = 'b';
+		} elseif ( 'span' === $tag && str_contains( $style, 'font-style:italic' ) ) {
+			$tag = 'i';
+		}
 		switch ( $tag ) {
 			case 'strong':
 			case 'b':

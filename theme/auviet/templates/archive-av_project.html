@@ -1,0 +1,49 @@
+<!-- wp:template-part {"slug":"header","area":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"av-catalog-page av-projects-page","style":{"spacing":{"padding":{"top":"32px","bottom":"96px"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
+<main class="wp-block-group av-catalog-page av-projects-page" style="padding-top:32px;padding-bottom:96px"><!-- wp:auviet/breadcrumb /-->
+
+<!-- wp:auviet/projects-header /-->
+
+<!-- wp:auviet/projects-filters /-->
+
+<!-- wp:query {"queryId":31,"query":{"inherit":true,"perPage":12},"className":"av-catalog av-projects-results"} -->
+<div class="wp-block-query av-catalog av-projects-results"><!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"4/3","sizeSlug":"medium_large"} /-->
+
+<!-- wp:post-title {"level":2,"isLink":true} /-->
+
+<!-- wp:auviet/project-meta /-->
+<!-- /wp:post-template -->
+
+<!-- wp:query-pagination {"layout":{"type":"flex","justifyContent":"center"}} -->
+<!-- wp:query-pagination-previous {"label":"Trang trước"} /-->
+
+<!-- wp:query-pagination-numbers /-->
+
+<!-- wp:query-pagination-next {"label":"Trang sau"} /-->
+<!-- /wp:query-pagination -->
+
+<!-- wp:query-no-results -->
+<!-- wp:group {"className":"av-empty","layout":{"type":"default"}} -->
+<div class="wp-block-group av-empty"><!-- wp:paragraph -->
+<p><strong>Chưa có mẫu phù hợp với bộ lọc này.</strong> Thử chọn loại sản phẩm hoặc ngành khác, hoặc gửi yêu cầu để Âu Việt gửi mẫu gần với nhu cầu của Quý khách.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/lien-he/">Gửi yêu cầu</a></div>
+<!-- /wp:button -->
+
+<!-- wp:button {"className":"is-style-outline"} -->
+<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/mau-da-lam/">Xem tất cả mẫu</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons --></div>
+<!-- /wp:group -->
+<!-- /wp:query-no-results --></div>
+<!-- /wp:query -->
+
+<!-- wp:pattern {"slug":"auviet/catalog-band"} /--></main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","area":"footer"} /-->

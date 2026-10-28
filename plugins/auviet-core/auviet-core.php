@@ -31,6 +31,8 @@ require_once AV_CORE_DIR . 'includes/legacy.php';
 require_once AV_CORE_DIR . 'includes/contact.php';
 require_once AV_CORE_DIR . 'includes/about.php';
 require_once AV_CORE_DIR . 'includes/design.php';
+require_once AV_CORE_DIR . 'includes/projects.php';
+require_once AV_CORE_DIR . 'includes/articles.php';
 require_once AV_CORE_DIR . 'includes/blocks.php';
 require_once AV_CORE_DIR . 'includes/quote-form.php';
 require_once AV_CORE_DIR . 'includes/quotes-admin.php';

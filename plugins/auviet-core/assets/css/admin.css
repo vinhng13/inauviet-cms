@@ -36,3 +36,13 @@
 .column-av_photos{width:50px}
 .av-type{display:inline-block;padding:2px 8px;border-radius:10px;background:#f0f0f1;font-size:12px}
 .av-type--lien_he{background:#fdecec;color:#8e1218}
+
+/* Mẫu đã làm, bài viết: danh sách chọn sản phẩm */
+.av-checklist{max-height:320px;overflow:auto;border:1px solid #dcdcde;border-radius:4px;padding:4px 12px 10px;background:#fff;columns:2 260px;column-gap:24px}
+.av-checklist--side{columns:1;max-height:260px}
+.av-checklist__group{column-span:all;margin:10px 0 4px;font-weight:600;color:#1d2327;border-bottom:1px solid #f0f0f1;padding-bottom:2px}
+.av-checklist label{display:block;padding:3px 0;break-inside:avoid}
+.column-av_thumb{width:56px}
+.column-av_thumb img{border-radius:4px;display:block}
+.av-col-warn{color:#b32d2e;font-weight:600}
+.av-col-muted{color:#646970;font-size:12px}
