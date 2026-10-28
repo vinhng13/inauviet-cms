@@ -93,6 +93,10 @@
 .av-ph--logo{min-height:84px;background:#fff;border:1px solid var(--av-line);border-radius:10px;margin:0}
 
 /* Liên hệ */
+.av-contact-cols{gap:40px;margin-top:32px!important}
+.av-contact-page .av-h-sm{font-size:clamp(24px,2.4vw,30px)!important;margin:32px 0 16px}
+.av-contact-page .av-mt{margin-top:72px!important}
+.av-contact-page .wp-block-column > .av-h-sm:first-child,.av-contact-page #lien-he > .av-h-sm:first-child{margin-top:0}
 .av-contact{gap:40px}
 .av-contact h2{margin-bottom:12px}
 

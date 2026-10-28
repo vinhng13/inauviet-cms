@@ -76,7 +76,7 @@ RewriteRule . /index.php [L]
 HT
 
 say "Plugin miễn phí"
-for p in secure-custom-fields seo-by-rank-math redirection simple-history litespeed-cache; do
+for p in secure-custom-fields seo-by-rank-math redirection simple-history two-factor litespeed-cache; do
   ${WP} plugin is-installed "$p" || ${WP} plugin install "$p"
   ${WP} plugin activate "$p" || echo "Không kích hoạt được $p"
 done

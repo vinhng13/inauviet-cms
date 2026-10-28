@@ -30,10 +30,11 @@ function av_render_quote_form( array $attrs = array() ): string {
 
 	if ( 'ok' === $status ) {
 		return sprintf(
-			'<div class="av-form av-form--done" role="status"><strong class="av-form__done-title">Đã nhận yêu cầu</strong><p>Cảm ơn bạn. Âu Việt sẽ gọi lại số điện thoại bạn để lại để tư vấn và báo giá. Cần gấp, gọi ngay <a href="%1$s">%2$s</a>.</p><a class="av-btn av-btn--outline" href="%3$s#lien-he">Gửi yêu cầu khác</a></div>',
+			'<div class="av-form av-form--done" role="status"><strong class="av-form__done-title">Đã nhận yêu cầu</strong><p>Cảm ơn bạn. Âu Việt sẽ gọi lại số điện thoại bạn để lại để %4$s. Cần gấp, gọi ngay <a href="%1$s">%2$s</a>.</p><a class="av-btn av-btn--outline" href="%3$s#lien-he">Gửi yêu cầu khác</a></div>',
 			esc_url( av_tel_href( $c['hotline'] ) ),
 			esc_html( $c['hotline'] ),
-			esc_url( remove_query_arg( array( 'bao-gia', 'loi' ) ) )
+			esc_url( remove_query_arg( array( 'bao-gia', 'loi' ) ) ),
+			'lien_he' === ( $attrs['type'] ?? '' ) ? 'trao đổi thêm' : 'tư vấn và báo giá'
 		);
 	}
 
@@ -45,6 +46,7 @@ function av_render_quote_form( array $attrs = array() ): string {
 	$uid     = wp_unique_id( 'avq-' );
 	$product = absint( $attrs['product'] ?? 0 );
 	$product = ( $product && 'av_product' === get_post_type( $product ) ) ? $product : 0;
+	$type    = isset( av_quote_types()[ $attrs['type'] ?? '' ] ) ? $attrs['type'] : 'bao_gia';
 
 	ob_start();
 	?>
@@ -52,6 +54,7 @@ function av_render_quote_form( array $attrs = array() ): string {
 		<input type="hidden" name="action" value="av_quote">
 		<input type="hidden" name="av_source" value="<?php echo esc_attr( remove_query_arg( array( 'bao-gia', 'loi' ) ) ); ?>">
 		<input type="hidden" name="av_t" value="<?php echo esc_attr( (string) time() ); ?>">
+		<input type="hidden" name="av_type" value="<?php echo esc_attr( $type ); ?>">
 		<?php if ( $product ) : ?>
 			<input type="hidden" name="av_product" value="<?php echo (int) $product; ?>">
 			<p class="av-form__product av-field--full">Sản phẩm: <strong><?php echo esc_html( get_the_title( $product ) ); ?></strong></p>
@@ -102,6 +105,8 @@ function av_handle_quote(): void {
 	$need  = sanitize_text_field( wp_unslash( $_POST['av_need'] ?? '' ) );
 	$note  = sanitize_textarea_field( wp_unslash( $_POST['av_note'] ?? '' ) );
 	$prod  = absint( $_POST['av_product'] ?? 0 );
+	$type  = sanitize_key( wp_unslash( $_POST['av_type'] ?? '' ) );
+	$type  = isset( av_quote_types()[ $type ] ) ? $type : 'bao_gia';
 	// phpcs:enable
 	if ( $prod && ( 'av_product' !== get_post_type( $prod ) || 'publish' !== get_post_status( $prod ) ) ) {
 		$prod = 0;
@@ -146,6 +151,7 @@ function av_handle_quote(): void {
 		'_av_note'   => $note,
 		'_av_source' => $source,
 		'_av_status' => 'moi',
+		'_av_type'   => $type,
 	);
 	if ( $prod ) {
 		$meta['_av_product'] = $prod;
@@ -217,7 +223,7 @@ function av_quote_notify( int $post_id ): void {
 	$body = implode(
 		"\n",
 		array(
-			'Có yêu cầu báo giá mới trên website.',
+			'Có yêu cầu mới trên website (' . ( av_quote_types()[ $m( '_av_type' ) ] ?? 'Báo giá' ) . ').',
 			'',
 			'Họ tên: ' . $m( '_av_name' ),
 			'Số điện thoại: ' . $m( '_av_phone' ),
@@ -231,7 +237,8 @@ function av_quote_notify( int $post_id ): void {
 		)
 	);
 	$subject = $m( '_av_product' ) ? get_the_title( (int) $m( '_av_product' ) ) : $m( '_av_need' );
-	wp_mail( $to, '[Báo giá] ' . $m( '_av_name' ) . ' – ' . $subject, $body );
+	$label   = av_quote_types()[ $m( '_av_type' ) ] ?? 'Báo giá';
+	wp_mail( $to, '[' . $label . '] ' . $m( '_av_name' ) . ' – ' . $subject, $body );
 }
 
 // Ghi lại lỗi gửi email để Quản trị viên thấy (yêu cầu vẫn được lưu trong hộp thư).

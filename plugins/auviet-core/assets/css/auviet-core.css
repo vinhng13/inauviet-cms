@@ -80,3 +80,24 @@
 .av-mbar__btn--zalo svg{color:#0068FF}.av-mbar__btn--goi svg{color:#D2232A}.av-mbar__btn--facebook svg{color:#1877F2}
 @media (max-width:720px){.av-fab{display:none}.av-mbar{display:grid}body{padding-bottom:64px}}
 @media (prefers-reduced-motion:reduce){.av-fab__btn:hover{transform:none}}
+
+/* Trang liên hệ: thông tin, bản đồ */
+.av-cinfo{background:#fff;border:1px solid #DEDCDC;border-top:6px solid #EC3237;border-radius:14px;padding:24px}
+.av-cinfo__name{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:22px;line-height:1.2;margin-bottom:12px}
+.av-cinfo dl{margin:0}
+.av-cinfo dl div{display:grid;grid-template-columns:150px 1fr;gap:4px 16px;padding:12px 0;border-top:1px solid #EFEEEE}
+.av-cinfo dt{color:#5C5A5B;font-size:14px}
+.av-cinfo dd{margin:0;font-weight:600}
+.av-cinfo dd a{color:#B81C23;text-decoration:none}
+.av-cinfo dd a:hover{text-decoration:underline}
+.av-cinfo__gbp{margin:12px 0 0;font-size:15px}
+@media (max-width:480px){.av-cinfo dl div{grid-template-columns:1fr}}
+.av-maps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.av-map{margin:0;background:#fff;border:1px solid #DEDCDC;border-radius:14px;overflow:hidden}
+.av-map__frame{position:relative;aspect-ratio:4/3;background:#E9E7E7}
+.av-map__frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.av-map__ph{position:absolute;inset:0;display:grid;place-items:center;padding:16px;text-align:center;color:#5C5A5B;font-size:14px}
+.av-map figcaption{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:16px 20px}
+.av-map figcaption strong{flex:1 1 100%}
+.av-map figcaption span{flex:1 1 220px;color:#5C5A5B;font-size:15px}
+.av-map .av-btn{padding:9px 18px;min-height:40px}

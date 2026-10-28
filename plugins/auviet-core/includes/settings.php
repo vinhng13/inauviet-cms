@@ -49,13 +49,14 @@ function av_sanitize_campaign( $in ): array {
 function av_sanitize_contact( $in ): array {
 	$in  = (array) $in;
 	$out = array();
-	foreach ( array( 'company_name', 'office_address', 'workshop_address', 'hotline', 'landline', 'gtm_id' ) as $k ) {
+	foreach ( array( 'company_name', 'office_address', 'workshop_address', 'hotline', 'landline', 'gtm_id', 'hours', 'tax_code', 'office_map', 'workshop_map' ) as $k ) {
 		$out[ $k ] = sanitize_text_field( $in[ $k ] ?? '' );
 	}
 	$out['email']        = sanitize_email( $in['email'] ?? '' );
 	$out['notify_email'] = sanitize_email( $in['notify_email'] ?? '' );
 	$out['zalo_url']     = esc_url_raw( $in['zalo_url'] ?? '' );
 	$out['facebook_url'] = esc_url_raw( $in['facebook_url'] ?? '' );
+	$out['gbp_url']      = esc_url_raw( $in['gbp_url'] ?? '' );
 	$out['departments']  = array();
 	foreach ( (array) ( $in['departments'] ?? array() ) as $d ) {
 		$row = array(
@@ -91,6 +92,7 @@ function av_render_campaign_page(): void {
 	?>
 	<div class="wrap">
 		<h1>Banner chiến dịch</h1>
+		<?php av_saved_notice(); ?>
 		<p>Dải banner màu vàng ngay dưới đầu trang, dùng cho mùa cao điểm (lịch Tết, lì xì, Trung thu…). Đặt ngày bắt đầu, kết thúc để banner tự hiện và tự ẩn.</p>
 		<p>Trạng thái hiện tại: <strong><?php echo av_campaign_is_live() ? 'Đang hiển thị' : 'Đang ẩn'; ?></strong></p>
 		<form method="post" action="options.php">
@@ -120,7 +122,8 @@ function av_render_contact_page(): void {
 	?>
 	<div class="wrap">
 		<h1>Liên hệ &amp; thông tin công ty</h1>
-		<p>Nhập một lần ở đây, mọi vị trí trên website (đầu trang, chân trang, nút liên hệ, khối đội tư vấn, form) tự cập nhật.</p>
+		<?php av_saved_notice(); ?>
+		<p>Nhập một lần ở đây, mọi vị trí trên website (đầu trang, chân trang, nút liên hệ, khối đội tư vấn, trang <a href="<?php echo esc_url( home_url( '/lien-he/' ) ); ?>" target="_blank">Liên hệ</a>, form) tự cập nhật.</p>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'av_contact_group' ); ?>
 			<h2>Công ty</h2>
@@ -128,6 +131,15 @@ function av_render_contact_page(): void {
 				<tr><th scope="row"><label for="av_contact-company_name">Tên công ty</label></th><td><?php av_field( 'av_contact', 'company_name', $c['company_name'] ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-office_address">Văn phòng</label></th><td><?php av_field( 'av_contact', 'office_address', $c['office_address'] ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-workshop_address">Xưởng</label></th><td><?php av_field( 'av_contact', 'workshop_address', $c['workshop_address'] ); ?></td></tr>
+				<tr><th scope="row"><label for="av_contact-hours">Giờ làm việc</label></th><td><?php av_field( 'av_contact', 'hours', $c['hours'], 'text', 'Ví dụ: Thứ Hai – Thứ Bảy, 8:00–17:30. Để trống thì không hiện. Nên ghi giống Google Business Profile.' ); ?></td></tr>
+				<tr><th scope="row"><label for="av_contact-tax_code">Mã số thuế</label></th><td><?php av_field( 'av_contact', 'tax_code', $c['tax_code'], 'text', 'Hiện ở trang liên hệ. Để trống thì không hiện.' ); ?></td></tr>
+			</table>
+			<h2>Bản đồ trên trang liên hệ</h2>
+			<p>Để trống thì bản đồ tìm theo địa chỉ ở trên. Nếu ghim sai chỗ, mở Google Maps, bấm chuột phải vào đúng vị trí, chép toạ độ (dạng 21.0352, 105.8175) rồi dán vào đây.</p>
+			<table class="form-table" role="presentation">
+				<tr><th scope="row"><label for="av_contact-office_map">Vị trí văn phòng</label></th><td><?php av_field( 'av_contact', 'office_map', $c['office_map'], 'text', 'Toạ độ hoặc tên địa điểm trên Google Maps.' ); ?></td></tr>
+				<tr><th scope="row"><label for="av_contact-workshop_map">Vị trí xưởng</label></th><td><?php av_field( 'av_contact', 'workshop_map', $c['workshop_map'] ); ?></td></tr>
+				<tr><th scope="row"><label for="av_contact-gbp_url">Đường dẫn Google Business Profile</label></th><td><?php av_field( 'av_contact', 'gbp_url', $c['gbp_url'], 'url', 'Trang doanh nghiệp trên Google Maps (để khách xem đánh giá). Tên, địa chỉ, số điện thoại ở đó cần giống hệt website.' ); ?></td></tr>
 			</table>
 			<h2>Bốn nút liên hệ</h2>
 			<table class="form-table" role="presentation">
@@ -153,7 +165,7 @@ function av_render_contact_page(): void {
 			<p class="description">Để trống cả tên và số điện thoại để bỏ một dòng.</p>
 			<h2>Hệ thống</h2>
 			<table class="form-table" role="presentation">
-				<tr><th scope="row"><label for="av_contact-notify_email">Email nhận yêu cầu báo giá</label></th><td><?php av_field( 'av_contact', 'notify_email', $c['notify_email'], 'email', 'Để trống: gửi về email quản trị của WordPress.' ); ?></td></tr>
+				<tr><th scope="row"><label for="av_contact-notify_email">Email nhận yêu cầu báo giá, liên hệ</label></th><td><?php av_field( 'av_contact', 'notify_email', $c['notify_email'], 'email', 'Để trống: gửi về email quản trị của WordPress.' ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-gtm_id">Mã Google Tag Manager</label></th><td><?php av_field( 'av_contact', 'gtm_id', $c['gtm_id'], 'text', 'Dạng GTM-XXXXXXX. Chỉ chạy trên môi trường production.' ); ?></td></tr>
 			</table>
 			<?php submit_button( 'Lưu thông tin' ); ?>
@@ -161,3 +173,13 @@ function av_render_contact_page(): void {
 	</div>
 	<?php
 }
+
+/**
+ * Thông báo "Đã lưu" sau khi lưu cấu hình (trang riêng của Âu Việt không tự hiện thông báo này).
+ */
+function av_saved_notice(): void {
+	if ( isset( $_GET['settings-updated'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		echo '<div class="notice notice-success is-dismissible"><p>Đã lưu. Thay đổi đã hiện trên website.</p></div>';
+	}
+}
+

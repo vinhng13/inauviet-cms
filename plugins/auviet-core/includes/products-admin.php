@@ -375,9 +375,7 @@ function av_price_log( int $post_id, array $old, array $new ): void {
 			'new_value'  => wp_json_encode( $new ),
 		)
 	);
-	if ( function_exists( 'SimpleLogger' ) ) {
-		SimpleLogger()->info( 'Sửa bảng giá sản phẩm "{title}"', array( 'title' => get_the_title( $post_id ) ) );
-	}
+	av_log( 'Sửa bảng giá sản phẩm "{title}": {changes}', array( 'title' => get_the_title( $post_id ), 'changes' => implode( '; ', array_slice( av_price_diff( $old, $new ), 0, 20 ) ) ), 'notice' );
 }
 
 /**

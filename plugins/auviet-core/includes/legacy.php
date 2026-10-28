@@ -35,7 +35,7 @@ add_action(
 		} elseif ( preg_match( '#/pd/.*-(\d{3})\.html$#u', $path, $m ) ) {
 			$to = home_url( av_legacy_category_map()[ $m[1] ] ?? '/san-pham/' );
 		} elseif ( preg_match( '#^/contact-us\.html$#', $path ) ) {
-			$to = home_url( '/#lien-he' );
+			$to = home_url( '/lien-he/' );
 		}
 		if ( $to ) {
 			wp_safe_redirect( $to, 301, 'Au Viet legacy' );

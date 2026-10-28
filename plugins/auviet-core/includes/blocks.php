@@ -12,7 +12,7 @@ function av_block_definitions(): array {
 		'auviet/contact-tiles'   => array( 'title' => 'Bốn nút liên hệ', 'icon' => 'share', 'render' => 'av_render_contact_tiles', 'description' => 'Zalo, Gọi, Facebook, Email.' ),
 		'auviet/departments'     => array( 'title' => 'Đội tư vấn theo bộ phận', 'icon' => 'groups', 'render' => 'av_render_departments', 'description' => 'Danh sách bộ phận và số điện thoại.' ),
 		'auviet/product-groups'  => array( 'title' => 'Nhóm sản phẩm', 'icon' => 'screenoptions', 'render' => 'av_render_product_groups', 'description' => 'Các nhóm sản phẩm cấp 1 kèm mô tả.' ),
-		'auviet/quote-form'      => array( 'title' => 'Form liên hệ báo giá', 'icon' => 'feedback', 'render' => 'av_render_quote_form', 'description' => 'Form một bước, lưu vào hộp thư Yêu cầu báo giá.', 'attributes' => array( 'need' => array( 'type' => 'string', 'default' => '' ) ) ),
+		'auviet/quote-form'      => array( 'title' => 'Form liên hệ báo giá', 'icon' => 'feedback', 'render' => 'av_render_quote_form', 'description' => 'Form một bước, lưu vào hộp thư Yêu cầu báo giá.', 'attributes' => array( 'need' => array( 'type' => 'string', 'default' => '' ), 'type' => array( 'type' => 'string', 'default' => 'bao_gia' ) ) ),
 		'auviet/company-info'    => array( 'title' => 'Chân trang công ty', 'icon' => 'building', 'render' => 'av_render_company_info', 'description' => 'Thông tin công ty, liên kết, chính sách.' ),
 	) );
 }
@@ -162,7 +162,7 @@ function av_render_company_info(): string {
 			<a href="<?php echo esc_url( home_url( '/chat-lieu/' ) ); ?>">Thư viện chất liệu</a>
 			<a href="<?php echo esc_url( home_url( '/kien-thuc/' ) ); ?>">Kiến thức in ấn</a>
 			<a href="<?php echo esc_url( home_url( '/hoi-dap/' ) ); ?>">Hỏi đáp</a>
-			<a href="<?php echo esc_url( home_url( '/#lien-he' ) ); ?>">Liên hệ</a>
+			<a href="<?php echo esc_url( home_url( '/lien-he/' ) ); ?>">Liên hệ</a>
 		</nav>
 		<nav class="av-footer-col" aria-label="Chính sách">
 			<strong>Chính sách</strong>

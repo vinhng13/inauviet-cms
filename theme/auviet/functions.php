@@ -85,3 +85,44 @@ add_action(
 		}
 	}
 );
+
+/**
+ * Tạo trang "Liên hệ" (/lien-he/) từ mẫu khối và lưu ID (chạy một lần).
+ * Biên tập viên sửa chữ, thứ tự khối trong Trang › Liên hệ; thông tin liên hệ sửa ở Âu Việt › Liên hệ & công ty.
+ */
+add_action(
+	'wp_loaded',
+	static function () {
+		$existing = (int) get_option( 'av_contact_page' );
+		if ( $existing && get_post( $existing ) ) {
+			return;
+		}
+		$page = get_page_by_path( 'lien-he' );
+		if ( ! $page ) {
+			$file = get_theme_file_path( 'patterns/contact-page.php' );
+			if ( ! is_readable( $file ) ) {
+				return;
+			}
+			ob_start();
+			include $file;
+			$content = trim( (string) ob_get_clean() );
+			kses_remove_filters();
+			$id = wp_insert_post(
+				array(
+					'post_type'    => 'page',
+					'post_status'  => 'publish',
+					'post_title'   => 'Liên hệ',
+					'post_name'    => 'lien-he',
+					'post_content' => $content,
+				)
+			);
+			kses_init();
+		} else {
+			$id = $page->ID;
+		}
+		if ( $id && ! is_wp_error( $id ) ) {
+			update_option( 'av_contact_page', (int) $id );
+		}
+	}
+);
+

@@ -34,3 +34,5 @@
 .column-av_thumb img{width:48px;height:48px;object-fit:cover;border-radius:4px}
 .column-av_primary,.column-av_price,.column-av_check{width:140px}
 .column-av_photos{width:50px}
+.av-type{display:inline-block;padding:2px 8px;border-radius:10px;background:#f0f0f1;font-size:12px}
+.av-type--lien_he{background:#fdecec;color:#8e1218}

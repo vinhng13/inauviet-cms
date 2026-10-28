@@ -13,6 +13,7 @@ add_filter(
 			'cb'        => '<input type="checkbox">',
 			'title'     => 'Khách',
 			'av_phone'  => 'Số điện thoại',
+			'av_type'   => 'Loại',
 			'av_need'   => 'Nhu cầu',
 			'av_status' => 'Trạng thái',
 			'av_source' => 'Trang gửi',
@@ -28,6 +29,10 @@ add_action(
 			case 'av_phone':
 				$p = (string) get_post_meta( $post_id, '_av_phone', true );
 				printf( '<a href="%s">%s</a>', esc_url( av_tel_href( $p ) ), esc_html( $p ) );
+				break;
+			case 'av_type':
+				$t = (string) get_post_meta( $post_id, '_av_type', true ) ?: 'bao_gia';
+				printf( '<span class="av-type av-type--%s">%s</span>', esc_attr( $t ), esc_html( av_quote_types()[ $t ] ?? $t ) );
 				break;
 			case 'av_need':
 				echo esc_html( (string) get_post_meta( $post_id, '_av_need', true ) );
@@ -63,6 +68,12 @@ add_action(
 			printf( '<option value="%s"%s>%s</option>', esc_attr( $k ), selected( $cur, $k, false ), esc_html( $v ) );
 		}
 		echo '</select>';
+		$type = isset( $_GET['av_type'] ) ? sanitize_key( wp_unslash( $_GET['av_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		echo '<label class="screen-reader-text" for="av-type-filter">Lọc theo loại</label><select id="av-type-filter" name="av_type"><option value="">Mọi loại</option>';
+		foreach ( av_quote_types() as $k => $v ) {
+			printf( '<option value="%s"%s>%s</option>', esc_attr( $k ), selected( $type, $k, false ), esc_html( $v ) );
+		}
+		echo '</select>';
 	}
 );
 
@@ -73,8 +84,23 @@ add_action(
 			return;
 		}
 		$s = isset( $_GET['av_status'] ) ? sanitize_key( wp_unslash( $_GET['av_status'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		$meta = array();
 		if ( $s && isset( av_quote_statuses()[ $s ] ) ) {
-			$q->set( 'meta_query', array( array( 'key' => '_av_status', 'value' => $s ) ) );
+			$meta[] = array( 'key' => '_av_status', 'value' => $s );
+		}
+		$t = isset( $_GET['av_type'] ) ? sanitize_key( wp_unslash( $_GET['av_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		if ( 'lien_he' === $t ) {
+			$meta[] = array( 'key' => '_av_type', 'value' => 'lien_he' );
+		} elseif ( 'bao_gia' === $t ) {
+			// Yêu cầu cũ chưa có loại được tính là báo giá.
+			$meta[] = array(
+				'relation' => 'OR',
+				array( 'key' => '_av_type', 'value' => 'bao_gia' ),
+				array( 'key' => '_av_type', 'compare' => 'NOT EXISTS' ),
+			);
+		}
+		if ( $meta ) {
+			$q->set( 'meta_query', $meta );
 		}
 	}
 );
@@ -112,6 +138,7 @@ function av_quote_box_customer( WP_Post $post ): void {
 		printf( '<option%s>%s</option>', selected( $m( '_av_need' ), $n, false ), esc_html( $n ) );
 	}
 	echo '</select></td></tr>';
+	printf( '<tr><th>Loại</th><td>%s</td></tr>', esc_html( av_quote_types()[ $m( '_av_type' ) ?: 'bao_gia' ] ?? 'Báo giá' ) );
 	if ( $m( '_av_product' ) ) {
 		printf( '<tr><th>Sản phẩm khách xem</th><td><a href="%s" target="_blank">%s</a></td></tr>', esc_url( get_permalink( (int) $m( '_av_product' ) ) ), esc_html( get_the_title( (int) $m( '_av_product' ) ) ) );
 	}
@@ -213,8 +240,9 @@ function av_quote_log( int $quote_id, string $old, string $new, int $user_id ): 
 		),
 		array( '%d', '%s', '%s', '%d', '%s' )
 	);
-	if ( function_exists( 'SimpleLogger' ) && $user_id ) {
-		SimpleLogger()->info( 'Đổi trạng thái yêu cầu báo giá #{quote_id}: {old} → {new}', array( 'quote_id' => $quote_id, 'old' => $old, 'new' => $new ) );
+	if ( $user_id ) {
+		$labels = av_quote_statuses();
+		av_log( 'Đổi trạng thái yêu cầu báo giá "{title}": {old} → {new}', array( 'title' => get_the_title( $quote_id ), 'quote_id' => $quote_id, 'old' => $labels[ $old ] ?? ( $old ?: 'mới tạo' ), 'new' => $labels[ $new ] ?? $new ) );
 	}
 }
 

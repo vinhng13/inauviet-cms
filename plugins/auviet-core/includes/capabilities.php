@@ -33,12 +33,12 @@ function av_capability_map(): array {
 		av_post_type_caps( 'av_materials' ),
 		av_post_type_caps( 'av_projects' ),
 		av_post_type_caps( 'av_faqs' ),
-		array( 'av_manage_site_content' )
+		array( 'av_manage_site_content', 'av_manage_seo' )
 	);
 
 	$admin_only = array_merge(
 		av_post_type_caps( 'av_quotes' ),
-		array( 'av_export_quotes', 'av_manage_prices', 'av_manage_site_system' )
+		array( 'av_export_quotes', 'av_manage_prices', 'av_manage_site_system', 'av_view_activity_log' )
 	);
 
 	return array(
@@ -73,6 +73,5 @@ add_action(
 	20
 );
 
-// QT-12: nhật ký hoạt động (Simple History) chỉ Quản trị viên xem.
-add_filter( 'simple_history/view_history_capability', static fn() => 'manage_options' );
-add_filter( 'simple_history/view_settings_capability', static fn() => 'manage_options' );
+// QT-08: quyền quản lý chuyển hướng của plugin Redirection theo quyền SEO riêng (Quản trị viên, Biên tập viên).
+add_filter( 'redirection_role', static fn() => 'av_manage_seo' );

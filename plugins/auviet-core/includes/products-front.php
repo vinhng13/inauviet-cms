@@ -169,6 +169,11 @@ function av_render_breadcrumb(): string {
 		$current = get_the_title( get_queried_object_id() );
 	} elseif ( is_post_type_archive( 'av_material' ) ) {
 		$current = 'Thư viện chất liệu';
+	} elseif ( is_page() && ! is_front_page() ) {
+		foreach ( array_reverse( get_post_ancestors( get_queried_object_id() ) ) as $aid ) {
+			$items[] = array( get_the_title( $aid ), get_permalink( $aid ) );
+		}
+		$current = get_the_title( get_queried_object_id() );
 	} else {
 		return '';
 	}

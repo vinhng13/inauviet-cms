@@ -18,6 +18,11 @@ function av_contact_defaults(): array {
 		'email'            => 'inquangcaoauviet@gmail.com',
 		'zalo_url'         => 'https://zalo.me/0988706960',
 		'facebook_url'     => 'https://www.facebook.com/ctyinquangcaoauviet',
+		'hours'            => '',
+		'tax_code'         => '',
+		'office_map'       => '',
+		'workshop_map'     => '',
+		'gbp_url'          => '',
 		'notify_email'     => '',
 		'gtm_id'           => '',
 		'departments'      => array(
