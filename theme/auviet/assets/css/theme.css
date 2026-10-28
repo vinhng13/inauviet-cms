@@ -118,3 +118,5 @@
 .av-footer{background:var(--av-ink);color:#B5B2B3;padding-top:64px;padding-bottom:32px}
 
 @media (max-width:781px){.av-hero{padding-top:44px}.av-section{padding-top:64px}.av-dark{padding-top:64px;padding-bottom:64px}}
+/* Trang con: đoạn mở đầu, đoạn giới thiệu dưới tiêu đề chạy hết bề rộng nội dung (trang chủ giữ nguyên). */
+body:not(.home) :is(.av-lead,.av-intro,.av-cat-head__intro){max-width:1200px!important;margin-left:auto!important;margin-right:auto!important}
