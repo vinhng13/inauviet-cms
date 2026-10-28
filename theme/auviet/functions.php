@@ -141,5 +141,6 @@ add_action(
 	static function () {
 		auviet_ensure_page( 'lien-he', 'Liên hệ', 'contact-page', 'av_contact_page' );
 		auviet_ensure_page( 'gioi-thieu', 'Giới thiệu Âu Việt', 'about-page', 'av_about_page' );
+		auviet_ensure_page( 'thiet-ke', 'Dịch vụ thiết kế', 'design-page', 'av_design_page' );
 	}
 );

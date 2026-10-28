@@ -46,6 +46,8 @@ Mọi cổng chỉ mở cho chính máy này (127.0.0.1).
 | Chữ, thứ tự khối trang Liên hệ (/lien-he/) | Trang › **Liên hệ** | Biên tập viên, Quản trị viên |
 | Trang Giới thiệu (/gioi-thieu/): chữ, thứ tự khối | Trang › **Giới thiệu Âu Việt** | Biên tập viên, Quản trị viên |
 | Năm thành lập, 4 số liệu nổi bật | **Âu Việt › Giới thiệu** | Biên tập viên, Quản trị viên |
+| Trang Dịch vụ thiết kế (/thiet-ke/) và từng loại thiết kế (trang con, mẫu "Trang loại thiết kế", ảnh mẫu trong hộp "Ảnh mẫu") | Trang › **Dịch vụ thiết kế** | Biên tập viên, Quản trị viên |
+| Phí thiết kế, số lần chỉnh sửa, thời gian, tư liệu cần chuẩn bị | **Âu Việt › Thiết kế** | Biên tập viên, Quản trị viên |
 | Máy móc, thiết bị (ảnh, loại, thông số) | **Âu Việt › Máy móc, thiết bị** | Biên tập viên, Quản trị viên |
 | Logo khách hàng (chỉ hiện khi khách đồng ý nêu tên; chọn hiện ở trang chủ) | **Âu Việt › Khách hàng tiêu biểu** | Biên tập viên, Quản trị viên |
 | Hotline, Zalo, Facebook, email, địa chỉ, giờ làm việc, mã số thuế, vị trí bản đồ, đội tư vấn, email nhận báo giá | **Âu Việt › Liên hệ & công ty** | Quản trị viên |

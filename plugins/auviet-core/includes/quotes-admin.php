@@ -68,6 +68,12 @@ add_action(
 			printf( '<option value="%s"%s>%s</option>', esc_attr( $k ), selected( $cur, $k, false ), esc_html( $v ) );
 		}
 		echo '</select>';
+		$need_cur = isset( $_GET['av_need'] ) ? sanitize_text_field( wp_unslash( $_GET['av_need'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		echo '<label class="screen-reader-text" for="av-need-filter">Lọc theo nhu cầu</label><select id="av-need-filter" name="av_need"><option value="">Mọi nhu cầu</option>';
+		foreach ( av_quote_needs() as $n ) {
+			printf( '<option%s>%s</option>', selected( $need_cur, $n, false ), esc_html( $n ) );
+		}
+		echo '</select>';
 		$type = isset( $_GET['av_type'] ) ? sanitize_key( wp_unslash( $_GET['av_type'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
 		echo '<label class="screen-reader-text" for="av-type-filter">Lọc theo loại</label><select id="av-type-filter" name="av_type"><option value="">Mọi loại</option>';
 		foreach ( av_quote_types() as $k => $v ) {
@@ -98,6 +104,10 @@ add_action(
 				array( 'key' => '_av_type', 'value' => 'bao_gia' ),
 				array( 'key' => '_av_type', 'compare' => 'NOT EXISTS' ),
 			);
+		}
+		$n = isset( $_GET['av_need'] ) ? sanitize_text_field( wp_unslash( $_GET['av_need'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		if ( $n && in_array( $n, av_quote_needs(), true ) ) {
+			$meta[] = array( 'key' => '_av_need', 'value' => $n );
 		}
 		if ( $meta ) {
 			$q->set( 'meta_query', $meta );

@@ -98,15 +98,15 @@
 
 <!-- wp:list -->
 <ul class="wp-block-list"><!-- wp:list-item -->
-<li>Sách, tạp chí, kỷ yếu</li>
+<li><a href="/thiet-ke/sach-ky-yeu/">Sách, kỷ yếu</a>, <a href="/thiet-ke/tap-chi/">tạp chí</a></li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Brochure, profile, catalogue</li>
+<li><a href="/thiet-ke/brochure-profile/">Brochure, profile</a>, <a href="/thiet-ke/catalogue/">catalogue</a></li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Tờ rơi, tờ gấp</li>
+<li><a href="/thiet-ke/to-roi-to-gap/">Tờ rơi, tờ gấp</a></li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
@@ -114,13 +114,17 @@
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Bao bì sản phẩm</li>
+<li><a href="/thiet-ke/bao-bi/">Bao bì sản phẩm</a></li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->
-<li>Túi giấy</li>
+<li><a href="/thiet-ke/tui-giay/">Túi giấy</a></li>
 <!-- /wp:list-item --></ul>
-<!-- /wp:list --></div>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p><a href="/thiet-ke/">Xem dịch vụ thiết kế</a></p>
+<!-- /wp:paragraph --></div>
 <!-- /wp:column -->
 
 <!-- wp:column {"className":"av-service"} -->

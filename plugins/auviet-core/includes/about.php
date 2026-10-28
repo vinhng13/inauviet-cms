@@ -459,10 +459,10 @@ add_action(
 add_action(
 	'wp_loaded',
 	static function () {
-		if ( get_option( 'av_mig_about_v2' ) || ! function_exists( 'auviet_page_from_pattern' ) ) {
+		if ( get_option( 'av_mig_about_v3' ) || ! function_exists( 'auviet_page_from_pattern' ) ) {
 			return;
 		}
-		update_option( 'av_mig_about_v2', 1, false );
+		update_option( 'av_mig_about_v3', 1, false );
 		$id = (int) get_option( 'av_about_page' );
 		$p  = $id ? get_post( $id ) : null;
 		if ( ! $p || $p->post_modified_gmt !== $p->post_date_gmt ) {

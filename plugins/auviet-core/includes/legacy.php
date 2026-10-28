@@ -80,6 +80,7 @@ function av_legacy_page(): void {
 		<?php if ( $last ) : ?>
 			<p><strong>Lần chạy gần nhất:</strong> <?php echo esc_html( (string) $last ); ?></p>
 		<?php endif; ?>
+		<p><label><input type="checkbox" id="av-legacy-only-design"> Chỉ nhập các trang dịch vụ thiết kế</label></p>
 		<p><label><input type="checkbox" id="av-legacy-force"> Ghi đè cả sản phẩm đã sửa tay sau lần nhập trước (mất phần nội dung, quy cách đã sửa; không đụng tới bảng giá)</label></p>
 		<p><button type="button" class="button button-primary button-hero" id="av-legacy-start">Bắt đầu nhập</button></p>
 		<div id="av-legacy-progress" hidden>
@@ -120,10 +121,13 @@ function av_legacy_page(): void {
 			if ( ! prep.success ) { line( 'Lỗi: ' + prep.data, true ); btn.disabled = false; return; }
 			line( prep.data.message );
 			var jobs = prep.data.jobs;
+			if ( document.getElementById( 'av-legacy-only-design' ).checked ) {
+				jobs = jobs.filter( function ( j ) { return 'design' === j.kind; } );
+			}
 			bar.max = jobs.length + 1;
 			for ( var i = 0; i < jobs.length; i++ ) {
 				status.textContent = 'Đang nhập ' + ( i + 1 ) + '/' + jobs.length + ': ' + jobs[ i ].label;
-				var r = await call( 'source', { slug: jobs[ i ].slug, index: jobs[ i ].index, force: document.getElementById( 'av-legacy-force' ).checked ? 1 : 0 } );
+				var r = await call( jobs[ i ].kind || 'source', { slug: jobs[ i ].slug, index: jobs[ i ].index, force: document.getElementById( 'av-legacy-force' ).checked ? 1 : 0 } );
 				line( ( r.success ? '' : 'Lỗi: ' ) + ( r.data && r.data.message ? r.data.message : r.data ), ! r.success );
 				bar.value = i + 1;
 			}
@@ -202,10 +206,24 @@ add_action(
 		foreach ( av_legacy_products() as $slug => $p ) {
 			foreach ( $p['sources'] as $i => $src ) {
 				$jobs[] = array(
+					'kind'  => 'source',
 					'slug'  => $slug,
 					'index' => $i,
 					'label' => $p['title'] . ( $i ? ' (ảnh từ trang cũ ' . ( $i + 1 ) . ')' : '' ),
 				);
+			}
+		}
+		// Trang loại thiết kế (LP-03).
+		if ( function_exists( 'av_legacy_designs' ) ) {
+			foreach ( av_legacy_designs() as $slug => $d ) {
+				foreach ( $d[1] as $i => $src ) {
+					$jobs[] = array(
+						'kind'  => 'design',
+						'slug'  => $slug,
+						'index' => $i,
+						'label' => $d[0] . ( $i ? ' (ảnh từ trang cũ ' . ( $i + 1 ) . ')' : '' ),
+					);
+				}
 			}
 		}
 		wp_send_json_success(

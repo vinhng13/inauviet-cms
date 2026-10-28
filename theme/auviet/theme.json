@@ -182,5 +182,14 @@
       "title": "Chân trang",
       "area": "footer"
     }
+  ],
+  "customTemplates": [
+    {
+      "name": "page-design-service",
+      "title": "Trang loại thiết kế",
+      "postTypes": [
+        "page"
+      ]
+    }
   ]
 }
