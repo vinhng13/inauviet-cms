@@ -94,8 +94,9 @@
 
 /* Liên hệ */
 .av-contact-cols{gap:40px;margin-top:32px!important}
-.av-contact-page .av-h-sm{font-size:clamp(24px,2.4vw,30px)!important;margin:32px 0 16px}
-.av-contact-page .av-mt{margin-top:72px!important}
+.av-contact-page .av-h-sm,.av-about-page .av-h-sm{font-size:clamp(24px,2.4vw,30px)!important;margin:32px 0 16px}
+.av-contact-page .av-mt,.av-about-page .av-mt{margin-top:72px!important}
+.av-about-page .av-intro{margin-bottom:24px}
 .av-contact-page .wp-block-column > .av-h-sm:first-child,.av-contact-page #lien-he > .av-h-sm:first-child{margin-top:0}
 .av-contact{gap:40px}
 .av-contact h2{margin-bottom:12px}

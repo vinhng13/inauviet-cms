@@ -35,30 +35,6 @@
 <h2 class="wp-block-heading av-h-sm">Khách hàng đã tin chọn</h2>
 <!-- /wp:heading -->
 
-<!-- wp:group {"className":"av-logos","layout":{"type":"grid","columnCount":3}} -->
-<div class="wp-block-group av-logos"><!-- wp:paragraph {"className":"av-ph av-ph--logo"} -->
-<p class="av-ph av-ph--logo">[Logo khách 1]</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"av-ph av-ph--logo"} -->
-<p class="av-ph av-ph--logo">[Logo khách 2]</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"av-ph av-ph--logo"} -->
-<p class="av-ph av-ph--logo">[Logo khách 3]</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"av-ph av-ph--logo"} -->
-<p class="av-ph av-ph--logo">[Logo khách 4]</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"av-ph av-ph--logo"} -->
-<p class="av-ph av-ph--logo">[Logo khách 5]</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph {"className":"av-ph av-ph--logo"} -->
-<p class="av-ph av-ph--logo">[Logo khách 6]</p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:group --></div>
+<!-- wp:auviet/clients {"homepage":true} /--></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->

@@ -44,6 +44,10 @@ Mọi cổng chỉ mở cho chính máy này (127.0.0.1).
 | Chữ, ảnh, thứ tự các khối trên trang chủ | Trang › **Trang chủ** (trình soạn khối; khối mẫu ở nhóm "Âu Việt") | Biên tập viên, Quản trị viên |
 | Banner vàng theo mùa (bật/tắt, nội dung, ngày hiện) | **Âu Việt › Banner chiến dịch** | Biên tập viên, Quản trị viên |
 | Chữ, thứ tự khối trang Liên hệ (/lien-he/) | Trang › **Liên hệ** | Biên tập viên, Quản trị viên |
+| Trang Giới thiệu (/gioi-thieu/): chữ, thứ tự khối | Trang › **Giới thiệu Âu Việt** | Biên tập viên, Quản trị viên |
+| Năm thành lập, 4 số liệu nổi bật | **Âu Việt › Giới thiệu** | Biên tập viên, Quản trị viên |
+| Máy móc, thiết bị (ảnh, loại, thông số) | **Âu Việt › Máy móc, thiết bị** | Biên tập viên, Quản trị viên |
+| Logo khách hàng (chỉ hiện khi khách đồng ý nêu tên; chọn hiện ở trang chủ) | **Âu Việt › Khách hàng tiêu biểu** | Biên tập viên, Quản trị viên |
 | Hotline, Zalo, Facebook, email, địa chỉ, giờ làm việc, mã số thuế, vị trí bản đồ, đội tư vấn, email nhận báo giá | **Âu Việt › Liên hệ & công ty** | Quản trị viên |
 | Sản phẩm / Mẫu đã làm hiện trên trang chủ | **Sản phẩm**, **Mẫu đã làm** (8 sản phẩm, 3 mẫu mới nhất) | Biên tập viên, Quản trị viên |
 | Yêu cầu báo giá khách gửi | **Yêu cầu báo giá** (đổi trạng thái, người phụ trách, ghi chú; có lịch sử) | Quản trị viên |

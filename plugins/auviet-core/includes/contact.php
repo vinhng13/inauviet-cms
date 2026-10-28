@@ -22,7 +22,7 @@ add_filter(
 	static function ( array $defs ): array {
 		return $defs + array(
 			'auviet/contact-info' => array( 'title' => 'Thông tin liên hệ', 'icon' => 'location', 'render' => 'av_render_contact_info', 'description' => 'Văn phòng, xưởng, điện thoại, email, giờ làm việc (lấy từ Âu Việt › Liên hệ & công ty).' ),
-			'auviet/contact-map'  => array( 'title' => 'Bản đồ văn phòng và xưởng', 'icon' => 'location-alt', 'render' => 'av_render_contact_map', 'description' => 'Bản đồ Google tải khi khách cuộn tới, kèm nút chỉ đường.' ),
+			'auviet/contact-map'  => array( 'title' => 'Bản đồ văn phòng', 'icon' => 'location-alt', 'render' => 'av_render_contact_map', 'description' => 'Bản đồ Google văn phòng giao dịch, tải khi khách cuộn tới, kèm nút chỉ đường.' ),
 		);
 	}
 );
@@ -82,11 +82,11 @@ function av_render_contact_info(): string {
 
 function av_render_contact_map(): string {
 	$c     = av_contact();
+	// Bản đồ chỉ cho văn phòng giao dịch (nơi khách đến làm việc).
 	$items = array(
 		array( 'Văn phòng giao dịch', $c['office_address'], av_map_query( 'office' ) ),
-		array( 'Xưởng sản xuất', $c['workshop_address'], av_map_query( 'workshop' ) ),
 	);
-	$out = '<div class="av-maps">';
+	$out = '<div class="av-maps av-maps--single">';
 	foreach ( $items as $it ) {
 		if ( '' === trim( (string) $it[1] ) ) {
 			continue;
@@ -153,3 +153,27 @@ add_action(
 		echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . "</script>\n";
 	}
 );
+
+// Một lần: đổi tiêu đề mục bản đồ trên trang liên hệ đã tạo trước đó (chỉ còn bản đồ văn phòng).
+add_action(
+	'init',
+	static function () {
+		if ( get_option( 'av_mig_contact_map' ) ) {
+			return;
+		}
+		update_option( 'av_mig_contact_map', 1, false );
+		$id = av_contact_page_id();
+		if ( ! $id ) {
+			return;
+		}
+		$content = (string) get_post_field( 'post_content', $id );
+		$new     = str_replace( '>Văn phòng và xưởng</h2>', '>Văn phòng giao dịch</h2>', $content );
+		if ( $new !== $content ) {
+			kses_remove_filters();
+			wp_update_post( array( 'ID' => $id, 'post_content' => $new ) );
+			kses_init();
+		}
+	},
+	50
+);
+

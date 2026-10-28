@@ -87,42 +87,49 @@ add_action(
 );
 
 /**
- * Tạo trang "Liên hệ" (/lien-he/) từ mẫu khối và lưu ID (chạy một lần).
- * Biên tập viên sửa chữ, thứ tự khối trong Trang › Liên hệ; thông tin liên hệ sửa ở Âu Việt › Liên hệ & công ty.
+ * Tạo một trang từ mẫu khối của theme (chạy một lần), lưu ID vào option.
+ * Sau đó Biên tập viên sửa chữ, thứ tự khối trong Trang.
  */
+function auviet_ensure_page( string $slug, string $title, string $pattern, string $option ): void {
+	$existing = (int) get_option( $option );
+	if ( $existing && get_post( $existing ) ) {
+		return;
+	}
+	$page = get_page_by_path( $slug );
+	if ( $page ) {
+		update_option( $option, (int) $page->ID );
+		return;
+	}
+	$file = get_theme_file_path( 'patterns/' . $pattern . '.php' );
+	if ( ! is_readable( $file ) ) {
+		return;
+	}
+	ob_start();
+	include $file;
+	$content = trim( (string) ob_get_clean() );
+	// Nội dung lấy từ file mẫu của theme (tin cậy), không lọc qua kses.
+	kses_remove_filters();
+	$id = wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_title'   => $title,
+			'post_name'    => $slug,
+			'post_content' => $content,
+		)
+	);
+	kses_init();
+	if ( $id && ! is_wp_error( $id ) ) {
+		update_option( $option, (int) $id );
+	}
+}
+
+// Trang Liên hệ (LP-06): thông tin liên hệ sửa ở Âu Việt › Liên hệ & công ty.
+// Trang Giới thiệu (LP-06): số liệu, máy móc, khách hàng sửa ở Âu Việt › Giới thiệu, Máy móc, Khách hàng tiêu biểu.
 add_action(
 	'wp_loaded',
 	static function () {
-		$existing = (int) get_option( 'av_contact_page' );
-		if ( $existing && get_post( $existing ) ) {
-			return;
-		}
-		$page = get_page_by_path( 'lien-he' );
-		if ( ! $page ) {
-			$file = get_theme_file_path( 'patterns/contact-page.php' );
-			if ( ! is_readable( $file ) ) {
-				return;
-			}
-			ob_start();
-			include $file;
-			$content = trim( (string) ob_get_clean() );
-			kses_remove_filters();
-			$id = wp_insert_post(
-				array(
-					'post_type'    => 'page',
-					'post_status'  => 'publish',
-					'post_title'   => 'Liên hệ',
-					'post_name'    => 'lien-he',
-					'post_content' => $content,
-				)
-			);
-			kses_init();
-		} else {
-			$id = $page->ID;
-		}
-		if ( $id && ! is_wp_error( $id ) ) {
-			update_option( 'av_contact_page', (int) $id );
-		}
+		auviet_ensure_page( 'lien-he', 'Liên hệ', 'contact-page', 'av_contact_page' );
+		auviet_ensure_page( 'gioi-thieu', 'Giới thiệu Âu Việt', 'about-page', 'av_about_page' );
 	}
 );
-

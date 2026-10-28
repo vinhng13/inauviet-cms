@@ -39,7 +39,7 @@
 <!-- wp:auviet/departments /-->
 
 <!-- wp:heading {"level":2,"className":"av-h-sm av-mt"} -->
-<h2 class="wp-block-heading av-h-sm av-mt">Văn phòng và xưởng</h2>
+<h2 class="wp-block-heading av-h-sm av-mt">Văn phòng giao dịch</h2>
 <!-- /wp:heading -->
 
 <!-- wp:auviet/contact-map /-->

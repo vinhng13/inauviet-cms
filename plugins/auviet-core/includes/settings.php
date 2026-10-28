@@ -135,10 +135,9 @@ function av_render_contact_page(): void {
 				<tr><th scope="row"><label for="av_contact-tax_code">Mã số thuế</label></th><td><?php av_field( 'av_contact', 'tax_code', $c['tax_code'], 'text', 'Hiện ở trang liên hệ. Để trống thì không hiện.' ); ?></td></tr>
 			</table>
 			<h2>Bản đồ trên trang liên hệ</h2>
-			<p>Để trống thì bản đồ tìm theo địa chỉ ở trên. Nếu ghim sai chỗ, mở Google Maps, bấm chuột phải vào đúng vị trí, chép toạ độ (dạng 21.0352, 105.8175) rồi dán vào đây.</p>
+			<p>Trang liên hệ có bản đồ văn phòng giao dịch. Để trống thì bản đồ tìm theo địa chỉ văn phòng ở trên. Nếu ghim sai chỗ, mở Google Maps, bấm chuột phải vào đúng vị trí, chép toạ độ (dạng 21.0352, 105.8175) rồi dán vào đây.</p>
 			<table class="form-table" role="presentation">
 				<tr><th scope="row"><label for="av_contact-office_map">Vị trí văn phòng</label></th><td><?php av_field( 'av_contact', 'office_map', $c['office_map'], 'text', 'Toạ độ hoặc tên địa điểm trên Google Maps.' ); ?></td></tr>
-				<tr><th scope="row"><label for="av_contact-workshop_map">Vị trí xưởng</label></th><td><?php av_field( 'av_contact', 'workshop_map', $c['workshop_map'] ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-gbp_url">Đường dẫn Google Business Profile</label></th><td><?php av_field( 'av_contact', 'gbp_url', $c['gbp_url'], 'url', 'Trang doanh nghiệp trên Google Maps (để khách xem đánh giá). Tên, địa chỉ, số điện thoại ở đó cần giống hệt website.' ); ?></td></tr>
 			</table>
 			<h2>Bốn nút liên hệ</h2>
