@@ -139,12 +139,13 @@
 .av-clients-empty{color:#5C5A5B;margin:0}
 
 /* Dịch vụ thiết kế */
-.av-terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:32px}
+.av-terms{display:flex;flex-wrap:wrap;align-items:stretch;gap:16px;margin-top:32px}
+.av-term{flex:1 1 220px;box-sizing:border-box}
 .av-term{background:#fff;border:1px solid #DEDCDC;border-left:6px solid #EC3237;border-radius:12px;padding:18px 20px}
 .av-term strong{display:block;font-size:17px;margin-bottom:6px}
 .av-term p{margin:0;color:#5C5A5B;font-size:15px}
 .av-term ul{margin:0;padding-left:20px;color:#5C5A5B;font-size:15px}
-.av-term--wide{grid-column:1/-1;border-left-color:#363435}
+.av-term--wide{flex:1.7 1 340px;border-left-color:#363435}
 .av-dcards .av-pcard img{aspect-ratio:4/3}
 .av-dcard__ex{font-size:14px;color:#5C5A5B;line-height:1.45}
 .av-dgallery{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
