@@ -195,10 +195,10 @@ function av_about_defaults(): array {
 	return array(
 		'founded' => '',
 		'stats'   => array(
-			array( 'value' => '10+', 'label' => 'năm thiết kế và in ấn tại Hà Nội' ),
-			array( 'value' => 'Khép kín', 'label' => 'thiết kế, chế bản, in, gia công' ),
-			array( 'value' => '2', 'label' => 'công nghệ in: offset và kỹ thuật số' ),
-			array( 'value' => 'Toàn quốc', 'label' => 'giao hàng tận nơi' ),
+			array( 'value' => '10+', 'label' => 'năm khẳng định tên tuổi trên thị trường in ấn' ),
+			array( 'value' => 'Khép kín', 'label' => 'từ ý tưởng, thiết kế đến in và hoàn thiện' ),
+			array( 'value' => 'Offset, kỹ thuật số', 'label' => 'màu sắc trung thực, sắc nét' ),
+			array( 'value' => 'Nhà thầu', 'label' => 'in ấn, thiết kế cho cơ quan nhà nước và đại học' ),
 		),
 	);
 }
@@ -318,7 +318,7 @@ function av_render_about_stats(): string {
 		$years    = (int) wp_date( 'Y' ) - (int) $a['founded'];
 		$stats[0] = array(
 			'value' => $years . ' năm',
-			'label' => 'thiết kế và in ấn tại Hà Nội, từ năm ' . $a['founded'],
+			'label' => 'khẳng định tên tuổi trên thị trường in ấn, từ năm ' . $a['founded'],
 		);
 	}
 	if ( ! $stats ) {
@@ -454,3 +454,31 @@ add_action(
 	},
 	50
 );
+
+// Một lần: trang Giới thiệu chưa ai sửa thì dựng lại theo mẫu mới (bám nội dung giới thiệu trên web cũ).
+add_action(
+	'wp_loaded',
+	static function () {
+		if ( get_option( 'av_mig_about_v2' ) || ! function_exists( 'auviet_page_from_pattern' ) ) {
+			return;
+		}
+		update_option( 'av_mig_about_v2', 1, false );
+		$id = (int) get_option( 'av_about_page' );
+		$p  = $id ? get_post( $id ) : null;
+		if ( ! $p || $p->post_modified_gmt !== $p->post_date_gmt ) {
+			return; // Đã có người sửa: giữ nguyên.
+		}
+		$content = auviet_page_from_pattern( 'about-page' );
+		if ( $content ) {
+			kses_remove_filters();
+			wp_update_post( array( 'ID' => $id, 'post_content' => $content ) );
+			kses_init();
+			// Giữ trạng thái "chưa sửa" để lần nâng cấp sau vẫn nhận ra.
+			global $wpdb;
+			$wpdb->update( $wpdb->posts, array( 'post_modified' => $p->post_date, 'post_modified_gmt' => $p->post_date_gmt ), array( 'ID' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			clean_post_cache( $id );
+		}
+	},
+	20
+);
+

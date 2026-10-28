@@ -97,6 +97,18 @@
 .av-contact-page .av-h-sm,.av-about-page .av-h-sm{font-size:clamp(24px,2.4vw,30px)!important;margin:32px 0 16px}
 .av-contact-page .av-mt,.av-about-page .av-mt{margin-top:72px!important}
 .av-about-page .av-intro{margin-bottom:24px}
+.av-kicker{margin:0 0 12px;font-family:var(--wp--preset--font-family--display);font-weight:800;font-size:clamp(20px,2.2vw,26px);line-height:1.2;color:var(--av-red-strong);text-transform:uppercase;letter-spacing:.01em}
+.av-about-page .av-lead,.av-about-page .av-intro,.av-contact-page .av-cat-head__intro{max-width:52em;margin-left:0!important;margin-right:auto!important}
+.av-services{gap:20px}
+.av-service{background:#fff;border:1px solid var(--av-line);border-top:6px solid var(--av-red);border-radius:14px;padding:24px}
+.av-service:nth-child(2){border-top-color:var(--av-ink)}
+.av-service h3{font-size:20px;margin:0 0 12px;letter-spacing:0}
+.av-service ul{margin:0 0 12px;padding-left:20px;color:var(--av-ink-2)}
+.av-service li{margin:4px 0}
+.av-service a{color:var(--av-ink);text-decoration-color:var(--av-red)}
+.av-service a:hover{color:var(--av-red-ink)}
+.av-service p{margin:0;font-weight:600}
+.av-thanks{margin-top:48px!important;font-family:var(--wp--preset--font-family--display);font-weight:800;font-size:clamp(22px,2.4vw,28px);text-align:center;color:var(--av-ink)}
 .av-contact-page .wp-block-column > .av-h-sm:first-child,.av-contact-page #lien-he > .av-h-sm:first-child{margin-top:0}
 .av-contact{gap:40px}
 .av-contact h2{margin-bottom:12px}

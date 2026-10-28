@@ -90,6 +90,19 @@ add_action(
  * Tạo một trang từ mẫu khối của theme (chạy một lần), lưu ID vào option.
  * Sau đó Biên tập viên sửa chữ, thứ tự khối trong Trang.
  */
+/**
+ * Nội dung khối của một file mẫu trong theme/patterns.
+ */
+function auviet_page_from_pattern( string $pattern ): string {
+	$file = get_theme_file_path( 'patterns/' . $pattern . '.php' );
+	if ( ! is_readable( $file ) ) {
+		return '';
+	}
+	ob_start();
+	include $file;
+	return trim( (string) ob_get_clean() );
+}
+
 function auviet_ensure_page( string $slug, string $title, string $pattern, string $option ): void {
 	$existing = (int) get_option( $option );
 	if ( $existing && get_post( $existing ) ) {
@@ -100,13 +113,10 @@ function auviet_ensure_page( string $slug, string $title, string $pattern, strin
 		update_option( $option, (int) $page->ID );
 		return;
 	}
-	$file = get_theme_file_path( 'patterns/' . $pattern . '.php' );
-	if ( ! is_readable( $file ) ) {
+	$content = auviet_page_from_pattern( $pattern );
+	if ( '' === $content ) {
 		return;
 	}
-	ob_start();
-	include $file;
-	$content = trim( (string) ob_get_clean() );
 	// Nội dung lấy từ file mẫu của theme (tin cậy), không lọc qua kses.
 	kses_remove_filters();
 	$id = wp_insert_post(
