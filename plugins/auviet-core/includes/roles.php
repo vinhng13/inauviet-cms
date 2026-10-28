@@ -11,63 +11,133 @@ defined( 'ABSPATH' ) || exit;
 const AV_ROLE_PREFIX = 'av_role_';
 
 /**
- * Ma trận quyền: mã module => [tên, [khoá hành động => [nhãn, capability[]]]].
- * QT-11 (người dùng, plugin, cập nhật) chỉ dành cho Quản trị viên nên không có trong ma trận.
+ * Các cột hành động trong ma trận quyền.
  */
-function av_permission_matrix(): array {
-	$page_caps = array( 'edit_pages', 'edit_others_pages', 'edit_published_pages', 'edit_private_pages', 'publish_pages', 'read_private_pages', 'delete_pages', 'delete_others_pages', 'delete_published_pages', 'delete_private_pages' );
-	$post_caps = array( 'edit_posts', 'edit_others_posts', 'edit_published_posts', 'edit_private_posts', 'publish_posts', 'read_private_posts', 'delete_posts', 'delete_others_posts', 'delete_published_posts', 'delete_private_posts', 'manage_categories' );
-	$quote_rw  = array( 'edit_av_quotes', 'edit_others_av_quotes', 'edit_published_av_quotes', 'edit_private_av_quotes', 'publish_av_quotes', 'read_private_av_quotes' );
-	$quote_del = array( 'delete_av_quotes', 'delete_others_av_quotes', 'delete_published_av_quotes', 'delete_private_av_quotes' );
+function av_permission_columns(): array {
 	return array(
-		'QT-02' => array( 'Trang và landing', array( 'manage' => array( 'Xem, thêm, sửa, xuất bản, xoá', $page_caps ) ) ),
-		'QT-03' => array(
-			'Sản phẩm, chất liệu',
-			array(
-				'products'  => array( 'Sản phẩm: xem, thêm, sửa, xuất bản, xoá', av_post_type_caps( 'av_products' ) ),
-				'materials' => array( 'Chất liệu: xem, thêm, sửa, xuất bản, xoá', av_post_type_caps( 'av_materials' ) ),
-			),
-		),
-		'QT-04' => array( 'Bảng giá, tính giá', array( 'prices' => array( 'Xem, sửa giá, nhập/xuất', array( 'av_manage_prices' ) ) ) ),
-		'QT-05' => array(
-			'Bài viết, tag, hỏi đáp',
-			array(
-				'posts' => array( 'Bài viết, chuyên mục, tag', $post_caps ),
-				'faqs'  => array( 'Hỏi đáp', av_post_type_caps( 'av_faqs' ) ),
-			),
-		),
-		'QT-06' => array( 'Mẫu đã làm', array( 'projects' => array( 'Xem, thêm, sửa, xuất bản, xoá', av_post_type_caps( 'av_projects' ) ) ) ),
-		'QT-07' => array(
-			'Yêu cầu báo giá',
-			array(
-				'quotes'        => array( 'Xem, đổi trạng thái, ghi chú', $quote_rw ),
-				'quotes_delete' => array( 'Xoá yêu cầu', $quote_del ),
-				'quotes_export' => array( 'Xuất Excel', array( 'av_export_quotes' ) ),
-			),
-		),
-		'QT-08' => array( 'SEO và chuyển hướng', array( 'seo' => array( 'Sửa meta, thêm chuyển hướng 301', array( 'av_manage_seo', 'rank_math_onpage_general', 'rank_math_onpage_advanced', 'rank_math_onpage_snippet', 'rank_math_onpage_social', 'rank_math_redirections', 'rank_math_404_monitor' ) ) ) ),
-		'QT-09' => array( 'Thư viện media', array( 'media' => array( 'Tải lên, sửa, xoá ảnh', array( 'upload_files' ) ) ) ),
-		'QT-10' => array(
-			'Cấu hình chung',
-			array(
-				'site_content' => array( 'Nội dung: banner, menu, nút nổi', array( 'av_manage_site_content' ) ),
-				'site_system'  => array( 'Hệ thống: thông tin công ty, liên hệ, email', array( 'av_manage_site_system' ) ),
-			),
-		),
-		'QT-12' => array( 'Nhật ký hoạt động', array( 'log' => array( 'Xem, lọc, xuất nhật ký', array( 'av_view_activity_log' ) ) ) ),
+		'xem'     => 'Xem',
+		'them'    => 'Thêm',
+		'sua'     => 'Sửa',
+		'xuatban' => 'Xuất bản',
+		'xoa'     => 'Xoá',
+		'khac'    => 'Khác',
 	);
 }
 
 /**
- * Các quyền một vai trò đang có theo ma trận: [ 'QT-03.products' => true, ... ].
+ * Bộ quyền cho từng hành động của một loại nội dung (capability_type số nhiều, ví dụ "av_products", "posts").
+ * Xem: danh sách trong trang quản trị và bản nháp, bản riêng tư. Thêm: tạo mới (create_*, cần Xem).
+ * Sửa: sửa nội dung người khác và nội dung đã xuất bản. Xuất bản: đăng, hẹn giờ đăng. Xoá: bỏ vào thùng rác, xoá hẳn.
+ */
+function av_content_actions( string $plural ): array {
+	return array(
+		'xem'     => array( 'Xem', array( "edit_{$plural}", "read_private_{$plural}" ) ),
+		'them'    => array( 'Thêm', array( "create_{$plural}" ) ),
+		'sua'     => array( 'Sửa', array( "edit_others_{$plural}", "edit_published_{$plural}", "edit_private_{$plural}" ) ),
+		'xuatban' => array( 'Xuất bản', array( "publish_{$plural}" ) ),
+		'xoa'     => array( 'Xoá', array( "delete_{$plural}", "delete_others_{$plural}", "delete_published_{$plural}", "delete_private_{$plural}" ) ),
+	);
+}
+
+/**
+ * Ma trận quyền: mã module => [tên module, [mục => [tên mục, [hành động => [nhãn, capability[]]], ghi chú]]].
+ * Mỗi ô là một quyền độc lập. QT-11 (người dùng, plugin, cập nhật) chỉ dành cho Quản trị viên nên không có ở đây.
+ */
+function av_permission_matrix(): array {
+	return array(
+		'QT-02' => array( 'Trang và landing', array( 'pages' => array( 'Trang', av_content_actions( 'pages' ) ) ) ),
+		'QT-03' => array(
+			'Sản phẩm, chất liệu',
+			array(
+				'products'  => array( 'Sản phẩm', av_content_actions( 'av_products' ), 'Nhóm sản phẩm: sửa theo quyền Sửa, xoá theo quyền Xoá sản phẩm.' ),
+				'materials' => array( 'Chất liệu', av_content_actions( 'av_materials' ) ),
+			),
+		),
+		'QT-04' => array(
+			'Bảng giá, tính giá',
+			array(
+				'prices' => array(
+					'Bảng giá tham khảo',
+					array(
+						'xem' => array( 'Xem', array( 'av_view_prices' ) ),
+						'sua' => array( 'Sửa', array( 'av_manage_prices' ) ),
+					),
+					'Sửa giá cần có thêm quyền Sửa sản phẩm.',
+				),
+			),
+		),
+		'QT-05' => array(
+			'Bài viết, chủ đề, hỏi đáp',
+			array(
+				'posts'      => array( 'Bài viết', av_content_actions( 'posts' ) ),
+				'post_terms' => array(
+					'Danh mục, chủ đề bài viết',
+					array(
+						'sua' => array( 'Thêm, sửa', array( 'av_edit_post_terms' ) ),
+						'xoa' => array( 'Xoá', array( 'av_delete_post_terms' ) ),
+					),
+				),
+				'faqs'       => array( 'Hỏi đáp', av_content_actions( 'av_faqs' ) ),
+			),
+		),
+		'QT-06' => array( 'Mẫu đã làm', array( 'projects' => array( 'Mẫu đã làm', av_content_actions( 'av_projects' ), 'Ngành: sửa theo quyền Sửa, xoá theo quyền Xoá mẫu.' ) ) ),
+		'QT-07' => array(
+			'Yêu cầu báo giá',
+			array(
+				'quotes' => array(
+					'Yêu cầu báo giá',
+					array(
+						'xem'  => array( 'Xem', array( 'edit_av_quotes', 'read_private_av_quotes' ) ),
+						'sua'  => array( 'Xử lý', array( 'edit_others_av_quotes', 'edit_published_av_quotes', 'edit_private_av_quotes', 'publish_av_quotes' ) ),
+						'xoa'  => array( 'Xoá', array( 'delete_av_quotes', 'delete_others_av_quotes', 'delete_published_av_quotes', 'delete_private_av_quotes' ) ),
+						'khac' => array( 'Xuất Excel', array( 'av_export_quotes' ) ),
+					),
+					'Xử lý: mở yêu cầu, đổi trạng thái, người phụ trách, ghi chú.',
+				),
+			),
+		),
+		'QT-08' => array(
+			'SEO và chuyển hướng',
+			array(
+				'seo_meta'  => array( 'Title, meta, ảnh chia sẻ', array( 'sua' => array( 'Sửa', array( 'rank_math_onpage_general', 'rank_math_onpage_advanced', 'rank_math_onpage_snippet', 'rank_math_onpage_social' ) ) ) ),
+				'redirects' => array( 'Chuyển hướng 301, lỗi 404', array( 'sua' => array( 'Sửa', array( 'av_manage_seo', 'rank_math_redirections', 'rank_math_404_monitor' ) ) ) ),
+			),
+		),
+		'QT-09' => array( 'Thư viện media', array( 'media' => array( 'Ảnh, file', array( 'them' => array( 'Tải lên', array( 'upload_files' ) ) ), 'Sửa, xoá ảnh của người khác đi theo quyền Sửa, Xoá bài viết.' ) ) ),
+		'QT-10' => array(
+			'Cấu hình chung',
+			array(
+				'site_content' => array( 'Nội dung: banner, giới thiệu, thiết kế', array( 'sua' => array( 'Sửa', array( 'av_manage_site_content' ) ) ) ),
+				'site_system'  => array( 'Hệ thống: công ty, liên hệ, email', array( 'sua' => array( 'Sửa', array( 'av_manage_site_system' ) ) ) ),
+			),
+		),
+		'QT-12' => array( 'Nhật ký hoạt động', array( 'log' => array( 'Nhật ký', array( 'xem' => array( 'Xem, lọc, xuất', array( 'av_view_activity_log' ) ) ) ) ) ),
+	);
+}
+
+/**
+ * Danh sách phẳng: "mục.hành động" => [tên mục, nhãn hành động, capability[]].
+ */
+function av_permission_flat(): array {
+	$out = array();
+	foreach ( av_permission_matrix() as $module ) {
+		foreach ( $module[1] as $res => $r ) {
+			foreach ( $r[1] as $act => $a ) {
+				$out[ $res . '.' . $act ] = array( $r[0], $a[0], $a[1] );
+			}
+		}
+	}
+	return $out;
+}
+
+/**
+ * Các quyền một vai trò đang có: [ 'products.xem' => true, ... ]. Một ô được tính là có khi vai trò có đủ mọi capability của ô đó.
  */
 function av_role_actions( WP_Role $role ): array {
-	$on = array();
-	foreach ( av_permission_matrix() as $code => $module ) {
-		foreach ( $module[1] as $key => $action ) {
-			$on[ $code . '.' . $key ] = ! array_diff( $action[1], array_keys( array_filter( $role->capabilities ) ) )
-				|| ( count( $action[1] ) > 3 && $role->has_cap( $action[1][0] ) ); // Bộ quyền nội dung: có quyền sửa là tính có.
-		}
+	$have = array_keys( array_filter( $role->capabilities ) );
+	$on   = array();
+	foreach ( av_permission_flat() as $key => $a ) {
+		$on[ $key ] = ! array_diff( $a[2], $have );
 	}
 	return $on;
 }
@@ -78,15 +148,21 @@ function av_is_custom_role( string $slug ): bool {
 
 /**
  * Gán đúng tập quyền đã chọn cho nhóm tự tạo (luôn có quyền "read" để vào trang quản trị).
+ * Mục nào có Thêm, Sửa, Xuất bản hoặc Xoá thì tự có Xem.
  */
 function av_apply_role_actions( WP_Role $role, array $chosen ): void {
+	$flat = av_permission_flat();
+	foreach ( array_keys( array_filter( $chosen ) ) as $key ) {
+		[ $res ] = explode( '.', (string) $key );
+		if ( isset( $flat[ $res . '.xem' ] ) ) {
+			$chosen[ $res . '.xem' ] = 1;
+		}
+	}
 	$want = array( 'read' => true );
-	foreach ( av_permission_matrix() as $code => $module ) {
-		foreach ( $module[1] as $key => $action ) {
-			if ( ! empty( $chosen[ $code . '.' . $key ] ) ) {
-				foreach ( $action[1] as $cap ) {
-					$want[ $cap ] = true;
-				}
+	foreach ( $flat as $key => $a ) {
+		if ( ! empty( $chosen[ $key ] ) ) {
+			foreach ( $a[2] as $cap ) {
+				$want[ $cap ] = true;
 			}
 		}
 	}
@@ -148,20 +224,7 @@ function av_roles_list(): void {
 		if ( ! isset( $roles[ $slug ] ) || ( ! av_is_custom_role( $slug ) && ! in_array( $slug, array( 'administrator', 'editor' ), true ) ) ) {
 			continue;
 		}
-		$role    = get_role( $slug );
-		$actions = av_role_actions( $role );
-		$labels  = array();
-		foreach ( av_permission_matrix() as $code => $module ) {
-			$parts = array();
-			foreach ( $module[1] as $key => $action ) {
-				if ( ! empty( $actions[ $code . '.' . $key ] ) ) {
-					$parts[] = $action[0];
-				}
-			}
-			if ( $parts ) {
-				$labels[] = '<strong>' . esc_html( $module[0] ) . '</strong>' . ( count( $module[1] ) > 1 ? ': ' . esc_html( implode( '; ', $parts ) ) : '' );
-			}
-		}
+		$labels = av_role_actions_lines( av_role_actions( get_role( $slug ) ) );
 		if ( 'administrator' === $slug ) {
 			array_unshift( $labels, '<strong>Toàn quyền</strong>, gồm người dùng, plugin, cập nhật (QT-11)' );
 		}
@@ -177,6 +240,29 @@ function av_roles_list(): void {
 		);
 	}
 	echo '</tbody></table>';
+}
+
+/**
+ * Mỗi mục một dòng: "<strong>Sản phẩm</strong>: xem, thêm, sửa".
+ *
+ * @return string[]
+ */
+function av_role_actions_lines( array $on ): array {
+	$lines = array();
+	foreach ( av_permission_matrix() as $module ) {
+		foreach ( $module[1] as $res => $r ) {
+			$acts = array();
+			foreach ( $r[1] as $act => $a ) {
+				if ( ! empty( $on[ $res . '.' . $act ] ) ) {
+					$acts[] = mb_strtolower( $a[0] );
+				}
+			}
+			if ( $acts ) {
+				$lines[] = '<strong>' . esc_html( $r[0] ) . '</strong>: ' . esc_html( implode( ', ', $acts ) );
+			}
+		}
+	}
+	return $lines;
 }
 
 function av_roles_form( string $slug ): void {
@@ -196,24 +282,102 @@ function av_roles_form( string $slug ): void {
 		<?php wp_nonce_field( 'av_save_role' ); ?>
 		<p><label for="av-role-name"><strong>Tên nhóm</strong></label><br>
 		<input type="text" class="regular-text" id="av-role-name" name="name" value="<?php echo esc_attr( $name ); ?>" required placeholder="VD: Kinh doanh"></p>
-		<table class="widefat striped av-matrix">
-			<thead><tr><th>Mã</th><th>Module</th><th>Được làm</th></tr></thead>
-			<tbody>
-			<tr><td>QT-01</td><td>Bảng điều khiển</td><td><label><input type="checkbox" checked disabled> Xem (luôn có)</label></td></tr>
-			<?php foreach ( av_permission_matrix() as $code => $module ) : ?>
+		<p class="description">Mỗi ô là một quyền riêng. Chọn Thêm, Sửa, Xuất bản hoặc Xoá thì Xem tự được chọn. Ô "—" là hành động không có ở mục đó.</p>
+		<table class="widefat av-matrix">
+			<thead>
 				<tr>
-					<td><?php echo esc_html( $code ); ?></td>
-					<td><?php echo esc_html( $module[0] ); ?></td>
-					<td>
-						<?php foreach ( $module[1] as $key => $action ) : ?>
-							<label><input type="checkbox" name="actions[<?php echo esc_attr( $code . '.' . $key ); ?>]" value="1"<?php checked( ! empty( $actions[ $code . '.' . $key ] ) ); ?>> <?php echo esc_html( $action[0] ); ?></label><br>
-						<?php endforeach; ?>
-					</td>
+					<th scope="col">Mã</th>
+					<th scope="col">Mục</th>
+					<?php foreach ( av_permission_columns() as $col => $label ) : ?>
+						<th scope="col" class="av-matrix__act">
+							<?php echo esc_html( $label ); ?>
+							<?php if ( 'khac' !== $col ) : ?>
+								<br><label class="av-matrix__all"><input type="checkbox" data-av-col="<?php echo esc_attr( $col ); ?>"> <span>cả cột</span></label>
+							<?php endif; ?>
+						</th>
+					<?php endforeach; ?>
+					<th scope="col" class="av-matrix__act">Cả dòng</th>
 				</tr>
-			<?php endforeach; ?>
-			<tr><td>QT-11</td><td>Người dùng, plugin, cập nhật, sao lưu</td><td><span class="description">Chỉ Quản trị viên</span></td></tr>
+			</thead>
+			<tbody>
+				<tr class="av-matrix__fixed">
+					<td>QT-01</td><td>Bảng điều khiển</td>
+					<td class="av-matrix__act"><input type="checkbox" checked disabled aria-label="Xem bảng điều khiển (luôn có)"></td>
+					<td colspan="6"><span class="description">Luôn có</span></td>
+				</tr>
+				<?php foreach ( av_permission_matrix() as $code => $module ) : ?>
+					<?php $first = true; foreach ( $module[1] as $res => $r ) : ?>
+						<tr data-av-row="<?php echo esc_attr( $res ); ?>" class="<?php echo $first ? 'av-matrix__module' : ''; ?>">
+							<td><?php echo $first ? esc_html( $code ) : ''; ?></td>
+							<td>
+								<?php if ( $first && $module[0] !== $r[0] ) : ?><span class="av-matrix__mod"><?php echo esc_html( $module[0] ); ?></span><br><?php endif; ?>
+								<strong><?php echo esc_html( $r[0] ); ?></strong>
+								<?php if ( ! empty( $r[2] ) ) : ?><br><span class="description"><?php echo esc_html( $r[2] ); ?></span><?php endif; ?>
+							</td>
+							<?php foreach ( av_permission_columns() as $col => $label ) : ?>
+								<td class="av-matrix__act">
+									<?php if ( isset( $r[1][ $col ] ) ) : ?>
+										<?php $k = $res . '.' . $col; ?>
+										<label>
+											<input type="checkbox" name="actions[<?php echo esc_attr( $k ); ?>]" value="1" data-av-act="<?php echo esc_attr( $col ); ?>"<?php checked( ! empty( $actions[ $k ] ) ); ?> aria-label="<?php echo esc_attr( $r[1][ $col ][0] . ' – ' . $r[0] ); ?>">
+											<?php if ( $r[1][ $col ][0] !== $label ) : ?><span class="av-matrix__lbl"><?php echo esc_html( $r[1][ $col ][0] ); ?></span><?php endif; ?>
+										</label>
+									<?php else : ?>
+										<span class="av-matrix__na" aria-hidden="true">—</span>
+									<?php endif; ?>
+								</td>
+							<?php endforeach; ?>
+							<td class="av-matrix__act"><input type="checkbox" data-av-rowall aria-label="<?php echo esc_attr( 'Chọn mọi quyền – ' . $r[0] ); ?>"></td>
+						</tr>
+					<?php $first = false; endforeach; ?>
+				<?php endforeach; ?>
+				<tr class="av-matrix__fixed av-matrix__module">
+					<td>QT-11</td><td>Người dùng, plugin, cập nhật, sao lưu</td>
+					<td colspan="7"><span class="description">Chỉ Quản trị viên</span></td>
+				</tr>
 			</tbody>
 		</table>
+		<script>
+		( function () {
+			var table = document.querySelector( '.av-matrix' );
+			if ( ! table ) { return; }
+			function rowSync( tr ) {
+				var boxes = tr.querySelectorAll( '[data-av-act]' );
+				var xem = tr.querySelector( '[data-av-act="xem"]' );
+				var other = Array.prototype.some.call( boxes, function ( b ) { return b !== xem && b.checked; } );
+				if ( xem && other ) { xem.checked = true; }
+				var all = tr.querySelector( '[data-av-rowall]' );
+				if ( all ) { all.checked = boxes.length && Array.prototype.every.call( boxes, function ( b ) { return b.checked; } ); }
+			}
+			function colSync() {
+				table.querySelectorAll( '[data-av-col]' ).forEach( function ( head ) {
+					var boxes = table.querySelectorAll( '[data-av-act="' + head.dataset.avCol + '"]' );
+					head.checked = boxes.length && Array.prototype.every.call( boxes, function ( b ) { return b.checked; } );
+				} );
+			}
+			table.addEventListener( 'change', function ( e ) {
+				var t = e.target;
+				var tr = t.closest( 'tr' );
+				if ( t.dataset.avAct === 'xem' && ! t.checked ) {
+					// Bỏ Xem thì bỏ luôn các quyền khác của mục đó.
+					tr.querySelectorAll( '[data-av-act]' ).forEach( function ( b ) { b.checked = false; } );
+				} else if ( t.hasAttribute( 'data-av-rowall' ) ) {
+					tr.querySelectorAll( '[data-av-act]' ).forEach( function ( b ) { b.checked = t.checked; } );
+				} else if ( t.dataset.avCol ) {
+					table.querySelectorAll( '[data-av-act="' + t.dataset.avCol + '"]' ).forEach( function ( b ) {
+						b.checked = t.checked;
+						if ( ! t.checked && t.dataset.avCol === 'xem' ) {
+							b.closest( 'tr' ).querySelectorAll( '[data-av-act]' ).forEach( function ( x ) { x.checked = false; } );
+						}
+					} );
+				}
+				table.querySelectorAll( 'tr[data-av-row]' ).forEach( rowSync );
+				colSync();
+			} );
+			table.querySelectorAll( 'tr[data-av-row]' ).forEach( rowSync );
+			colSync();
+		} )();
+		</script>
 		<p class="submit">
 			<button type="submit" class="button button-primary">Lưu nhóm quyền</button>
 			<a class="button" href="<?php echo esc_url( admin_url( 'users.php?page=av-roles' ) ); ?>">Quay lại</a>
@@ -400,21 +564,9 @@ add_filter(
 );
 
 /**
- * Danh sách quyền đọc được, ví dụ "Yêu cầu báo giá: Xem, đổi trạng thái, ghi chú; Xuất Excel".
+ * Danh sách quyền đọc được, ví dụ "Yêu cầu báo giá: xem, xử lý, xuất excel | Sản phẩm: xem".
  */
 function av_role_actions_text( array $on ): string {
-	$parts = array();
-	foreach ( av_permission_matrix() as $code => $module ) {
-		$acts = array();
-		foreach ( $module[1] as $key => $action ) {
-			if ( ! empty( $on[ $code . '.' . $key ] ) ) {
-				$acts[] = $action[0];
-			}
-		}
-		if ( $acts ) {
-			$parts[] = $module[0] . ': ' . implode( '; ', $acts );
-		}
-	}
-	return $parts ? implode( ' | ', $parts ) : 'không có quyền nào';
+	$lines = array_map( static fn( $l ) => wp_strip_all_tags( $l ), av_role_actions_lines( $on ) );
+	return $lines ? implode( ' | ', $lines ) : 'không có quyền nào';
 }
-

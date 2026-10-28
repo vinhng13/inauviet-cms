@@ -46,3 +46,21 @@
 .column-av_thumb img{border-radius:4px;display:block}
 .av-col-warn{color:#b32d2e;font-weight:600}
 .av-col-muted{color:#646970;font-size:12px}
+
+/* Nhóm quyền: ma trận mục × hành động */
+.av-matrix{max-width:1180px;margin-top:8px}
+.av-matrix th,.av-matrix td{vertical-align:middle;padding:9px 10px}
+.av-matrix thead th{font-weight:600;background:#f6f7f7}
+.av-matrix .av-matrix__act{text-align:center;width:84px}
+.av-matrix__all{display:inline-flex;align-items:center;gap:3px;font-weight:400;font-size:11px;color:#646970;margin-top:2px}
+.av-matrix__all input{margin:0}
+.av-matrix tbody tr{background:#fff}
+.av-matrix tbody tr.av-matrix__module td{border-top:1px solid #c3c4c7}
+.av-matrix tbody tr:hover{background:#f6f7f7}
+.av-matrix__mod{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#646970}
+.av-matrix__lbl{display:block;font-size:11px;color:#50575e;margin-top:2px}
+.av-matrix__na{color:#c3c4c7}
+.av-matrix__fixed td{color:#646970}
+.av-matrix label{display:inline-block;cursor:pointer}
+.av-matrix .description{font-size:12px}
+fieldset.av-readonly{opacity:.85}

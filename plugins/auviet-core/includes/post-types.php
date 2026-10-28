@@ -166,10 +166,11 @@ add_action( 'init', 'av_register_content_types' );
  * Quyền quản lý phân loại đi theo quyền sửa loại nội dung tương ứng.
  */
 function av_taxonomy_caps( string $plural ): array {
+	// Xem danh sách theo quyền Xem; thêm, sửa theo quyền Sửa; xoá theo quyền Xoá của loại nội dung.
 	return array(
 		'manage_terms' => 'edit_' . $plural,
-		'edit_terms'   => 'edit_' . $plural,
-		'delete_terms' => 'edit_' . $plural,
+		'edit_terms'   => 'edit_others_' . $plural,
+		'delete_terms' => 'delete_others_' . $plural,
 		'assign_terms' => 'edit_' . $plural,
 	);
 }

@@ -37,8 +37,21 @@ add_action(
 	static function () {
 		add_meta_box( 'av_product_info', 'Quy cách và chất liệu', 'av_box_product_info', 'av_product', 'normal', 'high' );
 		add_meta_box( 'av_product_gallery', 'Thư viện ảnh sản phẩm', 'av_box_product_gallery', 'av_product', 'normal', 'high' );
-		if ( current_user_can( 'av_manage_prices' ) ) {
-			add_meta_box( 'av_product_prices', 'Bảng giá tham khảo (chỉ Quản trị viên)', 'av_box_product_prices', 'av_product', 'normal', 'default' );
+		if ( current_user_can( 'av_manage_prices' ) || current_user_can( 'av_view_prices' ) ) {
+			add_meta_box(
+				'av_product_prices',
+				current_user_can( 'av_manage_prices' ) ? 'Bảng giá tham khảo' : 'Bảng giá tham khảo (chỉ xem)',
+				static function ( WP_Post $post ) {
+					// Có quyền Xem mà không có quyền Sửa giá: hiện bảng giá, khoá mọi ô nhập.
+					$ro = ! current_user_can( 'av_manage_prices' );
+					echo $ro ? '<fieldset disabled class="av-readonly">' : '';
+					av_box_product_prices( $post );
+					echo $ro ? '</fieldset>' : '';
+				},
+				'av_product',
+				'normal',
+				'default'
+			);
 		}
 		add_meta_box( 'av_product_related', 'Liên quan và hỏi đáp', 'av_box_product_related', 'av_product', 'normal', 'low' );
 	}
@@ -460,7 +473,7 @@ add_filter(
 			if ( 'title' === $k ) {
 				$out['av_primary'] = 'Nhóm chính';
 				$out['av_photos']  = 'Ảnh';
-				if ( current_user_can( 'av_manage_prices' ) ) {
+				if ( current_user_can( 'av_manage_prices' ) || current_user_can( 'av_view_prices' ) ) {
 					$out['av_price'] = 'Giá tham khảo';
 				}
 				$out['av_check'] = 'Quy cách';
