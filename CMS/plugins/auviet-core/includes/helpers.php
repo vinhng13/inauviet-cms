@@ -41,6 +41,48 @@ add_action(
 );
 
 /**
+ * Nội dung hiện trên mọi trang (banner, liên hệ, giới thiệu, thiết kế...) được sửa ở trang cấu hình:
+ * xoá bộ nhớ đệm trang LiteSpeed để khách thấy ngay, không phải đợi bộ nhớ đệm hết hạn (7 ngày).
+ */
+function av_purge_page_cache(): void {
+	do_action( 'litespeed_purge_all' );
+}
+foreach ( array( 'av_campaign', 'av_contact', 'av_design', 'av_about', 'av_projects_intro' ) as $av_opt ) {
+	add_action( "update_option_{$av_opt}", 'av_purge_page_cache' );
+	add_action( "add_option_{$av_opt}", 'av_purge_page_cache' );
+}
+unset( $av_opt );
+
+// Banner có ngày bắt đầu, kết thúc: trang lưu đệm hết hạn lúc nửa đêm để banner tự hiện, tự ẩn đúng ngày.
+add_action(
+	'wp',
+	static function () {
+		if ( is_admin() ) {
+			return;
+		}
+		$c = av_campaign();
+		if ( empty( $c['start'] ) && empty( $c['end'] ) ) {
+			return;
+		}
+		$midnight = ( new DateTimeImmutable( 'tomorrow', wp_timezone() ) )->getTimestamp();
+		do_action( 'litespeed_control_set_ttl', max( 60, $midnight - time() ) );
+	}
+);
+
+// Lần đầu có yêu cầu sau khi qua ngày bắt đầu hoặc kết thúc: xoá bộ nhớ đệm một lần.
+add_action(
+	'init',
+	static function () {
+		$live = av_campaign_is_live() ? '1' : '0';
+		if ( get_option( 'av_campaign_live_state' ) !== $live ) {
+			update_option( 'av_campaign_live_state', $live, true );
+			av_purge_page_cache();
+		}
+	},
+	99
+);
+
+/**
  * Cấu hình liên hệ và thông tin công ty (QT-10 phần hệ thống).
  */
 function av_contact_defaults(): array {
