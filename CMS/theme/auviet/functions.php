@@ -33,7 +33,7 @@ add_action(
 		if ( file_exists( get_theme_file_path( 'assets/css/fonts.css' ) ) ) {
 			wp_enqueue_style( 'auviet-fonts', get_theme_file_uri( 'assets/css/fonts.css' ), array(), AUVIET_THEME_VERSION );
 		}
-		wp_enqueue_style( 'auviet-theme', get_theme_file_uri( 'assets/css/theme.css' ), array(), (string) filemtime( get_theme_file_path( 'assets/css/theme.css' ) ) );
+		wp_enqueue_style( 'auviet-theme', get_theme_file_uri( 'assets/css/theme.css' ), array(), ( function_exists( 'av_ver' ) ? av_ver( get_theme_file_path( 'assets/css/theme.css' ) ) : (string) filemtime( get_theme_file_path( 'assets/css/theme.css' ) ) ) );
 	}
 );
 

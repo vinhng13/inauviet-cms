@@ -722,7 +722,7 @@ add_action(
 		if ( ! $screen || ! in_array( $screen->post_type, array( 'post', 'av_product' ), true ) ) {
 			return;
 		}
-		wp_enqueue_script( 'auviet-title-check', plugins_url( 'assets/js/title-check.js', AV_CORE_FILE ), array( 'wp-data', 'wp-api-fetch', 'wp-plugins', 'wp-element', 'wp-editor', 'wp-notices', 'wp-url' ), (string) filemtime( AV_CORE_DIR . 'assets/js/title-check.js' ), true );
+		wp_enqueue_script( 'auviet-title-check', plugins_url( 'assets/js/title-check.js', AV_CORE_FILE ), array( 'wp-data', 'wp-api-fetch', 'wp-plugins', 'wp-element', 'wp-editor', 'wp-notices', 'wp-url' ), av_ver( AV_CORE_DIR . 'assets/js/title-check.js' ), true );
 	}
 );
 
@@ -759,7 +759,7 @@ add_filter(
 add_action(
 	'enqueue_block_assets',
 	static function () {
-		wp_enqueue_style( 'auviet-content', plugins_url( 'assets/css/content.css', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/css/content.css' ) );
+		wp_enqueue_style( 'auviet-content', plugins_url( 'assets/css/content.css', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/css/content.css' ) );
 	}
 );
 

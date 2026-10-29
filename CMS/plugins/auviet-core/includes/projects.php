@@ -351,7 +351,7 @@ add_action(
 		$screen = get_current_screen();
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) && $screen && 'av_project' === $screen->post_type ) {
 			wp_enqueue_media();
-			wp_enqueue_script( 'auviet-product-admin', plugins_url( 'assets/js/product-admin.js', AV_CORE_FILE ), array( 'jquery', 'jquery-ui-sortable' ), (string) filemtime( AV_CORE_DIR . 'assets/js/product-admin.js' ), true );
+			wp_enqueue_script( 'auviet-product-admin', plugins_url( 'assets/js/product-admin.js', AV_CORE_FILE ), array( 'jquery', 'jquery-ui-sortable' ), av_ver( AV_CORE_DIR . 'assets/js/product-admin.js' ), true );
 		}
 	}
 );
@@ -494,10 +494,10 @@ add_action(
 	'wp_enqueue_scripts',
 	static function () {
 		if ( is_post_type_archive( 'av_project' ) ) {
-			wp_enqueue_script( 'auviet-projects', plugins_url( 'assets/js/projects.js', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/js/projects.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
+			wp_enqueue_script( 'auviet-projects', plugins_url( 'assets/js/projects.js', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/js/projects.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
 		}
 		if ( is_singular( 'av_project' ) ) {
-			wp_enqueue_script( 'auviet-product', plugins_url( 'assets/js/product.js', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/js/product.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
+			wp_enqueue_script( 'auviet-product', plugins_url( 'assets/js/product.js', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/js/product.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
 		}
 	}
 );

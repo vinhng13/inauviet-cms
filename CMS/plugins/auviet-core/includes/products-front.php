@@ -117,7 +117,7 @@ add_action(
 add_action(
 	'enqueue_block_assets',
 	static function () {
-		wp_enqueue_style( 'auviet-products', plugins_url( 'assets/css/products.css', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/css/products.css' ) );
+		wp_enqueue_style( 'auviet-products', plugins_url( 'assets/css/products.css', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/css/products.css' ) );
 	}
 );
 
@@ -125,7 +125,7 @@ add_action(
 	'wp_enqueue_scripts',
 	static function () {
 		if ( is_singular( 'av_product' ) || av_is_catalog() ) {
-			wp_enqueue_script( 'auviet-product', plugins_url( 'assets/js/product.js', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/js/product.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
+			wp_enqueue_script( 'auviet-product', plugins_url( 'assets/js/product.js', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/js/product.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
 		}
 	}
 );

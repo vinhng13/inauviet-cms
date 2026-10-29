@@ -284,7 +284,7 @@ add_action(
 	'wp_enqueue_scripts',
 	static function () {
 		if ( is_page() && ( get_queried_object_id() === av_design_page_id() || (int) wp_get_post_parent_id( get_queried_object_id() ) === av_design_page_id() ) ) {
-			wp_enqueue_script( 'auviet-product', plugins_url( 'assets/js/product.js', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/js/product.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
+			wp_enqueue_script( 'auviet-product', plugins_url( 'assets/js/product.js', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/js/product.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
 		}
 	}
 );
@@ -330,7 +330,7 @@ add_action(
 		$screen = get_current_screen();
 		if ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) && $screen && 'page' === $screen->post_type ) {
 			wp_enqueue_media();
-			wp_enqueue_script( 'auviet-product-admin', plugins_url( 'assets/js/product-admin.js', AV_CORE_FILE ), array( 'jquery', 'jquery-ui-sortable' ), (string) filemtime( AV_CORE_DIR . 'assets/js/product-admin.js' ), true );
+			wp_enqueue_script( 'auviet-product-admin', plugins_url( 'assets/js/product-admin.js', AV_CORE_FILE ), array( 'jquery', 'jquery-ui-sortable' ), av_ver( AV_CORE_DIR . 'assets/js/product-admin.js' ), true );
 		}
 	}
 );

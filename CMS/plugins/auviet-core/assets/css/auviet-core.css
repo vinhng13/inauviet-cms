@@ -104,8 +104,10 @@
 .av-maps--single{grid-template-columns:1fr}
 .av-maps--single .av-map{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
 .av-maps--single .av-map__frame{aspect-ratio:auto;min-height:360px}
-.av-maps--single figcaption{flex-direction:column;align-items:flex-start;justify-content:center;padding:24px}
-.av-maps--single figcaption span{flex:0 0 auto}
+.av-maps--single figcaption{display:grid;grid-template-columns:minmax(0,1fr);align-content:center;justify-items:start;gap:12px;padding:28px}
+.av-maps--single figcaption strong{flex:none;font-size:20px}
+.av-maps--single figcaption span{flex:none;max-width:100%;font-size:16px}
+.av-maps--single figcaption .av-btn{margin-top:4px}
 @media (max-width:781px){.av-maps--single .av-map{grid-template-columns:1fr}.av-maps--single .av-map__frame{min-height:0;aspect-ratio:4/3}}
 
 /* Trang giới thiệu: số liệu, quy trình khép kín, máy móc, khách hàng */

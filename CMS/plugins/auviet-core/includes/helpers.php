@@ -6,6 +6,41 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Phiên bản file CSS, JS theo nội dung (đổi nội dung là đổi phiên bản), để trình duyệt và bộ nhớ đệm
+ * không giữ bản cũ. Không dùng ngày sửa file vì ổ chia sẻ Docker trên Windows có lúc báo ngày cũ.
+ */
+function av_ver( string $file ): string {
+	static $cache = array();
+	if ( ! isset( $cache[ $file ] ) ) {
+		$cache[ $file ] = is_readable( $file ) ? substr( (string) md5_file( $file ), 0, 10 ) : AV_CORE_VERSION;
+	}
+	return $cache[ $file ];
+}
+
+/**
+ * CSS, JS của plugin hoặc giao diện đổi (sau khi cập nhật code): xoá bộ nhớ đệm trang của LiteSpeed một lần,
+ * để khách không nhận trang cũ trỏ tới file cũ.
+ */
+add_action(
+	'init',
+	static function () {
+		$files = array_merge(
+			glob( AV_CORE_DIR . 'assets/{css,js}/*.{css,js}', GLOB_BRACE ) ?: array(),
+			glob( get_theme_file_path( 'assets/css' ) . '/*.css' ) ?: array(),
+			glob( get_theme_file_path( 'templates' ) . '/*.html' ) ?: array(),
+			glob( get_theme_file_path( 'parts' ) . '/*.html' ) ?: array()
+		);
+		$sig = md5( implode( ',', array_map( 'av_ver', $files ) ) );
+		if ( get_option( 'av_assets_sig' ) === $sig ) {
+			return;
+		}
+		update_option( 'av_assets_sig', $sig, true );
+		do_action( 'litespeed_purge_all' );
+	},
+	99
+);
+
+/**
  * Cấu hình liên hệ và thông tin công ty (QT-10 phần hệ thống).
  */
 function av_contact_defaults(): array {

@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 add_action(
 	'enqueue_block_assets',
 	static function () {
-		wp_enqueue_style( 'auviet-core', plugins_url( 'assets/css/auviet-core.css', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/css/auviet-core.css' ) );
+		wp_enqueue_style( 'auviet-core', plugins_url( 'assets/css/auviet-core.css', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/css/auviet-core.css' ) );
 	}
 );
 

@@ -19,12 +19,12 @@ add_action(
 		}
 		$is_product = in_array( $hook, array( 'post.php', 'post-new.php' ), true ) && 'av_product' === $screen->post_type;
 		$is_group   = in_array( $screen->base, array( 'edit-tags', 'term' ), true ) && 'av_group' === $screen->taxonomy;
-		wp_enqueue_style( 'auviet-admin', plugins_url( 'assets/css/admin.css', AV_CORE_FILE ), array(), (string) filemtime( AV_CORE_DIR . 'assets/css/admin.css' ) );
+		wp_enqueue_style( 'auviet-admin', plugins_url( 'assets/css/admin.css', AV_CORE_FILE ), array(), av_ver( AV_CORE_DIR . 'assets/css/admin.css' ) );
 		if ( ! $is_product && ! $is_group ) {
 			return;
 		}
 		wp_enqueue_media();
-		wp_enqueue_script( 'auviet-product-admin', plugins_url( 'assets/js/product-admin.js', AV_CORE_FILE ), array( 'jquery', 'jquery-ui-sortable' ), (string) filemtime( AV_CORE_DIR . 'assets/js/product-admin.js' ), true );
+		wp_enqueue_script( 'auviet-product-admin', plugins_url( 'assets/js/product-admin.js', AV_CORE_FILE ), array( 'jquery', 'jquery-ui-sortable' ), av_ver( AV_CORE_DIR . 'assets/js/product-admin.js' ), true );
 	}
 );
 
