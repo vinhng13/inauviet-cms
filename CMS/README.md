@@ -7,7 +7,7 @@ Tài liệu yêu cầu và kỹ thuật: xem `docs/tai-lieu.md`.
 ## Chạy trên máy local (Windows, Docker Desktop)
 
 Yêu cầu: Docker Desktop đang chạy (“Engine running”), WSL 2 đã cài (`wsl --status` hiện “Default Version: 2”).
-Mở PowerShell tại thư mục này (`D:\Source.Code\Inauviet`).
+Mở PowerShell tại thư mục này (`D:\Source.Code\Inauviet\CMS`).
 
 ```powershell
 # 1. Dựng và khởi động các container (lần đầu mất vài phút)
