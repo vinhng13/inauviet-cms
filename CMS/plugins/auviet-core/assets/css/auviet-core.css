@@ -157,3 +157,5 @@
 .av-dgallery span{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(30,28,29,.8));color:#fff;font-size:13px;font-weight:600}
 .av-hero-cta{margin:24px 0 0!important;gap:12px}
 .av-design-service .av-ps__lead p{margin:0 0 24px;font-size:17px;color:#5C5A5B}
+/* Ảnh trong thẻ (khung flex dọc): bỏ chiều cao tối thiểu theo ảnh gốc để mọi ảnh cùng một tỉ lệ. */
+.av-pcard a > img,.av-pjcard a > img,.av-postcard a > img{min-height:0;height:auto;flex:none}
