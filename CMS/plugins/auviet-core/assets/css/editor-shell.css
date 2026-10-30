@@ -1,0 +1,182 @@
+/* Màn hình soạn Sản phẩm, Mẫu đã làm (prototype "Màn hình soạn nội dung").
+   Màu: than chì #2B292A, chữ phụ #5C5A5B, kẻ #E2E0DF, nền #F4F3F2, đỏ nút #C8202A, xanh ổn #1F7A3A, cam cần sửa #C2410C. */
+
+body.av-shell{background:#F4F3F2}
+body.av-shell #wpcontent{padding-left:0}
+body.av-shell .wrap{margin:0;padding:0 24px 48px}
+body.av-shell .wrap > .wp-heading-inline,
+body.av-shell .wrap > .page-title-action,
+body.av-shell .wrap > .wp-header-end{display:none}
+body.av-shell #poststuff{padding-top:0;min-width:0}
+.av-tab-hidden{display:none!important}
+
+/* ---------- Thanh trên cùng ---------- */
+.av-topbar{position:sticky;top:32px;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin:0 -24px 24px;padding:10px 24px;background:#fff;border-bottom:1px solid #E2E0DF}
+@media (max-width:782px){.av-topbar{top:0;position:relative}}
+.av-topbar__back{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:#5C5A5B;text-decoration:none;font-weight:500}
+.av-topbar__back:hover{color:#2B292A}
+.av-topbar__title{display:flex;align-items:center;gap:10px;flex:1 1 320px;min-width:0}
+.av-topbar__name{font-size:18px;font-weight:700;color:#2B292A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av-topbar__saved{flex:none;font-size:13px;color:#6B6869}
+.av-pill{flex:none;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px}
+.av-pill--live{background:#E6F4EA;color:#1F6B35}
+.av-pill--draft{background:#FFF1CC;color:#5C4400}
+.av-pill--future{background:#E5EEFF;color:#1D4ED8}
+.av-topbar__actions{display:flex;flex-wrap:wrap;gap:8px}
+.av-tb-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #D4D1D0;background:#fff;color:#2B292A;font:inherit;font-weight:500;text-decoration:none;cursor:pointer;box-sizing:border-box}
+.av-tb-btn:hover{border-color:#2B292A;color:#2B292A}
+.av-tb-btn--primary{background:#C8202A;border-color:#C8202A;color:#fff;font-weight:600;padding:0 22px}
+.av-tb-btn--primary:hover{background:#A51A22;border-color:#A51A22;color:#fff}
+.av-tb-btn[disabled]{background:#E2E0DF;border-color:#E2E0DF;color:#5C5A5B;cursor:not-allowed}
+.av-tb-btn:focus-visible,.av-shell-nav__item:focus-visible,.av-check:focus-visible{outline:2px solid #2563EB;outline-offset:2px}
+
+/* ---------- Ba cột: mục | nội dung | kiểm tra ---------- */
+body.av-shell #post-body.av-grid{display:grid;grid-template-columns:210px minmax(0,1fr) 320px;grid-template-rows:auto auto 1fr;gap:24px;align-items:start;margin-right:0!important}
+body.av-shell #post-body.av-grid::after{display:none}
+body.av-shell .av-grid > .av-shell-nav{grid-column:1;grid-row:1 / span 3;position:sticky;top:110px;display:flex;flex-direction:column;gap:4px}
+body.av-shell .av-grid > #post-body-content{grid-column:2;grid-row:1;float:none;width:auto;margin:0}
+body.av-shell .av-grid > #post-body-content.av-tab-hidden + *{margin-top:0}
+body.av-shell .av-grid > #postbox-container-2{grid-column:2;grid-row:2;float:none!important;width:auto!important;margin:0!important}
+body.av-shell .av-grid > #postbox-container-1{grid-column:3;grid-row:1 / span 3;float:none!important;width:auto!important;margin:0!important}
+body.av-shell #postbox-container-1 #side-sortables{min-height:0}
+@media (max-width:1180px){
+	body.av-shell #post-body.av-grid{grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:auto auto auto 1fr}
+	body.av-shell .av-grid > .av-shell-nav{grid-column:1 / -1;grid-row:1;position:static;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+	body.av-shell .av-grid > #post-body-content{grid-column:1;grid-row:2}
+	body.av-shell .av-grid > #postbox-container-2{grid-column:1;grid-row:3}
+	body.av-shell .av-grid > #postbox-container-1{grid-column:2;grid-row:2 / span 3}
+	body.av-shell .av-shell-nav__item{flex:none;width:auto}
+}
+@media (max-width:900px){
+	body.av-shell #post-body.av-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:none}
+	body.av-shell .av-grid > #postbox-container-1{grid-column:1;grid-row:4}
+}
+
+/* Mục bên trái */
+.av-shell-nav__item{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;padding:0 14px;border:0;border-radius:10px;background:transparent;color:#2B292A;font:inherit;font-size:14px;font-weight:500;text-align:left;cursor:pointer}
+.av-shell-nav__item:hover{background:#EAE8E7}
+.av-shell-nav__item.is-active{background:#2B292A;color:#fff;font-weight:600}
+.av-shell-nav__badge{flex:none;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:999px;background:#FDECEC;color:#B81C23;font-size:12px;font-weight:700;display:inline-grid;place-items:center}
+
+/* ---------- Thẻ và hộp ---------- */
+.av-card{background:#fff;border:1px solid #E2E0DF;border-radius:14px;padding:22px 26px 26px;box-sizing:border-box}
+.av-card__head h2{margin:0 0 2px!important;padding:0!important;font-size:18px!important;font-weight:700;line-height:1.3}
+.av-card__head p{margin:0 0 18px;color:#5C5A5B}
+.av-card__label{display:block;margin:16px 0 6px;font-size:14px;font-weight:600;color:#2B292A}
+.av-card--content .av-card__label:first-of-type{margin-top:0}
+body.av-shell #titlediv{margin-bottom:0}
+body.av-shell #titlediv #title{height:48px;padding:0 14px;font-size:18px;border:1px solid #CFCCCB;border-radius:10px;box-shadow:none}
+body.av-shell #titlediv #title-prompt-text{padding:12px 16px;font-size:18px}
+body.av-shell #edit-slug-box{padding:6px 0 0;color:#5C5A5B}
+body.av-shell #postdivrich{margin-top:0}
+body.av-shell #wp-content-editor-container{border-radius:0 0 10px 10px;border-color:#CFCCCB}
+body.av-shell #postexcerpt.av-flat{margin:16px 0 0;border:0;box-shadow:none;background:transparent}
+body.av-shell #postexcerpt.av-flat .postbox-header{border:0}
+body.av-shell #postexcerpt.av-flat .postbox-header h2{padding:0 0 6px;font-size:14px;font-weight:600}
+body.av-shell #postexcerpt.av-flat .handle-actions{display:none}
+body.av-shell #postexcerpt.av-flat .inside{padding:0;margin:0}
+body.av-shell #postexcerpt.av-flat textarea{height:84px;border:1px solid #CFCCCB;border-radius:10px;padding:10px 12px}
+body.av-shell #postexcerpt.av-flat .inside > p{margin:6px 0 0;color:#5C5A5B}
+
+body.av-shell .postbox{border:1px solid #E2E0DF;border-radius:14px;box-shadow:none;overflow:hidden}
+body.av-shell .postbox .postbox-header{border-bottom-color:#EFEDEC}
+body.av-shell .postbox .postbox-header h2.hndle{font-size:16px;font-weight:700;padding:14px 20px}
+body.av-shell .postbox .inside{padding:6px 20px 18px;margin:0}
+body.av-shell .av-flat-box .handle-actions{display:none}
+body.av-shell .av-flat-box .postbox-header{pointer-events:none}
+body.av-shell .av-flat-box .inside{padding:6px 24px 22px}
+body.av-shell #postbox-container-2 .postbox{margin-bottom:20px}
+
+/* Hộp Đăng của WordPress thành "Hiển thị": nút lưu đã ở thanh trên cùng */
+body.av-shell #submitdiv .postbox-header h2{font-size:0!important}
+body.av-shell #submitdiv .postbox-header h2::before{content:"Hiển thị";font-size:16px}
+body.av-shell #minor-publishing-actions,
+body.av-shell #publishing-action{display:none}
+body.av-shell #major-publishing-actions{background:#fff;border-top:1px solid #EFEDEC}
+
+/* ---------- Danh sách kiểm tra ---------- */
+.av-checks__sum{margin:4px 0 8px;color:#5C5A5B;font-size:13px}
+.av-checks{list-style:none;margin:0;padding:0}
+.av-checks li{margin:0}
+.av-check{display:flex;align-items:flex-start;gap:10px;width:100%;min-height:44px;padding:8px;border:0;border-radius:8px;background:transparent;text-align:left;font:inherit;color:#2B292A;cursor:pointer}
+.av-check:hover{background:#F4F3F2}
+.av-check.is-ok{cursor:default}
+.av-check__icon{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;line-height:1;margin-top:1px;box-sizing:border-box}
+.av-check.is-ok .av-check__icon{border:2px solid #1F7A3A;color:#1F7A3A}
+.av-check.is-ok .av-check__icon::before{content:"✓"}
+.av-check.is-bad .av-check__icon{border:2px solid #C2410C;color:#C2410C}
+.av-check.is-bad .av-check__icon::before{content:"!"}
+.av-check.is-bad[data-block="1"] .av-check__icon{background:#C2410C;color:#fff}
+.av-check__text{display:flex;flex-direction:column;gap:1px}
+.av-check__text strong{font-size:14px}
+.av-check__text span{font-size:13px;color:#5C5A5B}
+.av-check__text span:empty{display:none}
+
+/* ---------- Ảnh: ảnh đầu tiên là ảnh đại diện ---------- */
+.av-ugallery{list-style:none;margin:12px 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.av-ugallery li{display:flex;flex-direction:column;gap:6px;margin:0}
+.av-ugallery__img{position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;border:1px solid #E2E0DF;background:#F4F3F2;cursor:grab}
+.av-ugallery__img img{display:block;width:100%;height:100%;object-fit:cover}
+.av-ugallery li:first-child .av-ugallery__img{border:2px solid #2B292A}
+.av-ugallery li:first-child .av-ugallery__img::after{content:"Ảnh đại diện";position:absolute;left:8px;top:8px;background:#2B292A;color:#fff;font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px}
+.av-ugallery .av-gallery__remove{top:6px;right:6px}
+.av-ugallery label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+.av-ugallery input{min-height:38px;border:1px solid #CFCCCB;border-radius:8px;font-weight:400}
+.av-ugallery li.is-noalt input{border-color:#C2410C;box-shadow:0 0 0 1px #C2410C}
+.av-ugallery li.is-noalt label::after{content:"Thiếu mô tả ảnh";color:#B54708;font-weight:600}
+.av-ugallery li.ui-sortable-placeholder{visibility:visible!important;border:2px dashed #A8A4A3;border-radius:10px;min-height:150px}
+.av-ugallery__add{min-height:40px!important;border-style:dashed!important}
+
+/* ---------- Quy cách: ô nhập 2 cột ---------- */
+body.av-shell .av-primary-row{display:none}
+body.av-shell .av-spec-table tbody,body.av-shell .av-spec-grid tbody{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 20px}
+body.av-shell .av-spec-grid tbody{grid-template-columns:repeat(3,minmax(0,1fr))}
+body.av-shell .av-spec-table tr,body.av-shell .av-spec-grid tr{display:flex;flex-direction:column;gap:6px}
+body.av-shell .av-spec-table th,body.av-shell .av-spec-table td,body.av-shell .av-spec-grid th,body.av-shell .av-spec-grid td{display:block;width:auto;padding:0;font-weight:600}
+body.av-shell .av-spec-table input,body.av-shell .av-spec-table textarea,body.av-shell .av-spec-grid input{width:100%;min-height:44px;border:1px solid #CFCCCB;border-radius:10px;font-weight:400}
+body.av-shell .av-spec-table tr:last-child{grid-column:1 / -1}
+@media (max-width:700px){body.av-shell .av-spec-table tbody,body.av-shell .av-spec-grid tbody{grid-template-columns:1fr}}
+
+/* Nhóm sản phẩm: ngôi sao nhóm chính */
+.av-star{border:0;background:transparent;color:#B3AFB0;font-size:16px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer;vertical-align:middle}
+.av-star:hover{background:#F4F3F2;color:#5C5A5B}
+.av-star.is-on{color:#B81C23}
+#av_groupchecklist li{margin:2px 0}
+.av-note{margin:0 0 10px;padding:10px 12px;border-radius:10px;background:#F1EFEE;color:#3F3D3E;font-size:13px}
+
+/* ---------- Mẫu đã làm ---------- */
+.av-client-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:6px 0 12px}
+@media (max-width:700px){.av-client-grid{grid-template-columns:1fr}}
+.av-field{margin:0 0 14px;padding:0;border:0;display:flex;flex-direction:column;gap:6px}
+.av-field > label,.av-field > legend{font-size:14px;font-weight:600;color:#2B292A;margin-bottom:6px}
+.av-field input[type=text]{min-height:44px;border:1px solid #CFCCCB;border-radius:10px;padding:0 12px}
+.av-req{color:#B81C23;font-weight:500}
+.av-seg{display:flex;gap:8px}
+.av-seg label{flex:1;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid #CFCCCB;border-radius:10px;font-size:14px;cursor:pointer}
+.av-seg label.is-on{border:2px solid #2B292A;font-weight:600}
+.av-leak{margin:10px 0 0;padding:12px 14px;border-radius:10px;background:#FFF4E5;border:1px solid #F3D19E;color:#6B3E00;font-weight:600}
+.av-pills{display:flex;flex-wrap:wrap;gap:8px}
+.av-pillcheck{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #CFCCCB;background:#fff;color:#2B292A;font-size:14px;cursor:pointer;text-decoration:none;box-sizing:border-box}
+.av-pillcheck:has(input:checked){background:#2B292A;border-color:#2B292A;color:#fff}
+.av-pillcheck--add{border-style:dashed;color:#5C5A5B}
+.av-cardprev{display:flex;flex-direction:column;gap:6px}
+.av-cardprev__img{aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#ECE7E1;display:grid;place-items:center;color:#5C5A5B;font-size:13px}
+.av-cardprev__img img{width:100%;height:100%;object-fit:cover;display:block}
+.av-cardprev strong{font-size:15px}
+.av-cardprev span{font-size:13px;color:#5C5A5B}
+
+/* Danh sách chọn có ô tìm */
+.av-checklist__search{width:100%;min-height:40px;margin:0 0 6px;padding:0 10px;border:1px solid #CFCCCB;border-radius:8px}
+.av-checklist__count{margin:0 0 6px;font-size:12px;color:#5C5A5B}
+.av-checklist label[hidden],.av-checklist__group[hidden]{display:none!important}
+.av-shell-nav__badge[hidden]{display:none}
+body.av-shell #slugdiv{display:none}
+/* Hiện trên Google */
+.av-serp{margin:10px 0 16px;padding:14px 16px;border:1px solid #E2E0DF;border-radius:10px;background:#FAFAF9;font-family:Arial,sans-serif}
+.av-serp__url{font-size:13px;color:#3C4043}
+.av-serp__title{font-size:19px;color:#1A0DAB;margin:2px 0;line-height:1.3}
+.av-serp__desc{font-size:14px;color:#4D5156}
+.av-field textarea{border:1px solid #CFCCCB;border-radius:10px;padding:10px 12px}
+.av-field > label{display:flex;justify-content:space-between;gap:12px}
+.av-count{font-weight:400;color:#1F6B35}
+.av-count.is-over{color:#B54708;font-weight:600}

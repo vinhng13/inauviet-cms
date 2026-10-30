@@ -64,3 +64,18 @@
 .av-matrix label{display:inline-block;cursor:pointer}
 .av-matrix .description{font-size:12px}
 fieldset.av-readonly{opacity:.85}
+
+/* Danh sách chọn có ô tìm (bài viết, sản phẩm, mẫu) */
+.av-checklist__search{width:100%;min-height:38px;margin:0 0 6px;padding:0 10px;border:1px solid #c3c4c7;border-radius:6px}
+.av-checklist__count{margin:0 0 6px;font-size:12px;color:#646970}
+.av-checklist label[hidden],.av-checklist__group[hidden]{display:none!important}
+
+/* Bài viết: khung "Trước khi đăng" */
+.av-pc__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.av-pc__item{display:flex;gap:10px;align-items:flex-start;margin:0}
+.av-pc__icon{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;box-sizing:border-box;margin-top:1px}
+.av-pc__item.is-ok .av-pc__icon{border:2px solid #1F7A3A;color:#1F7A3A}
+.av-pc__item.is-bad .av-pc__icon{border:2px solid #C2410C;color:#C2410C}
+.av-pc__text{display:flex;flex-direction:column;gap:1px}
+.av-pc__text strong{font-size:13px}
+.av-pc__text span{font-size:12px;color:#5C5A5B}

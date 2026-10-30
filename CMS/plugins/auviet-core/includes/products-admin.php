@@ -36,7 +36,7 @@ add_action(
 	'add_meta_boxes_av_product',
 	static function () {
 		add_meta_box( 'av_product_info', 'Quy cách và chất liệu', 'av_box_product_info', 'av_product', 'normal', 'high' );
-		add_meta_box( 'av_product_gallery', 'Thư viện ảnh sản phẩm', 'av_box_product_gallery', 'av_product', 'normal', 'high' );
+		add_meta_box( 'av_product_gallery', 'Ảnh sản phẩm', 'av_box_unified_gallery', 'av_product', 'normal', 'high' );
 		if ( current_user_can( 'av_manage_prices' ) || current_user_can( 'av_view_prices' ) ) {
 			add_meta_box(
 				'av_product_prices',
@@ -70,7 +70,7 @@ function av_box_product_info( WP_Post $post ): void {
 			<label><input type="checkbox" name="av_spec_checked" value="1"> Đã kiểm tra quy cách và chất liệu</label>
 		</div>
 	<?php endif; ?>
-	<p class="av-admin-row">
+	<p class="av-admin-row av-primary-row">
 		<label for="av-primary-group"><strong>Nhóm chính</strong> (dùng cho đường dẫn "Trang chủ › Sản phẩm › Nhóm" và chọn sẵn nhu cầu trong form)</label><br>
 		<select id="av-primary-group" name="av_primary_group">
 			<option value="0">— Nhóm đầu tiên được chọn —</option>
@@ -221,25 +221,34 @@ function av_box_product_related( WP_Post $post ): void {
 	$articles = get_posts( array( 'post_type' => 'post', 'numberposts' => 200, 'post_status' => 'publish' ) );
 	$faq_list = get_posts( array( 'post_type' => 'av_faq', 'numberposts' => -1, 'post_status' => 'publish', 'orderby' => 'title', 'order' => 'ASC' ) );
 	?>
+	<?php
+	$sort = static fn( array $items, array $chosen ) => array_merge(
+		array_values( array_filter( $items, static fn( $p ) => in_array( $p->ID, $chosen, true ) ) ),
+		array_values( array_filter( $items, static fn( $p ) => ! in_array( $p->ID, $chosen, true ) ) )
+	);
+	?>
+	<p class="description">Gõ để tìm, đánh dấu để chọn. Để trống thì trang tự lấy sản phẩm cùng nhóm chính và bài viết có gắn sản phẩm này.</p>
 	<div class="av-rel-cols">
-		<p>
-			<label for="av-related"><strong>Sản phẩm liên quan</strong></label><br>
-			<select id="av-related" name="av_related[]" multiple size="8">
-				<?php foreach ( $products as $p ) : ?>
-					<option value="<?php echo (int) $p->ID; ?>"<?php selected( in_array( $p->ID, $related, true ) ); ?>><?php echo esc_html( $p->post_title ); ?></option>
+		<fieldset>
+			<legend><strong>Sản phẩm liên quan</strong></legend>
+			<div class="av-checklist" data-av-filter="Tìm sản phẩm…">
+				<?php foreach ( $sort( $products, $related ) as $p ) : ?>
+					<label><input type="checkbox" name="av_related[]" value="<?php echo (int) $p->ID; ?>"<?php checked( in_array( $p->ID, $related, true ) ); ?>> <?php echo esc_html( $p->post_title ); ?></label>
 				<?php endforeach; ?>
-			</select>
-			<span class="description">Giữ Ctrl để chọn nhiều. Chọn thiếu thì trang tự lấy thêm sản phẩm cùng nhóm chính.</span>
-		</p>
-		<p>
-			<label for="av-related-posts"><strong>Bài viết liên quan</strong></label><br>
-			<select id="av-related-posts" name="av_related_posts[]" multiple size="8">
-				<?php foreach ( $articles as $a ) : ?>
-					<option value="<?php echo (int) $a->ID; ?>"<?php selected( in_array( $a->ID, $rel_post, true ) ); ?>><?php echo esc_html( $a->post_title ); ?></option>
-				<?php endforeach; ?>
-			</select>
-			<?php if ( ! $articles ) : ?><span class="description">Chưa có bài viết nào trong Kiến thức in ấn.</span><?php endif; ?>
-		</p>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend><strong>Bài viết liên quan</strong></legend>
+			<?php if ( ! $articles ) : ?>
+				<p class="description">Chưa có bài viết nào trong Kiến thức in ấn.</p>
+			<?php else : ?>
+				<div class="av-checklist" data-av-filter="Tìm bài viết…">
+					<?php foreach ( $sort( $articles, $rel_post ) as $a ) : ?>
+						<label><input type="checkbox" name="av_related_posts[]" value="<?php echo (int) $a->ID; ?>"<?php checked( in_array( $a->ID, $rel_post, true ) ); ?>> <?php echo esc_html( $a->post_title ); ?></label>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+		</fieldset>
 	</div>
 	<fieldset class="av-faq-pick">
 		<legend><strong>Câu hỏi thường gặp hiện cuối trang</strong></legend>
@@ -294,9 +303,13 @@ add_action(
 				}
 			}
 
-			// Thư viện ảnh.
-			$gallery = array_values( array_filter( array_map( 'absint', explode( ',', (string) wp_unslash( $_POST['av_gallery'] ?? '' ) ) ), 'wp_attachment_is_image' ) );
-			update_post_meta( $post_id, '_av_gallery', $gallery );
+			// Ảnh: ảnh đầu tiên là ảnh đại diện, mô tả ảnh lưu vào từng ảnh.
+			if ( ! empty( $_POST['av_gallery_unified'] ) ) {
+				av_save_unified_gallery( $post_id );
+			} else {
+				$gallery = array_values( array_filter( array_map( 'absint', explode( ',', (string) wp_unslash( $_POST['av_gallery'] ?? '' ) ) ), 'wp_attachment_is_image' ) );
+				update_post_meta( $post_id, '_av_gallery', $gallery );
+			}
 
 			// Liên quan, hỏi đáp.
 			update_post_meta( $post_id, '_av_related', array_values( array_diff( array_map( 'absint', (array) ( $_POST['av_related'] ?? array() ) ), array( $post_id, 0 ) ) ) );

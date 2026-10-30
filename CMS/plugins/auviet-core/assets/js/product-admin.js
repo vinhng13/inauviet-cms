@@ -6,15 +6,23 @@
 	var $gallery = $( '[data-av-gallery]' );
 	var $galleryInput = $( '[data-av-gallery-input]' );
 
+	var unified = $gallery.data( 'unified' ) === 1 || $gallery.data( 'unified' ) === '1';
+
 	function syncGallery() {
 		var ids = $gallery.children( 'li' ).map( function () {
 			return $( this ).data( 'id' );
 		} ).get();
 		$galleryInput.val( ids.join( ',' ) );
+		// Màn hình soạn mới: cập nhật danh sách kiểm tra, ảnh xem trước.
+		$( document ).trigger( 'av:gallery' );
 	}
 
 	if ( $gallery.length ) {
-		$gallery.sortable( { update: syncGallery } );
+		$gallery.sortable( unified ? { update: syncGallery, cancel: 'input,button,label' } : { update: syncGallery } );
+		$gallery.on( 'input', '[data-av-alt]', function () {
+			$( this ).closest( 'li' ).toggleClass( 'is-noalt', ! $.trim( this.value ) );
+			$( document ).trigger( 'av:gallery' );
+		} );
 		$gallery.on( 'click', '.av-gallery__remove', function () {
 			$( this ).closest( 'li' ).remove();
 			syncGallery();
@@ -30,6 +38,15 @@
 							return;
 						}
 						var thumb = ( a.sizes && a.sizes.thumbnail ? a.sizes.thumbnail.url : a.url );
+						if ( unified ) {
+							var big = ( a.sizes && a.sizes.medium ? a.sizes.medium.url : thumb );
+							var $u = $( '<li>' ).attr( 'data-id', a.id ).toggleClass( 'is-noalt', ! a.alt );
+							var $box = $( '<div class="av-ugallery__img">' ).append( $( '<img alt="">' ).attr( 'src', big ) ).append( '<button type="button" class="av-gallery__remove" aria-label="Bỏ ảnh">×</button>' );
+							var $in = $( '<input type="text" data-av-alt placeholder="VD: Túi kraft in logo 1 màu">' ).attr( 'name', 'av_alt[' + a.id + ']' ).val( a.alt || '' );
+							$u.append( $box ).append( $( '<label>Mô tả ảnh</label>' ).append( $in ) );
+							$gallery.append( $u );
+							return;
+						}
 						var $li = $( '<li>' ).attr( 'data-id', a.id ).toggleClass( 'is-noalt', ! a.alt );
 						$li.append( $( '<a target="_blank" title="Sửa ảnh, mô tả">' ).attr( 'href', a.editLink ).append( $( '<img alt="">' ).attr( 'src', thumb ) ) );
 						$li.append( '<button type="button" class="av-gallery__remove" aria-label="Bỏ ảnh">×</button>' );

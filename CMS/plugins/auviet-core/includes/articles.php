@@ -634,7 +634,7 @@ add_action(
 function av_box_post_products( WP_Post $post ): void {
 	wp_nonce_field( 'av_post_products', 'av_post_products_nonce' );
 	$chosen = array_map( 'intval', (array) get_post_meta( $post->ID, '_av_post_product' ) );
-	echo '<p class="description">Sản phẩm chọn ở đây hiện cuối bài, và form báo giá chọn sẵn sản phẩm đầu tiên. Bài cũng tự hiện ở mục "Bài viết liên quan" của sản phẩm đó.</p><div class="av-checklist av-checklist--side">';
+	echo '<p class="description">Sản phẩm chọn ở đây hiện cuối bài, và form báo giá chọn sẵn sản phẩm đầu tiên. Bài cũng tự hiện ở mục "Bài viết liên quan" của sản phẩm đó.</p><div class="av-checklist av-checklist--side" data-av-filter="Tìm sản phẩm…">';
 	foreach ( av_visible_groups() as $g ) {
 		$products = get_posts( array( 'post_type' => 'av_product', 'numberposts' => -1, 'orderby' => array( 'menu_order' => 'ASC', 'title' => 'ASC' ), 'tax_query' => array( array( 'taxonomy' => 'av_group', 'terms' => $g->term_id ) ) ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
 		if ( ! $products ) {
@@ -723,6 +723,9 @@ add_action(
 			return;
 		}
 		wp_enqueue_script( 'auviet-title-check', plugins_url( 'assets/js/title-check.js', AV_CORE_FILE ), array( 'wp-data', 'wp-api-fetch', 'wp-plugins', 'wp-element', 'wp-editor', 'wp-notices', 'wp-url' ), av_ver( AV_CORE_DIR . 'assets/js/title-check.js' ), true );
+		if ( 'post' === $screen->post_type ) {
+			wp_enqueue_script( 'auviet-post-checks', plugins_url( 'assets/js/post-checks.js', AV_CORE_FILE ), array( 'wp-data', 'wp-api-fetch', 'wp-plugins', 'wp-element', 'wp-editor', 'wp-url' ), av_ver( AV_CORE_DIR . 'assets/js/post-checks.js' ), true );
+		}
 	}
 );
 

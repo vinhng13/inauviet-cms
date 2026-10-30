@@ -169,9 +169,10 @@ add_filter(
 add_action(
 	'add_meta_boxes_av_project',
 	static function () {
-		add_meta_box( 'av_project_client', 'Khách hàng và sản phẩm', 'av_box_project_client', 'av_project', 'normal', 'high' );
+		add_meta_box( 'av_project_client', 'Khách hàng', 'av_box_project_client', 'av_project', 'normal', 'high' );
+		add_meta_box( 'av_project_products', 'Sản phẩm và ngành', 'av_box_project_products', 'av_project', 'normal', 'high' );
 		add_meta_box( 'av_project_specs', 'Quy cách', 'av_box_project_specs', 'av_project', 'normal', 'high' );
-		add_meta_box( 'av_project_gallery', 'Ảnh dự án', 'av_box_product_gallery', 'av_project', 'normal', 'high' );
+		add_meta_box( 'av_project_gallery', 'Ảnh thật của đơn hàng', 'av_box_unified_gallery', 'av_project', 'normal', 'high' );
 		remove_meta_box( 'postexcerpt', 'av_project', 'normal' );
 		add_meta_box( 'postexcerpt', 'Mô tả ngắn (hiện dưới tên dự án)', 'post_excerpt_meta_box', 'av_project', 'normal', 'high' );
 	}
@@ -179,23 +180,39 @@ add_action(
 
 function av_box_project_client( WP_Post $post ): void {
 	wp_nonce_field( 'av_project_meta', 'av_project_nonce' );
-	$chosen = array_map( 'intval', (array) get_post_meta( $post->ID, '_av_products', true ) );
-	$ok     = (bool) get_post_meta( $post->ID, '_av_client_ok', true );
+	$ok = (bool) get_post_meta( $post->ID, '_av_client_ok', true );
 	if ( get_post_meta( $post->ID, '_av_sample', true ) ) {
 		echo '<div class="av-admin-note av-admin-note--warn"><p><strong>Đây là dự án mẫu thử</strong> (chỉ có ở môi trường thử) để xem giao diện. Sửa thành dự án thật hoặc xoá đi.</p></div>';
 	}
 	?>
-	<p class="av-admin-row">
-		<label for="av-client-name"><strong>Khách hàng</strong></label><br>
-		<input type="text" class="regular-text" id="av-client-name" name="av_client_name" value="<?php echo esc_attr( (string) get_post_meta( $post->ID, '_av_client_name', true ) ); ?>" placeholder="Tên doanh nghiệp, trường, cơ quan">
-	</p>
-	<p class="av-admin-row">
-		<label><input type="checkbox" name="av_client_ok" value="1" <?php checked( $ok ); ?>> <strong>Khách hàng đồng ý cho nêu tên</strong></label><br>
-		<span class="description">Chưa đánh dấu thì tên khách chỉ lưu nội bộ, không hiện ở bất kỳ đâu trên website. Khi đó tên khách cũng không được nằm trong tiêu đề, mô tả, nội dung hay mô tả ảnh: website sẽ không cho xuất bản.</span>
-	</p>
-	<fieldset class="av-admin-row">
-		<legend><strong>Sản phẩm của dự án</strong> (chọn ít nhất 1; dùng để lọc "Loại sản phẩm" và hiện "Sản phẩm liên quan")</legend>
-		<div class="av-checklist">
+	<div class="av-client-grid">
+		<p class="av-field">
+			<label for="av-client-name">Tên khách hàng</label>
+			<input type="text" id="av-client-name" name="av_client_name" value="<?php echo esc_attr( (string) get_post_meta( $post->ID, '_av_client_name', true ) ); ?>" placeholder="Tên doanh nghiệp, trường, cơ quan">
+		</p>
+		<fieldset class="av-field">
+			<legend>Nêu tên trên web?</legend>
+			<div class="av-seg">
+				<label><input type="radio" name="av_client_ok" value="0" <?php checked( ! $ok ); ?>> Không, giữ kín</label>
+				<label><input type="radio" name="av_client_ok" value="1" <?php checked( $ok ); ?>> Khách đã đồng ý</label>
+			</div>
+		</fieldset>
+	</div>
+	<p class="av-note">Giữ kín thì tên khách chỉ lưu nội bộ. Web tự kiểm tra tiêu đề, mô tả, nội dung, mô tả ảnh và đường dẫn: có tên khách thì không cho đăng.</p>
+	<p class="av-leak" data-av-leak hidden></p>
+	<?php
+}
+
+function av_box_project_products( WP_Post $post ): void {
+	$chosen = array_map( 'intval', (array) get_post_meta( $post->ID, '_av_products', true ) );
+	$terms  = get_terms( array( 'taxonomy' => 'av_industry', 'hide_empty' => false ) );
+	$have   = wp_get_object_terms( $post->ID, 'av_industry', array( 'fields' => 'ids' ) );
+	$have   = is_wp_error( $have ) ? array() : array_map( 'intval', $have );
+	$types  = wp_list_pluck( av_project_types( $post->ID ), 'name' );
+	?>
+	<fieldset class="av-field">
+		<legend>Sản phẩm của dự án <span class="av-req">(bắt buộc)</span></legend>
+		<div class="av-checklist" data-av-filter="Tìm sản phẩm…">
 			<?php
 			foreach ( av_visible_groups() as $g ) {
 				$products = get_posts(
@@ -212,22 +229,30 @@ function av_box_project_client( WP_Post $post ): void {
 				}
 				printf( '<p class="av-checklist__group">%s</p>', esc_html( $g->name ) );
 				foreach ( $products as $p ) {
-					printf(
-						'<label><input type="checkbox" name="av_products[]" value="%d"%s> %s</label>',
-						(int) $p->ID,
-						checked( in_array( $p->ID, $chosen, true ), true, false ),
-						esc_html( $p->post_title )
-					);
+					printf( '<label><input type="checkbox" name="av_products[]" value="%d"%s> %s</label>', (int) $p->ID, checked( in_array( $p->ID, $chosen, true ), true, false ), esc_html( $p->post_title ) );
 				}
 			}
 			?>
+		</div>
+		<p class="description">Loại sản phẩm trên trang lọc lấy từ nhóm chính của sản phẩm<?php echo $types ? ': <strong>' . esc_html( implode( ', ', $types ) ) . '</strong>' : ''; ?>.</p>
+	</fieldset>
+	<fieldset class="av-field">
+		<legend>Ngành</legend>
+		<input type="hidden" name="tax_input[av_industry][]" value="0">
+		<div class="av-pills">
+			<?php foreach ( is_wp_error( $terms ) ? array() : $terms as $t ) : ?>
+				<label class="av-pillcheck"><input type="checkbox" name="tax_input[av_industry][]" value="<?php echo (int) $t->term_id; ?>"<?php checked( in_array( (int) $t->term_id, $have, true ) ); ?>> <?php echo esc_html( $t->name ); ?></label>
+			<?php endforeach; ?>
+			<?php if ( current_user_can( 'edit_others_av_projects' ) ) : ?>
+				<a class="av-pillcheck av-pillcheck--add" href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=av_industry&post_type=av_project' ) ); ?>" target="_blank">+ Ngành khác</a>
+			<?php endif; ?>
 		</div>
 	</fieldset>
 	<?php
 }
 
 function av_box_project_specs( WP_Post $post ): void {
-	echo '<p class="description">Điền mục nào hiện mục đó trên trang dự án. Ngành chọn ở khung "Ngành" bên phải.</p><table class="form-table" role="presentation">';
+	echo '<p class="description">Điền mục nào hiện mục đó trên trang dự án.</p><table class="form-table av-spec-grid" role="presentation">';
 	foreach ( av_project_spec_fields() as $k => $label ) {
 		printf(
 			'<tr><th scope="row"><label for="av-pspec-%1$s">%2$s</label></th><td><input type="text" class="large-text" id="av-pspec-%1$s" name="av_pspec[%1$s]" value="%3$s"></td></tr>',
@@ -255,6 +280,10 @@ function av_project_publish_error( array $data ): string {
 	$texts = array( $data['post_title'], $data['post_excerpt'], wp_strip_all_tags( (string) $data['post_content'] ) );
 	$imgs  = array_filter( array_map( 'absint', explode( ',', (string) wp_unslash( $_POST['av_gallery'] ?? '' ) ) ) );
 	$imgs[] = absint( $_POST['_thumbnail_id'] ?? 0 );
+	// Mô tả ảnh đang sửa trên form (chưa lưu vào ảnh).
+	foreach ( (array) ( $_POST['av_alt'] ?? array() ) as $alt ) {
+		$texts[] = (string) $alt;
+	}
 	foreach ( array_filter( $imgs ) as $aid ) {
 		$texts[] = (string) get_post_meta( $aid, '_wp_attachment_image_alt', true );
 		$texts[] = (string) get_post_field( 'post_excerpt', $aid );
@@ -308,8 +337,12 @@ add_action(
 		foreach ( array_keys( av_project_spec_fields() ) as $k ) {
 			update_post_meta( $post_id, '_av_pspec_' . $k, sanitize_text_field( (string) ( $specs[ $k ] ?? '' ) ) );
 		}
-		$gallery = array_values( array_filter( array_map( 'absint', explode( ',', (string) wp_unslash( $_POST['av_gallery'] ?? '' ) ) ), 'wp_attachment_is_image' ) );
-		update_post_meta( $post_id, '_av_gallery', $gallery );
+		if ( ! empty( $_POST['av_gallery_unified'] ) ) {
+			av_save_unified_gallery( $post_id );
+		} else {
+			$gallery = array_values( array_filter( array_map( 'absint', explode( ',', (string) wp_unslash( $_POST['av_gallery'] ?? '' ) ) ), 'wp_attachment_is_image' ) );
+			update_post_meta( $post_id, '_av_gallery', $gallery );
+		}
 		// phpcs:enable
 		av_project_sync_types( $post_id );
 	}
