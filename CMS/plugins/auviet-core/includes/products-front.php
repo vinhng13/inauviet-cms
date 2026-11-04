@@ -478,7 +478,7 @@ function av_render_product_prices(): string {
 	$out  = '<section class="av-psec" aria-labelledby="av-prices-title"><h2 id="av-prices-title">Giá tham khảo</h2>';
 	if ( ! av_product_has_prices( $id ) ) {
 		$out .= sprintf(
-			'<div class="av-price-contact"><p><strong>Liên hệ báo giá.</strong> Giá phụ thuộc khổ, chất liệu, số lượng và gia công. Gửi yêu cầu hoặc gọi <a href="%s" data-av-event="bam_goi">%s</a>, Âu Việt báo giá trong giờ làm việc.</p><a class="av-btn" href="#bao-gia">Gửi yêu cầu báo giá</a></div>',
+			'<div class="av-price-contact"><p><strong>Liên hệ báo giá.</strong> Giá phụ thuộc khổ, chất liệu, số lượng và gia công. Gọi <a href="%s" data-av-event="bam_goi">%s</a> hoặc nhắn Zalo, Âu Việt báo giá trong giờ làm việc.</p><a class="av-btn" href="#bao-gia">Liên hệ báo giá</a></div>',
 			esc_url( av_tel_href( $c['hotline'] ) ),
 			esc_html( $c['hotline'] )
 		);
@@ -509,7 +509,7 @@ function av_render_product_quote(): string {
 	$group = av_product_primary_group( $id );
 	$need  = $group ? av_group_root( $group )->name : '';
 	return sprintf(
-		'<section class="av-pquote" id="bao-gia" aria-labelledby="av-quote-title"><div class="av-pquote__text"><h2 id="av-quote-title">Nhận báo giá %1$s</h2><p>Để lại số điện thoại, Âu Việt gọi lại tư vấn quy cách và báo giá. Hoặc liên hệ ngay:</p>%2$s</div><div class="av-pquote__form" id="lien-he">%3$s</div></section>',
+		'<section class="av-pquote" id="bao-gia" aria-labelledby="av-quote-title"><div class="av-pquote__text"><h2 id="av-quote-title">Nhận báo giá %1$s</h2><p>Gọi, nhắn Zalo, Facebook hoặc email, Âu Việt tư vấn quy cách và báo giá trong giờ làm việc:</p>%2$s</div><div class="av-pquote__form" id="lien-he">%3$s</div></section>',
 		esc_html( mb_strtolower( get_the_title( $id ) ) ),
 		av_render_contact_tiles(),
 		av_render_quote_form(

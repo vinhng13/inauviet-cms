@@ -151,3 +151,8 @@
 /* Nhóm sản phẩm trên trang chủ: có ảnh */
 .av-group.has-img{padding-top:0;overflow:hidden}
 .av-group__img{display:block;width:calc(100% + 40px);max-width:none;margin:0 -20px 8px;aspect-ratio:4/3;object-fit:cover;height:auto}
+
+/* Form báo giá tắt: khối liên hệ còn 4 nút, chiếm cả hàng */
+.av-pquote__form:not(:has(*)){display:none}
+.av-pquote:not(:has(.av-pquote__form *)){grid-template-columns:1fr}
+.av-pquote:not(:has(.av-pquote__form *)) .av-pquote__text{max-width:760px}

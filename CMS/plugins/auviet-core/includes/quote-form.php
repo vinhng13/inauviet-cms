@@ -22,7 +22,18 @@ function av_quote_error_messages(): array {
 	);
 }
 
+/**
+ * Form báo giá đang tắt trên toàn web (khách liên hệ qua Zalo, gọi, Facebook, email).
+ * Bật lại: add_filter( 'av_quote_form_enabled', '__return_true' );
+ */
+function av_quote_form_enabled(): bool {
+	return (bool) apply_filters( 'av_quote_form_enabled', false );
+}
+
 function av_render_quote_form( array $attrs = array() ): string {
+	if ( ! av_quote_form_enabled() ) {
+		return '';
+	}
 	$status = isset( $_GET['bao-gia'] ) ? sanitize_key( wp_unslash( $_GET['bao-gia'] ) ) : '';
 	$err    = isset( $_GET['loi'] ) ? sanitize_key( wp_unslash( $_GET['loi'] ) ) : '';
 	$msgs   = av_quote_error_messages();
@@ -258,4 +269,39 @@ add_action(
 		}
 		printf( '<div class="notice notice-error"><p><strong>Website không gửi được email thông báo:</strong> %s. Yêu cầu báo giá vẫn được lưu trong hộp thư.</p></div>', esc_html( $err ) );
 	}
+);
+
+/**
+ * Bỏ form: sửa các câu đang nhắc tới form trong nội dung trang đã tạo từ mẫu (chạy một lần).
+ */
+add_action(
+	'init',
+	static function () {
+		if ( get_option( 'av_mig_noform_2' ) ) {
+			return;
+		}
+		update_option( 'av_mig_noform_2', 1, false );
+		$map = array(
+			'Để lại liên hệ, Âu Việt gọi lại báo giá'           => 'Liên hệ Âu Việt để nhận báo giá',
+			'Hoặc liên hệ ngay qua kênh bạn quen dùng.'         => 'Nhắn Zalo, gọi điện, Facebook hoặc email, Âu Việt phản hồi trong giờ làm việc.',
+			'Gọi, nhắn Zalo hoặc để lại lời nhắn, Âu Việt'      => 'Gọi, nhắn Zalo hoặc gửi email, Âu Việt',
+			'Điền form, hoặc nhắn Zalo, Facebook, email, gọi điện.' => 'Nhắn Zalo, Facebook, email hoặc gọi điện.',
+			'qua form, Zalo hoặc email'                         => 'qua Zalo hoặc email',
+			'Để lại số điện thoại, Âu Việt gọi lại tư vấn và báo giá.' => 'Gọi hoặc nhắn Zalo, Âu Việt tư vấn và báo giá ngay.',
+			'Bạn chỉ cần để lại liên hệ.'                       => 'Bạn chỉ cần gọi hoặc nhắn Zalo.',
+		);
+		$pages = get_posts( array( 'post_type' => 'page', 'post_status' => array( 'publish', 'draft', 'private', 'pending', 'future' ), 'numberposts' => -1 ) );
+		kses_remove_filters();
+		foreach ( $pages as $p ) {
+			$new = strtr( $p->post_content, $map );
+			if ( $new !== $p->post_content ) {
+				wp_update_post( wp_slash( array( 'ID' => $p->ID, 'post_content' => $new ) ) );
+			}
+		}
+		kses_init();
+		if ( function_exists( 'av_purge_page_cache' ) ) {
+			av_purge_page_cache();
+		}
+	},
+	80
 );

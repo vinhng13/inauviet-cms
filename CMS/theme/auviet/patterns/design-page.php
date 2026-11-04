@@ -32,7 +32,7 @@
 
 <!-- wp:list {"ordered":true,"className":"av-chain"} -->
 <ol class="wp-block-list av-chain"><!-- wp:list-item -->
-<li><strong>Gửi yêu cầu</strong>Quý khách mô tả nhu cầu, gửi logo, nội dung, ảnh và mẫu tham khảo qua form, Zalo hoặc email.</li>
+<li><strong>Gửi yêu cầu</strong>Quý khách mô tả nhu cầu, gửi logo, nội dung, ảnh và mẫu tham khảo qua Zalo hoặc email.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->

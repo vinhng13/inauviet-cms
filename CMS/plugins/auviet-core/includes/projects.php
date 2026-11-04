@@ -810,7 +810,7 @@ function av_render_project_quote(): string {
 	$first    = $products ? $products[0] : null;
 	$group    = $first ? av_product_primary_group( $first->ID ) : null;
 	return sprintf(
-		'<section class="av-pquote" id="bao-gia" aria-labelledby="av-pjq-title"><div class="av-pquote__text"><h2 id="av-pjq-title">Cần làm sản phẩm tương tự?</h2><p>Gửi số lượng, kích thước và mẫu Quý khách thích, Âu Việt gọi lại tư vấn chất liệu và báo giá. Hoặc liên hệ ngay:</p>%1$s</div><div class="av-pquote__form" id="lien-he">%2$s</div></section>',
+		'<section class="av-pquote" id="bao-gia" aria-labelledby="av-pjq-title"><div class="av-pquote__text"><h2 id="av-pjq-title">Cần làm sản phẩm tương tự?</h2><p>Nhắn Zalo hoặc gọi, gửi số lượng, kích thước và mẫu Quý khách thích, Âu Việt tư vấn chất liệu và báo giá:</p>%1$s</div><div class="av-pquote__form" id="lien-he">%2$s</div></section>',
 		av_render_contact_tiles(),
 		av_render_quote_form(
 			array(

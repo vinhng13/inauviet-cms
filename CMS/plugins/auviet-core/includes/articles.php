@@ -339,7 +339,7 @@ function av_inline_cta( int $post_id ): string {
 	$products = av_post_products( $post_id );
 	$name     = $products ? mb_strtolower( $products[0]->post_title ) : 'ấn phẩm';
 	return sprintf(
-		'<aside class="av-inline-cta" aria-label="Nhận báo giá"><p><strong>Cần %1$s theo yêu cầu?</strong> Gửi số lượng, kích thước và mẫu Quý khách thích, Âu Việt gọi lại tư vấn và báo giá trong giờ làm việc.</p><div class="av-inline-cta__btns"><a class="av-btn" href="#bao-gia">Nhận báo giá</a><a class="av-btn av-btn--zalo" href="%2$s" target="_blank" rel="noopener" data-av-event="bam_zalo">Zalo</a><a class="av-btn av-btn--outline" href="%3$s" data-av-event="bam_goi">Gọi %4$s</a></div></aside>',
+		'<aside class="av-inline-cta" aria-label="Nhận báo giá"><p><strong>Cần %1$s theo yêu cầu?</strong> Nhắn Zalo hoặc gọi, gửi số lượng, kích thước và mẫu Quý khách thích, Âu Việt tư vấn và báo giá trong giờ làm việc.</p><div class="av-inline-cta__btns"><a class="av-btn" href="#bao-gia">Nhận báo giá</a><a class="av-btn av-btn--zalo" href="%2$s" target="_blank" rel="noopener" data-av-event="bam_zalo">Zalo</a><a class="av-btn av-btn--outline" href="%3$s" data-av-event="bam_goi">Gọi %4$s</a></div></aside>',
 		esc_html( $name ),
 		esc_url( $c['zalo_url'] ),
 		esc_url( av_tel_href( $c['hotline'] ) ),
@@ -547,7 +547,7 @@ function av_render_post_quote(): string {
 	$first = $ps ? $ps[0] : null;
 	$group = $first ? av_product_primary_group( $first->ID ) : null;
 	return sprintf(
-		'<section class="av-pquote" id="bao-gia" aria-labelledby="av-postq-title"><div class="av-pquote__text"><h2 id="av-postq-title">%1$s</h2><p>Để lại số điện thoại, Âu Việt gọi lại tư vấn quy cách và báo giá. Hoặc liên hệ ngay:</p>%2$s</div><div class="av-pquote__form" id="lien-he">%3$s</div></section>',
+		'<section class="av-pquote" id="bao-gia" aria-labelledby="av-postq-title"><div class="av-pquote__text"><h2 id="av-postq-title">%1$s</h2><p>Gọi, nhắn Zalo, Facebook hoặc email, Âu Việt tư vấn quy cách và báo giá trong giờ làm việc:</p>%2$s</div><div class="av-pquote__form" id="lien-he">%3$s</div></section>',
 		esc_html( $first ? 'Nhận báo giá ' . mb_strtolower( $first->post_title ) : 'Nhận tư vấn và báo giá' ),
 		av_render_contact_tiles(),
 		av_render_quote_form(

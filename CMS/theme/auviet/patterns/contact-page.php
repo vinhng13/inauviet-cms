@@ -7,7 +7,7 @@
  */
 ?>
 <!-- wp:paragraph {"className":"av-cat-head__intro"} -->
-<p class="av-cat-head__intro">Gọi, nhắn Zalo hoặc để lại lời nhắn, Âu Việt phản hồi trong giờ làm việc. Cần báo giá in, gửi kèm kích thước, số lượng và file thiết kế nếu có.</p>
+<p class="av-cat-head__intro">Gọi, nhắn Zalo hoặc gửi email, Âu Việt phản hồi trong giờ làm việc. Cần báo giá in, gửi kèm kích thước, số lượng và file thiết kế nếu có.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:columns {"className":"av-contact-cols"} -->

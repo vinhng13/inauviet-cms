@@ -13,7 +13,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"av-lead"} -->
-<p class="av-lead">Hơn 10 năm thiết kế và in ấn cho doanh nghiệp tại Hà Nội: catalogue, tờ rơi, tem nhãn, túi giấy, hộp giấy, lịch, backdrop. Để lại số điện thoại, Âu Việt gọi lại tư vấn và báo giá.</p>
+<p class="av-lead">Hơn 10 năm thiết kế và in ấn cho doanh nghiệp tại Hà Nội: catalogue, tờ rơi, tem nhãn, túi giấy, hộp giấy, lịch, backdrop. Gọi hoặc nhắn Zalo, Âu Việt tư vấn và báo giá ngay.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->

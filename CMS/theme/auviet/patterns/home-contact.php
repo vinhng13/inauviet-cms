@@ -8,11 +8,11 @@
 <!-- wp:columns {"align":"wide","anchor":"lien-he","className":"av-section av-contact"} -->
 <div id="lien-he" class="wp-block-columns alignwide av-section av-contact"><!-- wp:column {"className":"av-contact__intro"} -->
 <div class="wp-block-column av-contact__intro"><!-- wp:heading -->
-<h2 class="wp-block-heading">Để lại liên hệ, Âu Việt gọi lại báo giá</h2>
+<h2 class="wp-block-heading">Liên hệ Âu Việt để nhận báo giá</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"av-intro"} -->
-<p class="av-intro">Hoặc liên hệ ngay qua kênh bạn quen dùng.</p>
+<p class="av-intro">Nhắn Zalo, gọi điện, Facebook hoặc email, Âu Việt phản hồi trong giờ làm việc.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:auviet/contact-tiles /--></div>

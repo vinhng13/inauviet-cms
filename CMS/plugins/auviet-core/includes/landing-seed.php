@@ -494,7 +494,7 @@ function av_ls_build_lich( array $img ): array {
 		'auviet/landing-quote',
 		array(
 			'title' => 'Gửi yêu cầu & nhận bộ mẫu thử miễn phí',
-			'text'  => 'Để lại thông tin, chuyên viên Âu Việt gửi bảng báo giá chi tiết và hộp mẫu thử đến Quý doanh nghiệp. Phản hồi trong 15 phút giờ hành chính.',
+			'text'  => 'Nhắn Zalo hoặc gọi, chuyên viên Âu Việt gửi bảng báo giá chi tiết và hộp mẫu thử đến Quý doanh nghiệp. Phản hồi trong 15 phút giờ hành chính.',
 		)
 	);
 	return $b;
@@ -576,7 +576,7 @@ function av_ls_build_tui( array $img ): array {
 		'auviet/landing-quote',
 		array(
 			'title' => 'Báo giá nhận ưu đãi',
-			'text'  => 'Để lại thông tin, chuyên viên Âu Việt gửi bảng báo giá chi tiết. Sản xuất trực tiếp, chất lượng đảm bảo, chi phí hợp lý.',
+			'text'  => 'Nhắn Zalo hoặc gọi, chuyên viên Âu Việt gửi bảng báo giá chi tiết. Sản xuất trực tiếp, chất lượng đảm bảo, chi phí hợp lý.',
 		)
 	);
 	return $b;

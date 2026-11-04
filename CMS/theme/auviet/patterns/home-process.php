@@ -11,12 +11,12 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"className":"av-intro"} -->
-<p class="av-intro">Bạn chỉ cần để lại liên hệ. Từ tư vấn, thiết kế đến in và giao hàng, Âu Việt lo trọn gói.</p>
+<p class="av-intro">Bạn chỉ cần gọi hoặc nhắn Zalo. Từ tư vấn, thiết kế đến in và giao hàng, Âu Việt lo trọn gói.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list {"ordered":true,"className":"av-steps"} -->
 <ol class="wp-block-list av-steps"><!-- wp:list-item -->
-<li><strong>Gửi yêu cầu</strong>Điền form, hoặc nhắn Zalo, Facebook, email, gọi điện.</li>
+<li><strong>Gửi yêu cầu</strong>Nhắn Zalo, Facebook, email hoặc gọi điện.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->

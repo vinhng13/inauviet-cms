@@ -120,3 +120,8 @@
 @media (max-width:781px){.av-hero{padding-top:44px}.av-section{padding-top:64px}.av-dark{padding-top:64px;padding-bottom:64px}}
 /* Trang con: đoạn mở đầu, đoạn giới thiệu dưới tiêu đề chạy hết bề rộng nội dung (trang chủ giữ nguyên). */
 body:not(.home) :is(.av-lead,.av-intro,.av-cat-head__intro){max-width:1200px!important;margin-left:auto!important;margin-right:auto!important}
+
+/* Form báo giá tắt: ẩn cột form ở Trang chủ và Liên hệ */
+.av-contact > .av-contact__form:not(:has(*)){display:none}
+.av-contact-cols > .wp-block-column:has(#lien-he):not(:has(form,.av-form)){display:none}
+.av-contact-cols:not(:has(form,.av-form)) > .wp-block-column{flex-basis:100%!important;max-width:760px}

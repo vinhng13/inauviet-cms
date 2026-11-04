@@ -35,7 +35,7 @@
 
 <!-- wp:list {"ordered":true,"className":"av-chain"} -->
 <ol class="wp-block-list av-chain"><!-- wp:list-item -->
-<li><strong>Gửi yêu cầu</strong>Gửi số lượng, kiểu dáng, logo và hình ảnh muốn in qua form, Zalo hoặc email.</li>
+<li><strong>Gửi yêu cầu</strong>Gửi số lượng, kiểu dáng, logo và hình ảnh muốn in qua Zalo hoặc email.</li>
 <!-- /wp:list-item -->
 
 <!-- wp:list-item -->

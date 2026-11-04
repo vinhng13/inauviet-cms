@@ -363,7 +363,7 @@ function av_render_landing_prices(): string {
 	foreach ( $ps as $p ) {
 		$out .= '<section class="av-lprice"><h3><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( $p->post_title ) . '</a></h3>';
 		if ( ! av_product_has_prices( $p->ID ) ) {
-			$out .= sprintf( '<p class="av-lprice__contact"><strong>Liên hệ báo giá.</strong> Giá theo khổ, giấy, số tờ và số lượng. Gọi <a href="%s" data-av-event="bam_goi">%s</a> hoặc gửi form bên dưới.</p>', esc_url( av_tel_href( $c['hotline'] ) ), esc_html( $c['hotline'] ) );
+			$out .= sprintf( '<p class="av-lprice__contact"><strong>Liên hệ báo giá.</strong> Giá theo khổ, giấy, số tờ và số lượng. Gọi <a href="%s" data-av-event="bam_goi">%s</a> hoặc nhắn Zalo.</p>', esc_url( av_tel_href( $c['hotline'] ) ), esc_html( $c['hotline'] ) );
 		} else {
 			$pr   = av_product_prices( $p->ID );
 			$out .= '<div class="av-prices__scroll"><table class="av-prices"><thead><tr><th scope="col">Quy cách</th>';
@@ -437,7 +437,7 @@ function av_render_landing_quote( array $attrs = array() ): string {
 				'product' => $first ? $first->ID : 0,
 			)
 		),
-		esc_html( trim( (string) ( $attrs['text'] ?? '' ) ) ?: 'Gửi số lượng, kiểu dáng và logo, Âu Việt gọi lại tư vấn mẫu, chất liệu và báo giá. Đặt sớm để giữ lịch in, kịp ngày cần hàng.' )
+		esc_html( trim( (string) ( $attrs['text'] ?? '' ) ) ?: 'Nhắn Zalo hoặc gọi, gửi số lượng, kiểu dáng và logo, Âu Việt tư vấn mẫu, chất liệu và báo giá. Đặt sớm để giữ lịch in, kịp ngày cần hàng.' )
 	);
 }
 
