@@ -37,6 +37,8 @@ require_once AV_CORE_DIR . 'includes/editor-shell.php';
 require_once AV_CORE_DIR . 'includes/blocks.php';
 require_once AV_CORE_DIR . 'includes/quote-form.php';
 require_once AV_CORE_DIR . 'includes/quotes-admin.php';
+require_once AV_CORE_DIR . 'includes/landing.php';
+require_once AV_CORE_DIR . 'includes/landing-seed.php';
 require_once AV_CORE_DIR . 'includes/frontend.php';
 
 register_activation_hook(

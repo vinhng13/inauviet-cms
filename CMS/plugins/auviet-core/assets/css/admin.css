@@ -79,3 +79,16 @@ fieldset.av-readonly{opacity:.85}
 .av-pc__text{display:flex;flex-direction:column;gap:1px}
 .av-pc__text strong{font-size:13px}
 .av-pc__text span{font-size:12px;color:#5C5A5B}
+
+/* Landing theo mùa */
+.av-land-state{margin:4px 0 14px;padding:8px 12px;border-left:4px solid #8c8f94;background:#f6f7f7}
+.av-land-state--live{border-color:#00a32a;background:#edfaef}
+.av-land-state--before{border-color:#dba617;background:#fcf9e8}
+.av-land-state--after,.av-land-state--draft{border-color:#8c8f94}
+.av-land-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 20px}
+.av-land-grid label{display:block;margin-bottom:4px}
+.av-land-pick{margin:14px 0}
+.av-land-pick legend{margin-bottom:6px}
+.av-land-admin .av-pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;background:#f0f0f1;color:#50575e}
+.av-land-admin .av-pill--live{background:#edfaef;color:#007017}
+.av-land-admin .av-pill--future{background:#fcf9e8;color:#8a6100}
