@@ -260,6 +260,8 @@ add_filter(
 			'auviet/landing-products' => array( 'title' => 'Landing: sản phẩm', 'icon' => 'products', 'render' => 'av_render_landing_products', 'description' => 'Thẻ các sản phẩm của landing.' ),
 			'auviet/landing-prices'   => array( 'title' => 'Landing: bảng giá tham khảo', 'icon' => 'money-alt', 'render' => 'av_render_landing_prices', 'description' => 'Bảng giá của từng sản phẩm, chưa có giá thì "Liên hệ báo giá".' ),
 			'auviet/landing-samples'  => array( 'title' => 'Landing: mẫu tiêu biểu', 'icon' => 'format-gallery', 'render' => 'av_render_landing_samples', 'description' => 'Ảnh thật lấy từ sản phẩm của landing.' ),
+			'auviet/landing-specs'    => array( 'title' => 'Landing: quy cách', 'icon' => 'list-view', 'render' => 'av_render_landing_specs', 'description' => 'Bảng quy cách, chất liệu của các sản phẩm đã chọn.' ),
+			'auviet/landing-projects' => array( 'title' => 'Landing: mẫu đã làm', 'icon' => 'portfolio', 'render' => 'av_render_landing_projects', 'description' => 'Dự án ở Mẫu đã làm có gắn sản phẩm của landing (ẩn khi chưa có).' ),
 			'auviet/landing-faq'      => array( 'title' => 'Landing: hỏi đáp', 'icon' => 'editor-help', 'render' => 'av_render_landing_faq', 'description' => 'Câu hỏi chọn trong hộp Landing theo mùa.' ),
 			'auviet/landing-quote'    => array(
 				'title'       => 'Landing: form báo giá',
@@ -391,8 +393,10 @@ function av_render_landing_samples(): string {
 		return '';
 	}
 	$items = array();
-	foreach ( av_landing_products( $id ) as $p ) {
-		foreach ( array_slice( av_page_images( $p->ID ), 0, 4 ) as $img ) {
+	$ps    = av_landing_products( $id );
+	$per   = max( 4, intdiv( 12, max( 1, count( $ps ) ) ) );
+	foreach ( $ps as $p ) {
+		foreach ( array_slice( av_page_images( $p->ID ), 0, $per ) as $img ) {
 			$items[ $img ] = $p;
 		}
 	}
@@ -405,6 +409,57 @@ function av_render_landing_samples(): string {
 		$out .= sprintf( '<li><a href="%s">%s<span>%s</span></a></li>', esc_url( get_permalink( $p ) ), wp_get_attachment_image( $img, 'medium_large', false, array( 'alt' => $alt, 'loading' => 'lazy' ) ), esc_html( $p->post_title ) );
 	}
 	return $out . '</ul>';
+}
+
+function av_render_landing_specs(): string {
+	$id = av_current_landing_id();
+	$ps = $id ? av_landing_products( $id ) : array();
+	if ( ! $ps ) {
+		return '';
+	}
+	$out = '<div class="av-lspecs">';
+	foreach ( $ps as $p ) {
+		$specs = av_product_specs( $p->ID );
+		$mats  = av_product_materials( $p->ID );
+		if ( ! $specs && ! $mats ) {
+			continue;
+		}
+		$out .= '<section class="av-lspecs__item">';
+		if ( count( $ps ) > 1 ) {
+			$out .= '<h3><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( $p->post_title ) . '</a></h3>';
+		}
+		$out .= '<table class="av-specs"><tbody>';
+		foreach ( $specs as $k => $v ) {
+			$out .= sprintf( '<tr><th scope="row">%s</th><td>%s</td></tr>', esc_html( $k ), esc_html( $v ) );
+		}
+		if ( $mats ) {
+			$links = array_map( static fn( $m ) => sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $m ) ), esc_html( $m->post_title ) ), $mats );
+			$out  .= '<tr><th scope="row">Chất liệu, gia công</th><td>' . implode( ', ', $links ) . '</td></tr>';
+		}
+		$out .= '</tbody></table></section>';
+	}
+	return $out . '</div>';
+}
+
+function av_render_landing_projects(): string {
+	$id = av_current_landing_id();
+	$ps = $id ? wp_list_pluck( av_landing_products( $id ), 'ID' ) : array();
+	if ( ! $ps || ! function_exists( 'av_project_cards' ) ) {
+		return '';
+	}
+	$found = array();
+	foreach ( get_posts( array( 'post_type' => 'av_project', 'numberposts' => 60, 'orderby' => 'date', 'order' => 'DESC' ) ) as $pj ) {
+		if ( array_intersect( $ps, array_map( 'intval', (array) get_post_meta( $pj->ID, '_av_products', true ) ) ) ) {
+			$found[] = $pj;
+		}
+		if ( count( $found ) >= 6 ) {
+			break;
+		}
+	}
+	if ( ! $found ) {
+		return '';
+	}
+	return '<section class="av-lsec av-lsec--projects"><h2 class="av-lsec__title">Dự án Âu Việt đã làm</h2>' . av_project_cards( $found ) . '<p><a class="av-link" href="' . esc_url( (string) get_post_type_archive_link( 'av_project' ) ) . '">Xem tất cả mẫu đã làm</a></p></section>';
 }
 
 function av_render_landing_faq(): string {

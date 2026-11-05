@@ -101,3 +101,25 @@
 }
 .av-landing .wp-block-gallery.av-lreviews figure.wp-block-image:not(#av){aspect-ratio:3/4}
 .av-landing .wp-block-gallery.av-lreviews figure.wp-block-image:not(#av) img{width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:top}
+
+/* Landing sản phẩm (sách, catalogue, hộp, phong bì, lì xì, bạt) */
+.av-lchecks--cols{columns:2 300px;column-gap:40px}
+.av-lchecks--cols li{break-inside:avoid;margin:0 0 12px;font-size:16.5px;line-height:1.6}
+.av-lsec--options .av-lcard h3{margin-top:0}
+.av-lspecs{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.av-lspecs__item h3{margin:0 0 10px;font-size:19px}
+.av-lspecs__item h3 a{color:inherit;text-decoration:none}
+.av-lspecs__item h3 a:hover{color:var(--av-red-strong,#D2232A)}
+.av-lspecs .av-specs{width:100%;margin:0}
+.av-lsec--tips > p:last-child{margin-top:12px;color:var(--av-ink-2,#5C5A5B)}
+.av-lsec--tips > p:last-child a{color:var(--av-red-strong,#D2232A);font-weight:600}
+.av-lfaq{margin:0 0 10px!important;border:1px solid var(--av-line,#DEDCDC);border-radius:12px;background:#fff}
+.av-lfaq summary{cursor:pointer;padding:16px 20px;font-weight:700;font-size:16.5px;color:var(--av-ink,#363435);list-style-position:inside}
+.av-lfaq[open] summary{color:var(--av-red-strong,#D2232A)}
+.av-lfaq > p{margin:0;padding:0 20px 16px;color:var(--av-ink-2,#5C5A5B)}
+.av-lsec--projects .av-link{display:inline-block;margin-top:12px;color:var(--av-red-strong,#D2232A);font-weight:600}
+.av-landing .av-lsamples{margin-top:8px}
+.av-lcards{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important}
+.av-lspecs{grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr))}
+.av-landing .av-lsamples{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:781px){.av-landing .av-lsamples{grid-template-columns:repeat(2,minmax(0,1fr))}}

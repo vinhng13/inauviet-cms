@@ -373,7 +373,7 @@ function av_ls_reviews( array $img, array $keys ): array {
 /* ------------------------------------------------------------------ */
 
 function av_ls_landings(): array {
-	return array(
+	$out = array(
 		'lich' => array(
 			'slug'     => 'in-lich-tet',
 			'title'    => 'In lịch Tết theo yêu cầu tại Hà Nội',
@@ -395,6 +395,27 @@ function av_ls_landings(): array {
 			'build'    => 'av_ls_build_tui',
 		),
 	);
+	foreach ( av_ls_product_landings() as $key => $c ) {
+		$out[ $key ] = array(
+			'slug'     => $c['slug'],
+			'title'    => $c['title'],
+			'excerpt'  => $c['excerpt'],
+			'season'   => $c['season'],
+			'products' => $c['products'],
+			'group'    => $c['group'],
+			'hero'     => '',
+			'build'    => 'av_ls_build_product',
+			'cfg'      => $c,
+		);
+	}
+	return $out;
+}
+
+/**
+ * Dựng khối của một landing (landing sản phẩm nhận thêm cấu hình).
+ */
+function av_ls_run_build( array $def, array $img ): array {
+	return isset( $def['cfg'] ) ? call_user_func( $def['build'], $img, $def['cfg'] ) : call_user_func( $def['build'], $img );
 }
 
 function av_ls_build_lich( array $img ): array {
@@ -608,7 +629,17 @@ function av_ls_create_page( string $key, bool $rebuild = false ) {
 	if ( $existing && ! $rebuild ) {
 		return (int) $existing->ID;
 	}
-	$content = serialize_blocks( call_user_func( $def['build'], $img ) );
+	$products = array();
+	foreach ( $def['products'] as $slug ) {
+		$p = get_page_by_path( $slug, OBJECT, 'av_product' );
+		if ( $p && 'publish' === $p->post_status ) {
+			$products[] = (int) $p->ID;
+		}
+	}
+	if ( ! $def['hero'] && ! $products ) {
+		return new WP_Error( 'av_ls_skip', 'Chưa có sản phẩm ' . implode( ', ', $def['products'] ) );
+	}
+	$content = serialize_blocks( av_ls_run_build( $def, $img ) );
 	$data    = array(
 		'post_type'    => 'page',
 		'post_title'   => $def['title'],
@@ -630,13 +661,9 @@ function av_ls_create_page( string $key, bool $rebuild = false ) {
 	update_post_meta( $id, '_av_landing', '1' );
 	update_post_meta( $id, '_av_seed', $key );
 	update_post_meta( $id, '_av_land_season', $def['season'] );
-	update_post_meta( $id, '_thumbnail_id', $img[ $def['hero'] ] );
-	$products = array();
-	foreach ( $def['products'] as $slug ) {
-		$p = get_page_by_path( $slug, OBJECT, 'av_product' );
-		if ( $p ) {
-			$products[] = (int) $p->ID;
-		}
+	$thumb = $def['hero'] ? $img[ $def['hero'] ] : (int) get_post_thumbnail_id( $products[0] );
+	if ( $thumb ) {
+		update_post_meta( $id, '_thumbnail_id', $thumb );
 	}
 	update_post_meta( $id, '_av_land_products', $products );
 	$g = get_term_by( 'slug', $def['group'], 'av_group' );
@@ -672,13 +699,15 @@ function av_ls_used_keys( string $key ): array {
 	foreach ( $all as $i => $k ) {
 		$fake[ $k ] = 900000 + $i;
 	}
-	$json = wp_json_encode( call_user_func( av_ls_landings()[ $key ]['build'], $fake ) );
+	$json = wp_json_encode( av_ls_run_build( av_ls_landings()[ $key ], $fake ) );
 	foreach ( $fake as $k => $n ) {
 		if ( false !== strpos( (string) $json, '"id":' . $n ) || false !== strpos( (string) $json, 'wp-image-' . $n ) ) {
 			$used[] = $k;
 		}
 	}
-	$used[]        = av_ls_landings()[ $key ]['hero'];
+	if ( av_ls_landings()[ $key ]['hero'] ) {
+		$used[] = av_ls_landings()[ $key ]['hero'];
+	}
 	$cache[ $key ] = array_values( array_unique( $used ) );
 	return $cache[ $key ];
 }
@@ -703,14 +732,18 @@ function av_render_landing_seed_box(): void {
 	}
 	?>
 	<div class="card av-ls-box" style="max-width:none;margin:16px 0">
-		<h2 style="margin-top:0">Landing in lịch Tết và in túi giấy</h2>
-		<p>Dựng lại 2 trang <a href="https://www.inlichdep.vn" target="_blank" rel="noopener">inlichdep.vn</a> và <a href="https://www.intuigiaygiare.com" target="_blank" rel="noopener">intuigiaygiare.com</a> thành landing trên web chính:
-			<code>/in-lich-tet/</code><?php echo $pages['lich'] ? ' (đã có)' : ''; ?> và <code>/in-tui-giay/</code><?php echo $pages['tui'] ? ' (đã có)' : ''; ?>.
+		<h2 style="margin-top:0">Tạo các landing có sẵn nội dung</h2>
+		<p>Lịch Tết, túi giấy dựng lại từ <a href="https://www.inlichdep.vn" target="_blank" rel="noopener">inlichdep.vn</a>, <a href="https://www.intuigiaygiare.com" target="_blank" rel="noopener">intuigiaygiare.com</a>; sách, catalogue, hộp giấy, phong bì, lì xì, bạt dựng từ nội dung sản phẩm đã có trên web.
 			Máy chủ tự tải <?php echo (int) $total; ?> ảnh gốc về thư viện Media (đã có <?php echo (int) $have; ?>), mất khoảng 1–3 phút.</p>
+		<ul style="columns:2 260px;margin:0 0 12px">
+			<?php foreach ( av_ls_landings() as $k => $d ) : ?>
+				<li><code>/<?php echo esc_html( $d['slug'] ); ?>/</code> <?php echo esc_html( $d['title'] ); ?><?php echo $pages[ $k ] ? ' <strong>(đã có)</strong>' : ''; ?></li>
+			<?php endforeach; ?>
+		</ul>
 		<p>
-			<button type="button" class="button button-primary" data-av-ls="create"><?php echo ( $pages['lich'] && $pages['tui'] ) ? 'Tải lại ảnh còn thiếu' : 'Tạo 2 landing từ trang cũ'; ?></button>
-			<?php if ( $pages['lich'] || $pages['tui'] ) : ?>
-				<label style="margin-left:12px"><input type="checkbox" data-av-ls-rebuild> Dựng lại nội dung 2 trang (mọi chỉnh sửa tay trên 2 trang sẽ mất)</label>
+			<button type="button" class="button button-primary" data-av-ls="create"><?php echo array_filter( $pages, static fn( $v ) => ! $v ) ? 'Tạo các landing còn thiếu' : 'Tải lại ảnh còn thiếu'; ?></button>
+			<?php if ( array_filter( $pages ) ) : ?>
+				<label style="margin-left:12px"><input type="checkbox" data-av-ls-rebuild> Dựng lại nội dung các landing đã có (mọi chỉnh sửa tay trên các trang này sẽ mất)</label>
 			<?php endif; ?>
 		</p>
 		<p class="av-ls-status" role="status" aria-live="polite"></p>
@@ -798,6 +831,10 @@ add_action(
 			$links   = array();
 			foreach ( array_keys( av_ls_landings() ) as $k ) {
 				$id = av_ls_create_page( $k, $rebuild );
+				if ( is_wp_error( $id ) && 'av_ls_skip' === $id->get_error_code() ) {
+					$links[] = esc_html( av_ls_landings()[ $k ]['title'] . ': bỏ qua (' . $id->get_error_message() . ')' );
+					continue;
+				}
 				if ( is_wp_error( $id ) ) {
 					wp_send_json_error( $id->get_error_message() );
 				}
