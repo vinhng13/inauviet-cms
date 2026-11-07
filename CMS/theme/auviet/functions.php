@@ -144,3 +144,34 @@ add_action(
 		auviet_ensure_page( 'thiet-ke', 'Dịch vụ thiết kế', 'design-page', 'av_design_page' );
 	}
 );
+
+/**
+ * Biểu tượng trên thanh tab (favicon) lấy từ logo Âu Việt.
+ * Nếu đã đặt "Biểu tượng trang web" trong Cài đặt › Tổng quan thì dùng ảnh đó thay thế.
+ */
+function auviet_favicon(): void {
+	if ( has_site_icon() ) {
+		return;
+	}
+	$dir = get_theme_file_uri( 'assets/images/' );
+	$v   = AUVIET_THEME_VERSION . '.1';
+	printf( '<link rel="icon" href="%s" sizes="any">' . "\n", esc_url( $dir . 'favicon.ico?v=' . $v ) );
+	printf( '<link rel="icon" type="image/png" sizes="32x32" href="%s">' . "\n", esc_url( $dir . 'favicon-32.png?v=' . $v ) );
+	printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( $dir . 'apple-touch-icon.png?v=' . $v ) );
+}
+add_action( 'wp_head', 'auviet_favicon', 2 );
+add_action( 'admin_head', 'auviet_favicon' );
+add_action( 'login_head', 'auviet_favicon' );
+
+// Xoá trang lưu đệm một lần sau khi thêm favicon, và mỗi khi đổi "Biểu tượng trang web", để thẻ icon hiện ngay.
+add_action(
+	'wp_loaded',
+	static function () {
+		if ( get_option( 'auviet_favicon_purged' ) === AUVIET_THEME_VERSION . '.1' ) {
+			return;
+		}
+		update_option( 'auviet_favicon_purged', AUVIET_THEME_VERSION . '.1' );
+		do_action( 'litespeed_purge_all' );
+	}
+);
+add_action( 'update_option_site_icon', static fn() => do_action( 'litespeed_purge_all' ) );
