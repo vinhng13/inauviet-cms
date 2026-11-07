@@ -130,7 +130,7 @@ function av_render_contact_page(): void {
 			<table class="form-table" role="presentation">
 				<tr><th scope="row"><label for="av_contact-company_name">Tên công ty</label></th><td><?php av_field( 'av_contact', 'company_name', $c['company_name'] ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-office_address">Văn phòng</label></th><td><?php av_field( 'av_contact', 'office_address', $c['office_address'] ); ?></td></tr>
-				<tr><th scope="row"><label for="av_contact-workshop_address">Xưởng</label></th><td><?php av_field( 'av_contact', 'workshop_address', $c['workshop_address'] ); ?></td></tr>
+				<tr><th scope="row"><label for="av_contact-workshop_address">Trụ sở</label></th><td><?php av_field( 'av_contact', 'workshop_address', $c['workshop_address'] ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-hours">Giờ làm việc</label></th><td><?php av_field( 'av_contact', 'hours', $c['hours'], 'text', 'Ví dụ: Thứ Hai – Thứ Bảy, 8:00–17:30. Để trống thì không hiện. Nên ghi giống Google Business Profile.' ); ?></td></tr>
 				<tr><th scope="row"><label for="av_contact-tax_code">Mã số thuế</label></th><td><?php av_field( 'av_contact', 'tax_code', $c['tax_code'], 'text', 'Hiện ở trang liên hệ. Để trống thì không hiện.' ); ?></td></tr>
 			</table>

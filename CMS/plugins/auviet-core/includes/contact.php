@@ -1,6 +1,6 @@
 <?php
 /**
- * LP-06 Trang liên hệ /lien-he/: khối thông tin liên hệ, bản đồ văn phòng và xưởng (tải khi cuộn tới),
+ * LP-06 Trang liên hệ /lien-he/: khối thông tin liên hệ, bản đồ văn phòng (tải khi cuộn tới),
  * dữ liệu có cấu trúc LocalBusiness. Mọi thông tin đọc từ Âu Việt › Liên hệ & công ty (QT-10) nên giống hệt
  * ở mọi nơi trên site. Form trên trang tạo yêu cầu loại "Liên hệ" trong hộp thư QT-07.
  */
@@ -60,7 +60,7 @@ function av_render_contact_info(): string {
 	$c    = av_contact();
 	$rows = array(
 		array( 'Văn phòng giao dịch', esc_html( $c['office_address'] ) ),
-		array( 'Xưởng sản xuất', esc_html( $c['workshop_address'] ) ),
+		array( 'Trụ sở', esc_html( $c['workshop_address'] ) ),
 		array( 'Hotline', sprintf( '<a href="%s" data-av-event="bam_goi">%s</a>', esc_url( av_tel_href( $c['hotline'] ) ), esc_html( $c['hotline'] ) ) ),
 		array( 'Điện thoại bàn', $c['landline'] ? sprintf( '<a href="%s" data-av-event="bam_goi">%s</a>', esc_url( av_tel_href( $c['landline'] ) ), esc_html( $c['landline'] ) ) : '' ),
 		array( 'Email', sprintf( '<a href="mailto:%1$s" data-av-event="bam_email">%1$s</a>', esc_html( $c['email'] ) ) ),
