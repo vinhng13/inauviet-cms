@@ -151,7 +151,7 @@ function av_render_company_info(): string {
 		<div class="av-footer-col av-footer-col--main">
 			<strong class="av-footer__name"><?php echo esc_html( $c['company_name'] ); ?></strong>
 			<p>Văn phòng: <?php echo esc_html( $c['office_address'] ); ?></p>
-			<p>Xưởng: <?php echo esc_html( $c['workshop_address'] ); ?></p>
+			<p>Trụ sở: <?php echo esc_html( $c['workshop_address'] ); ?></p>
 			<p>Điện thoại: <a href="<?php echo esc_url( av_tel_href( $c['landline'] ) ); ?>"><?php echo esc_html( $c['landline'] ); ?></a> · Di động: <a href="<?php echo esc_url( av_tel_href( $c['hotline'] ) ); ?>"><?php echo esc_html( $c['hotline'] ); ?></a></p>
 			<p>Email: <a href="mailto:<?php echo esc_attr( $c['email'] ); ?>"><?php echo esc_html( $c['email'] ); ?></a></p>
 		</div>
