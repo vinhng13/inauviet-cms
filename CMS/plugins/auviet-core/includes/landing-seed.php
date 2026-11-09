@@ -626,6 +626,15 @@ function av_ls_create_page( string $key, bool $rebuild = false ) {
 	}
 
 	$existing = get_page_by_path( $def['slug'] );
+	if ( ! $existing && ! empty( $def['cfg']['old_slug'] ) ) {
+		// Landing đổi địa chỉ (vd. /in-bat/ → /in-phun-kho-lon/): dùng lại trang cũ, đổi đường dẫn và dựng lại nội dung.
+		$old = get_page_by_path( $def['cfg']['old_slug'] );
+		if ( $old && get_post_meta( $old->ID, '_av_seed', true ) === $key ) {
+			wp_update_post( array( 'ID' => $old->ID, 'post_name' => $def['slug'] ) );
+			$existing = get_post( $old->ID );
+			$rebuild  = true;
+		}
+	}
 	if ( $existing && ! $rebuild ) {
 		return (int) $existing->ID;
 	}
@@ -636,8 +645,18 @@ function av_ls_create_page( string $key, bool $rebuild = false ) {
 			$products[] = (int) $p->ID;
 		}
 	}
+	// Landing không gắn sản phẩm (vd. thiệp) lấy ảnh đại diện của bài viết liên quan đầu tiên.
+	$post_thumb = 0;
 	if ( ! $def['hero'] && ! $products ) {
-		return new WP_Error( 'av_ls_skip', 'Chưa có sản phẩm ' . implode( ', ', $def['products'] ) );
+		foreach ( av_ls_posts( $def['cfg']['posts'] ?? array() ) as $p ) {
+			$post_thumb = (int) get_post_thumbnail_id( $p );
+			if ( $post_thumb ) {
+				break;
+			}
+		}
+		if ( ! $post_thumb ) {
+			return new WP_Error( 'av_ls_skip', 'Chưa có sản phẩm ' . implode( ', ', $def['products'] ) );
+		}
 	}
 	$content = serialize_blocks( av_ls_run_build( $def, $img ) );
 	$data    = array(
@@ -661,7 +680,7 @@ function av_ls_create_page( string $key, bool $rebuild = false ) {
 	update_post_meta( $id, '_av_landing', '1' );
 	update_post_meta( $id, '_av_seed', $key );
 	update_post_meta( $id, '_av_land_season', $def['season'] );
-	$thumb = $def['hero'] ? $img[ $def['hero'] ] : (int) get_post_thumbnail_id( $products[0] );
+	$thumb = $def['hero'] ? $img[ $def['hero'] ] : ( $products ? (int) get_post_thumbnail_id( $products[0] ) : $post_thumb );
 	if ( $thumb ) {
 		update_post_meta( $id, '_thumbnail_id', $thumb );
 	}
@@ -733,7 +752,7 @@ function av_render_landing_seed_box(): void {
 	?>
 	<div class="card av-ls-box" style="max-width:none;margin:16px 0">
 		<h2 style="margin-top:0">Tạo các landing có sẵn nội dung</h2>
-		<p>Lịch Tết, túi giấy dựng lại từ <a href="https://www.inlichdep.vn" target="_blank" rel="noopener">inlichdep.vn</a>, <a href="https://www.intuigiaygiare.com" target="_blank" rel="noopener">intuigiaygiare.com</a>; sách, catalogue, hộp giấy, phong bì, lì xì, bạt dựng từ nội dung sản phẩm đã có trên web.
+		<p>Lịch Tết, túi giấy dựng lại từ <a href="https://www.inlichdep.vn" target="_blank" rel="noopener">inlichdep.vn</a>, <a href="https://www.intuigiaygiare.com" target="_blank" rel="noopener">intuigiaygiare.com</a>; các landing còn lại dựng từ nội dung sản phẩm và bài viết đã có trên web.
 			Máy chủ tự tải <?php echo (int) $total; ?> ảnh gốc về thư viện Media (đã có <?php echo (int) $have; ?>), mất khoảng 1–3 phút.</p>
 		<ul style="columns:2 260px;margin:0 0 12px">
 			<?php foreach ( av_ls_landings() as $k => $d ) : ?>
@@ -844,4 +863,25 @@ add_action(
 		}
 		wp_send_json_error( 'Bước không hợp lệ.' );
 	}
+);
+
+// Địa chỉ cũ của landing đã đổi (vd. /in-bat/) chuyển hẳn sang địa chỉ mới.
+add_action(
+	'template_redirect',
+	static function () {
+		if ( ! is_404() ) {
+			return;
+		}
+		$path = trim( (string) wp_parse_url( (string) ( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_PATH ), '/' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( '' === $path ) {
+			return;
+		}
+		foreach ( av_ls_product_landings() as $c ) {
+			if ( ! empty( $c['old_slug'] ) && $c['old_slug'] === $path && get_page_by_path( $c['slug'] ) ) {
+				wp_safe_redirect( home_url( '/' . $c['slug'] . '/' ), 301 );
+				exit;
+			}
+		}
+	},
+	1 // Trước redirect_canonical của WordPress (nó đoán /in-bat/ thành sản phẩm in bạt).
 );

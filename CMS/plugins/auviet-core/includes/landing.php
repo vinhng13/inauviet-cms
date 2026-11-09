@@ -394,7 +394,7 @@ function av_render_landing_samples(): string {
 	}
 	$items = array();
 	$ps    = av_landing_products( $id );
-	$per   = max( 4, intdiv( 12, max( 1, count( $ps ) ) ) );
+	$per   = max( 2, intdiv( 12, max( 1, count( $ps ) ) ) );
 	foreach ( $ps as $p ) {
 		foreach ( array_slice( av_page_images( $p->ID ), 0, $per ) as $img ) {
 			$items[ $img ] = $p;

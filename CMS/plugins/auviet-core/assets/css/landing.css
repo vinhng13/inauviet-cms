@@ -123,3 +123,8 @@
 .av-lspecs{grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr))}
 .av-landing .av-lsamples{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media (max-width:781px){.av-landing .av-lsamples{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.av-lposts{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px}
+.av-lposts li{margin:0}
+.av-lposts a{display:flex;align-items:center;gap:10px;height:100%;padding:14px 16px;border:1px solid var(--av-line,#e6e3e1);border-radius:8px;background:#fff;color:var(--av-ink,#363435);font-weight:600;line-height:1.45;text-decoration:none}
+.av-lposts a::after{content:"→";margin-left:auto;color:var(--av-red-strong,#D2232A)}
+.av-lposts a:hover,.av-lposts a:focus-visible{border-color:var(--av-red-strong,#D2232A);color:var(--av-red-strong,#D2232A)}
