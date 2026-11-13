@@ -210,10 +210,26 @@ function av_icon( string $name, int $size = 22 ): string {
 /**
  * Bốn kênh liên hệ (LP-08): Zalo, Gọi, Facebook, Email.
  */
+/**
+ * Biểu tượng của một kênh liên hệ: ảnh logo nếu có (Zalo), không thì icon SVG.
+ */
+function av_channel_icon( array $ch, int $size = 22 ): string {
+	if ( ! empty( $ch['img'] ) ) {
+		$file = 'assets/images/' . $ch['img'];
+		return sprintf(
+			'<img class="av-chicon" src="%s" alt="" width="%d" height="%d" decoding="async">',
+			esc_url( plugins_url( $file, AV_CORE_FILE ) . '?v=' . av_ver( AV_CORE_DIR . $file ) ),
+			$size,
+			$size
+		);
+	}
+	return av_icon( $ch['icon'], $size );
+}
+
 function av_contact_channels(): array {
 	$c = av_contact();
 	return array(
-		array( 'key' => 'zalo', 'label' => 'Zalo', 'sub' => preg_replace( '/[^0-9]/', '', $c['hotline'] ), 'url' => $c['zalo_url'], 'icon' => 'chat', 'event' => 'bam_zalo' ),
+		array( 'key' => 'zalo', 'label' => 'Zalo', 'sub' => preg_replace( '/[^0-9]/', '', $c['hotline'] ), 'url' => $c['zalo_url'], 'icon' => 'chat', 'img' => 'zalo.png', 'event' => 'bam_zalo' ),
 		array( 'key' => 'goi', 'label' => 'Gọi điện', 'sub' => $c['hotline'], 'url' => av_tel_href( $c['hotline'] ), 'icon' => 'phone', 'event' => 'bam_goi' ),
 		array( 'key' => 'facebook', 'label' => 'Facebook', 'sub' => 'Nhắn fanpage', 'url' => $c['facebook_url'], 'icon' => 'fb', 'event' => 'bam_facebook' ),
 		array( 'key' => 'email', 'label' => 'Email', 'sub' => 'Gửi file, yêu cầu', 'url' => 'mailto:' . $c['email'], 'icon' => 'mail', 'event' => 'bam_email' ),

@@ -25,7 +25,7 @@ add_action(
 				esc_url( $ch['url'] ),
 				esc_attr( $ch['label'] . ' ' . $ch['sub'] ),
 				esc_attr( $ch['event'] ),
-				av_icon( $ch['icon'] ), // phpcs:ignore WordPress.Security.EscapeOutput -- SVG cố định.
+				av_channel_icon( $ch, empty( $ch['img'] ) ? 22 : 52 ), // phpcs:ignore WordPress.Security.EscapeOutput -- SVG hoặc ảnh cố định.
 				str_starts_with( $ch['url'], 'http' ) ? ' target="_blank" rel="noopener"' : ''
 			);
 		}
@@ -36,7 +36,7 @@ add_action(
 				esc_attr( $ch['key'] ),
 				esc_url( $ch['url'] ),
 				esc_attr( $ch['event'] ),
-				av_icon( $ch['icon'] ), // phpcs:ignore WordPress.Security.EscapeOutput -- SVG cố định.
+				av_channel_icon( $ch ), // phpcs:ignore WordPress.Security.EscapeOutput -- SVG hoặc ảnh cố định.
 				esc_html( 'Gọi điện' === $ch['label'] ? 'Gọi' : $ch['label'] ),
 				str_starts_with( $ch['url'], 'http' ) ? ' target="_blank" rel="noopener"' : ''
 			);

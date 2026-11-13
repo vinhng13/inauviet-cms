@@ -95,7 +95,7 @@ function av_render_contact_tiles(): string {
 			esc_attr( $ch['key'] ),
 			esc_url( $ch['url'] ),
 			esc_attr( $ch['event'] ),
-			av_icon( $ch['icon'] ),
+			av_channel_icon( $ch, empty( $ch['img'] ) ? 22 : 40 ),
 			esc_html( $ch['label'] ),
 			esc_html( $ch['sub'] ),
 			str_starts_with( $ch['url'], 'http' ) ? ' target="_blank" rel="noopener"' : ''

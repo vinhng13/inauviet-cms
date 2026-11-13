@@ -28,7 +28,7 @@
 .av-tile{display:flex;align-items:center;gap:12px;padding:16px;min-height:44px;border-radius:12px;background:#fff;border:1px solid #DEDCDC;color:#363435;text-decoration:none}
 .av-tile:hover{border-color:#363435;color:#363435}
 .av-tile__icon{flex:0 0 40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;background:#363435}
-.av-tile--zalo .av-tile__icon{background:#0068FF}.av-tile--goi .av-tile__icon{background:#D2232A}.av-tile--facebook .av-tile__icon{background:#1877F2}
+.av-tile--zalo .av-tile__icon{background:transparent}.av-tile--zalo .av-chicon{width:40px;height:40px}.av-tile--goi .av-tile__icon{background:#D2232A}.av-tile--facebook .av-tile__icon{background:#1877F2}
 .av-tile strong{display:block}
 .av-tile span span{font-size:14px;color:#5C5A5B}
 @media (max-width:480px){.av-tiles{grid-template-columns:1fr}}
@@ -74,10 +74,10 @@
 .av-fab{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:90}
 .av-fab__btn{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:#fff;background:#363435;box-shadow:0 0 0 2px #fff,0 4px 14px rgba(54,52,53,.25)}
 .av-fab__btn:hover{color:#fff;transform:translateY(-1px)}
-.av-fab__btn--zalo{background:#0068FF}.av-fab__btn--goi{background:#D2232A}.av-fab__btn--facebook{background:#1877F2}
+.av-fab__btn--zalo{background:#fff;overflow:hidden}.av-fab__btn--zalo .av-chicon{width:52px;height:52px;border-radius:50%}.av-fab__btn--goi{background:#D2232A}.av-fab__btn--facebook{background:#1877F2}
 .av-mbar{display:none;position:fixed;left:0;right:0;bottom:0;grid-template-columns:repeat(4,minmax(0,1fr));background:#fff;border-top:1px solid #DEDCDC;z-index:90}
 .av-mbar__btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;min-height:56px;color:#363435;text-decoration:none;font-size:12px;font-weight:600}
-.av-mbar__btn--zalo svg{color:#0068FF}.av-mbar__btn--goi svg{color:#D2232A}.av-mbar__btn--facebook svg{color:#1877F2}
+.av-mbar__btn--zalo .av-chicon{width:22px;height:22px}.av-mbar__btn--goi svg{color:#D2232A}.av-mbar__btn--facebook svg{color:#1877F2}
 @media (max-width:720px){.av-fab{display:none}.av-mbar{display:grid}body{padding-bottom:64px}}
 @media (prefers-reduced-motion:reduce){.av-fab__btn:hover{transform:none}}
 
